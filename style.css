@@ -1,0 +1,81 @@
+:root {
+  --color-primary: #2563eb;
+  --color-primary-hover: #1d4ed8;
+  --color-bg: #f8fafc;
+  --color-card: #ffffff;
+  --color-border: #e2e8f0;
+  --color-text-main: #1e293b;
+  --color-text-sub: #64748b;
+  --color-success: #10b981;
+  --color-error: #ef4444;
+  --color-warn: #f59e0b;
+  --radius-lg: 12px;
+  --radius-md: 8px;
+  --shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; transition: all 0.2s ease; }
+
+body { background-color: var(--color-bg); color: var(--color-text-main); font-family: 'Inter', system-ui, -apple-system, sans-serif; line-height: 1.5; }
+
+.app { max-width: 1200px; margin: 0 auto; padding: 2rem 1rem; }
+
+/* Navigation */
+.nav { display: flex; gap: 10px; margin-bottom: 2rem; background: #fff; padding: 6px; border-radius: var(--radius-md); box-shadow: var(--shadow); }
+.nav-btn { flex: 1; border: none; padding: 10px 16px; font-size: 14px; font-weight: 500; border-radius: 6px; cursor: pointer; background: transparent; color: var(--color-text-sub); }
+.nav-btn.on { background: var(--color-primary); color: rgb(117, 167, 228); box-shadow: 0 4px 12px rgba(18, 68, 174, 0.2); }
+.nav-btn:hover:not(.on) { background: #f1f5f9; color: var(--color-text-main); }
+
+
+
+/* Pages */
+.page { display: none; animation: fadeIn 0.3s ease-in-out; }
+.page.on { display: block; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+/* Cards & Metrics */
+.card { background: var(--color-card); border: 1px solid var(--color-border); border-radius: var(--radius-lg); padding: 1.5rem; margin-bottom: 1.5rem; box-shadow: var(--shadow); }
+.sec-label { font-size: 12px; font-weight: 700; color: var(--color-text-sub); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 12px; display: block; }
+
+.mc { background: #fcfdfe; border: 1px solid var(--color-border); border-radius: var(--radius-md); padding: 1.25rem; }
+.ml { font-size: 13px; color: var(--color-text-sub); margin-bottom: 8px; font-weight: 500; }
+.mv { font-size: 26px; font-weight: 700; color: var(--color-text-main); }
+.ms { font-size: 12px; margin-top: 4px; font-weight: 600; }
+
+/* Grids */
+.g4 { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; margin-bottom: 1.5rem; }
+.g2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 16px; }
+
+/* Tables */
+.tbl { width: 100%; border-collapse: separate; border-spacing: 0; font-size: 14px; }
+.tbl th { background: #f8fafc; text-align: left; padding: 12px; font-size: 11px; font-weight: 700; color: var(--color-text-sub); text-transform: uppercase; border-bottom: 2px solid var(--color-border); }
+.tbl td { padding: 14px 12px; border-bottom: 1px solid var(--color-border); vertical-align: middle; }
+.tbl tr:hover td { background: #f8fafc; }
+
+/* Inputs & Buttons */
+.inp:focus, .date-inp:focus { 
+  border-color: var(--color-primary); 
+  /* 'ring' o'rniga box-shadow ishlatamiz */
+  box-shadow: 0 0 0 3px #bfdbfe; 
+  outline: none; /* Standart ko'k chiziqni olib tashlash uchun */
+}
+.badge { padding: 4px 10px; border-radius: 20px; font-size: 11px; font-weight: 600; display: inline-flex; align-items: center; }
+.bp { background: #dcfce7; color: #166534; }
+.bu { background: #fee2e2; color: #991b1b; }
+.bi { background: #dbeafe; color: #1e40af; }
+.bw { background: #fef3c7; color: #92400e; }
+
+/* Progress Bar */
+.bar-bg { background: #e2e8f0; border-radius: 10px; height: 10px; overflow: hidden; }
+.bar-f { height: 100%; border-radius: 10px; }
+
+/* Farq Panel */
+.farq-panel { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+.farq-col { background: white; border: 1px solid var(--color-border); border-radius: var(--radius-lg); padding: 1.5rem; box-shadow: var(--shadow); }
+.trek-item { padding: 12px 0; border-bottom: 1px solid #f1f5f9; display: flex; justify-content: space-between; align-items: center; }
+.trek-code { font-weight: 600; color: var(--color-primary); font-family: 'JetBrains Mono', monospace; }
+
+@media (max-width: 768px) {
+  .farq-panel { grid-template-columns: 1fr; }
+  .g4 { grid-template-columns: 1fr 1fr; }
+}

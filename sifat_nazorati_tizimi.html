@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sifat Nazorati Tizimi</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="app">
+<h2 class="sr-only">Logistika sifat nazorati — sana filtri va farq treklarsi tizimi</h2>
+
+<div class="nav">
+  <button class="nav-btn on" onclick="goPage('dashboard')">Bugungi holat</button>
+  <button class="nav-btn" onclick="goPage('qop')">Qop tekshiruvi</button>
+  <button class="nav-btn" onclick="goPage('farq')">Farq treklarsi</button>
+  <button class="nav-btn" onclick="goPage('api')">Trek / API</button>
+</div>
+
+<div id="page-dashboard" class="page on">
+  <div class="header-row">
+    <div class="sec-label" style="margin:0">Umumiy holat</div>
+    <div class="filter-bar">
+      <span style="font-size:12px;color:var(--color-text-secondary)">Sana:</span>
+      <input class="nav-btn" type="date" id="dash-date" onchange="renderDashboard()">
+      <select class="nav-btn" id="dash-kuryer" onchange="renderDashboard()" style="cursor:pointer">
+
+        <option value="all">Barcha kuryer</option>
+        <option value="BTS">BTS</option>
+        <option value="EMU">EMU</option>
+        <option value="IPOST">IPOST</option>
+        <option value="Relog">Relog</option>
+
+      </select>
+    </div>
+  </div>
+
+  <div class="g4" id="dash-metrics"></div>
+
+  <div class="sec-label">Kuryer holati</div>
+  <div class="card" id="dash-couriers"></div>
+
+  <div class="sec-label">Kunlik farq dinamikasi</div>
+  <div class="card" id="dash-farq-summary"></div>
+</div>
+
+<div id="page-qop" class="page">
+  <div class="header-row">
+    <div class="sec-label" style="margin:0">Qop tekshiruvi</div>
+    <div class="filter-bar">
+      <span style="font-size:12px;color:var(--color-text-secondary)">Sana:</span>
+      <input class="nav-btn" type="date" id="qop-date" onchange="renderQopPage()">
+
+      <select class="nav-btn" id="qop-period" onchange="renderQopPage()" style="cursor:pointer">
+        <option value="day">Kunlik</option>
+        <option value="week">Haftalik</option>
+        <option value="month">Oylik</option>
+      </select>
+
+    </div>
+  </div>
+
+  <div class="tab-row" id="qop-tabs"></div>
+  <div id="qop-body">
+    
+  </div>
+
+  <div class="sec-label" style="margin-top:8px">Kunlik qop tekshiruvi tarixi</div>
+  <div class="card">
+    <table class="tbl" id="qop-history-tbl">
+      <thead><tr>
+        <th style="width:80px">Sana</th>
+        <th style="width:65px">Kuryer</th>
+        <th style="width:70px">Kutilgan</th>
+        <th style="width:70px">Topildi</th>
+        <th style="width:60px">Farq</th>
+        <th style="width:70px">To'langan</th>
+        <th style="width:80px">To'lanmagan</th>
+        <th>Holat</th>
+      </tr></thead>
+      <tbody id="qop-history-body"></tbody>
+    </table>
+  </div>
+</div>
+
+<div id="page-farq" class="page">
+  <div class="header-row">
+    <div class="sec-label" style="margin:0">Farq treklarsi — oylik kuzatuv</div>
+    <div class="filter-bar">
+      <select class="nav-btn" id="farq-month" onchange="renderFarqPage()" style="cursor:pointer">
+        <option value="2025-04">Aprel 2025</option>
+        <option value="2025-03">Mart 2025</option>
+        <option value="2025-02">Fevral 2025</option>
+      </select>
+      <select class="nav-btn" id="farq-kuryer" onchange="renderFarqPage()" style="cursor:pointer">
+        <option value="all">Barcha</option>
+        <option value="BTS">BTS</option>
+        <option value="EMU">EMU</option>
+        <option value="IPOST">IPOST</option>
+        <option value="Relog">Relog</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="g4" style="margin-bottom:14px" id="farq-metrics"></div>
+
+  <div class="farq-panel" id="farq-panel"></div>
+
+  <div class="sec-label">Kunlik farq o'zgarishi</div>
+  <div class="card" id="farq-daily"></div>
+</div>
+
+<div id="page-api" class="page">
+  <div class="sec-label">Trek raqami tekshirish</div>
+  <div class="card">
+    <div style="display:flex;gap:8px;margin-bottom:10px;flex-wrap:wrap">
+      <input class="inp" id="trek-inp" placeholder="UZ123456789CN" style="flex:1;min-width:180px">
+      <button class="nav-btn" onclick="fetchTrek()" style="white-space:nowrap">Tekshirish</button>
+    </div>
+    <div id="trek-result"></div>
+  </div>
+  <div class="sec-label">Ko'p trek tekshirish</div>
+  <div class="card">
+    <textarea class="inp" id="bulk-inp" rows="4" placeholder="UZ123456789CN&#10;UZ987654321CN" style="width:100%;resize:vertical;margin-bottom:8px"></textarea>
+    <div style="display:flex;gap:8px;align-items:center">
+      <button class="nav-btn" onclick="fetchBulk()">Tekshirish</button>
+      <button class="nav-btn" onclick="exportCSV()">CSV yuklash</button>
+      <span style="font-size:12px;color:var(--color-text-tertiary)" id="bulk-st"></span>
+    </div>
+    <div id="bulk-result" style="margin-top:10px"></div>
+  </div>
+</div>
+</div>
+
+<script>
+var today = new Date().toISOString().slice(0,10);
+
+var MOCK = {
+  treks: {
+    'UZ123456789CN':{client:'Alisher Nazarov',summa:125000,holat:'unpaid',kuryer:'IPOST',date:'2025-04-17'},
+    'UZ987654321CN':{client:'Malika Yusupova',summa:87000,holat:'paid',kuryer:'BTS',date:'2025-04-17'},
+    'UZ111222333CN':{client:'Jasur Karimov',summa:210000,holat:'unpaid',kuryer:'EMU',date:'2025-04-16'},
+    'UZ555666777CN':{client:'Nilufar Rashidova',summa:45000,holat:'paid',kuryer:'Relog',date:'2025-04-16'},
+    'UZ222333444CN':{client:'Bobur Toshmatov',summa:67000,holat:'unpaid',kuryer:'BTS',date:'2025-04-15'},
+    'UZ333444555CN':{client:'Zulfiya Ergasheva',summa:93000,holat:'unpaid',kuryer:'IPOST',date:'2025-04-15'},
+    'UZ444555666CN':{client:'Sherzod Umarov',summa:34000,holat:'paid',kuryer:'EMU',date:'2025-04-14'},
+    'UZ666777888CN':{client:'Dildora Yusupova',summa:156000,holat:'unpaid',kuryer:'Relog',date:'2025-04-14'},
+    'UZ777888999CN':{client:'Kamol Raximov',summa:78000,holat:'unpaid',kuryer:'BTS',date:'2025-04-13'},
+    'UZ888999000CN':{client:'Mohira Salimova',summa:44000,holat:'paid',kuryer:'IPOST',date:'2025-04-13'},
+  },
+  dailyFarq: [
+    {date:'2025-04-13',kuryer:'BTS',china:3000,found:2960,diff:-40,closed:0},
+    {date:'2025-04-13',kuryer:'IPOST',china:2800,found:2792,diff:-8,closed:0},
+    {date:'2025-04-14',kuryer:'EMU',china:2000,found:1985,diff:-15,closed:5},
+    {date:'2025-04-14',kuryer:'Relog',china:2000,found:1994,diff:-6,closed:2},
+    {date:'2025-04-15',kuryer:'BTS',china:3000,found:2968,diff:-32,closed:18},
+    {date:'2025-04-16',kuryer:'IPOST',china:2800,found:2750,diff:-50,closed:30},
+    {date:'2025-04-17',kuryer:'EMU',china:2000,found:1978,diff:-22,closed:0},
+  ],
+  couriers:[
+    {name:'BTS',total:3000,paid:1400,unpaid:1600},
+    {name:'EMU',total:2000,paid:800,unpaid:1200},
+    {name:'IPOST',total:2800,paid:1000,unpaid:1800},
+    {name:'Relog',total:2000,paid:1000,unpaid:1000},
+  ]
+};
+
+var farqDB = {
+  permanent: [
+    {trek:'UZ123456789CN',kuryer:'IPOST',date:'2025-04-16',fixedDate:'2025-04-16',status:'open'},
+    {trek:'UZ111222333CN',kuryer:'EMU',date:'2025-04-16',fixedDate:'2025-04-16',status:'open'},
+    {trek:'UZ333444555CN',kuryer:'IPOST',date:'2025-04-15',fixedDate:'2025-04-15',status:'open'},
+    {trek:'UZ222333444CN',kuryer:'BTS',date:'2025-04-15',fixedDate:'2025-04-15',status:'open'},
+    {trek:'UZ777888999CN',kuryer:'BTS',date:'2025-04-13',fixedDate:'2025-04-13',status:'open'},
+    {trek:'UZ666777888CN',kuryer:'Relog',date:'2025-04-14',fixedDate:'2025-04-14',status:'closed'},
+    {trek:'UZ444555666CN',kuryer:'EMU',date:'2025-04-14',fixedDate:'2025-04-14',status:'closed'},
+  ],
+  resolved: [
+    {trek:'UZ987654321CN',kuryer:'BTS',fixedDate:'2025-04-16',resolvedDate:'2025-04-17'},
+    {trek:'UZ555666777CN',kuryer:'Relog',fixedDate:'2025-04-14',resolvedDate:'2025-04-16'},
+    {trek:'UZ888999000CN',kuryer:'IPOST',fixedDate:'2025-04-13',resolvedDate:'2025-04-15'},
+  ]
+};
+
+var curPage='dashboard', qopTab='IPOST', bulkData=[];
+
+function goPage(p){
+  curPage=p;
+  document.querySelectorAll('.page').forEach(function(el){el.classList.remove('on')});
+  document.getElementById('page-'+p).classList.add('on');
+  document.querySelectorAll('.nav-btn').forEach(function(b,i){
+    b.classList.toggle('on',['dashboard','qop','farq','api'][i]===p);
+  });
+  if(p==='dashboard') renderDashboard();
+  if(p==='qop') renderQopPage();
+  if(p==='farq') renderFarqPage();
+}
+
+function fmt(n){return Math.round(n).toLocaleString('ru-RU')}
+function pct(a,b){return b?Math.round(a/b*100):0}
+
+function initDates(){
+  var di=document.getElementById('dash-date');
+  var qi=document.getElementById('qop-date');
+  if(di&&!di.value) di.value=today;
+  if(qi&&!qi.value) qi.value=today;
+}
+
+function renderDashboard(){
+  initDates();
+  var selDate=document.getElementById('dash-date').value||today;
+  var selK=document.getElementById('dash-kuryer').value;
+  var couriers=selK==='all'?MOCK.couriers:MOCK.couriers.filter(function(c){return c.name===selK});
+  var tp=couriers.reduce(function(s,c){return s+c.paid},0);
+  var tu=couriers.reduce(function(s,c){return s+c.unpaid},0);
+  var tt=couriers.reduce(function(s,c){return s+c.total},0);
+  var openFarq=farqDB.permanent.filter(function(r){return r.status==='open'&&(selK==='all'||r.kuryer===selK)}).length;
+
+  document.getElementById('dash-metrics').innerHTML=
+    mc('Jami yuborildi',fmt(tt),'tranzitda')+
+    mc('To\'langan',fmt(tp),pct(tp,tt)+'%','#3B6D11')+
+    mc('To\'lanmagan',fmt(tu),pct(tu,tt)+'%','#A32D2D')+
+    mc('Ochiq farqlar',fmt(openFarq),'trek raqam','#854F0B');
+
+  var ch='';
+  couriers.forEach(function(c){
+    var pp=pct(c.paid,c.total),up=pct(c.unpaid,c.total);
+    ch+='<div class="row-f">';
+    ch+='<span style="font-size:13px;font-weight:500;min-width:52px;color:var(--color-text-primary)">'+c.name+'</span>';
+    ch+='<div style="flex:1">';
+    ch+='<div style="display:flex;align-items:center;gap:6px;margin-bottom:4px"><span class="dot" style="background:#639922"></span><div class="bar-bg"><div class="bar-f" style="width:'+pp+'%;background:#639922"></div></div><span style="font-size:12px;color:var(--color-text-secondary);min-width:78px">'+fmt(c.paid)+' to\'langan</span><span class="badge bp">'+pp+'%</span></div>';
+    ch+='<div style="display:flex;align-items:center;gap:6px"><span class="dot" style="background:#E24B4A"></span><div class="bar-bg"><div class="bar-f" style="width:'+up+'%;background:#E24B4A"></div></div><span style="font-size:12px;color:var(--color-text-secondary);min-width:78px">'+fmt(c.unpaid)+' to\'lanmagan</span><span class="badge bu">'+up+'%</span></div>';
+    ch+='</div></div>';
+  });
+  document.getElementById('dash-couriers').innerHTML=ch;
+
+  var fd='<table class="tbl"><thead><tr><th style="width:80px">Sana</th><th style="width:65px">Kuryer</th><th style="width:65px">Farq</th><th style="width:70px">Yopildi</th><th>Qolgan</th></tr></thead><tbody>';
+  var rows=MOCK.dailyFarq.filter(function(r){return selK==='all'||r.kuryer===selK}).slice(-6);
+  rows.forEach(function(r){
+    var remain=Math.abs(r.diff)-r.closed;
+    fd+='<tr><td style="font-size:11px;color:var(--color-text-secondary)">'+r.date+'</td>';
+    fd+='<td><strong>'+r.kuryer+'</strong></td>';
+    fd+='<td style="color:#A32D2D;font-weight:500">'+r.diff+'</td>';
+    fd+='<td style="color:#3B6D11">'+r.closed+'</td>';
+    fd+='<td><span class="badge '+(remain===0?'bp':'bu')+'">'+remain+' ta</span></td></tr>';
+  });
+  fd+='</tbody></table>';
+  document.getElementById('dash-farq-summary').innerHTML=fd;
+}
+
+function mc(label,val,sub,color){
+  return '<div class="mc"><div class="ml">'+label+'</div><div class="mv"'+(color?' style="color:'+color+'"':'')+'>'+val+'</div><div class="ms">'+sub+'</div></div>';
+}
+
+var qopData={
+  IPOST:{china:2800,found:2750,paidOut:1000,unpaidOut:1750},
+  Relog:{china:2000,found:2000,paidOut:1000,unpaidOut:1000},
+  BTS:{china:3000,found:2968,paidOut:1400,unpaidOut:1568},
+  EMU:{china:2000,found:1978,paidOut:800,unpaidOut:1178}
+};
+// qop tab
+function renderQopPage(){
+ initDates();
+  
+  // Kuryerlarni tanlash uchun SELECT (dropdown) yaratish
+  var selectHtml = '<select class="nav-btn" onchange="setQopTab(this.value)" style="cursor:pointer">';
+  ['IPOST', 'Relog', 'BTS', 'EMU'].forEach(function(k) {
+    // Agar qopTab tanlangan kuryerga teng bo'lsa, uni 'selected' qilamiz
+    var selected = (qopTab === k) ? ' selected' : '';
+    selectHtml += '<option value="' + k + '"' + selected + '>' + k + '</option>';
+  });
+  selectHtml += '</select>';
+
+  // HTML dagi konteynerga (qop-tabs id li joyga) selectni joylashtiramiz
+  document.getElementById('qop-tabs').innerHTML = selectHtml;
+
+  var d = qopData[qopTab];
+  var diff = d.found - d.china;
+  var ok = (d.paidOut + d.unpaidOut) === d.found;
+
+  var html='<div class="g4" style="margin-bottom:14px">';
+  html+=mc('Xitoydan kutilgan',fmt(d.china),'trek');
+  html+=mc('Qopdan topildi',fmt(d.found),'trek',d.found<d.china?'#A32D2D':'var(--color-text-primary)');
+  html+=mc('Farq',diff===0?'Mos':''+(diff),'ta',diff<0?'#A32D2D':diff>0?'#854F0B':'#3B6D11');
+  html+=mc('Tekshiruv',ok?'To\'g\'ri':'Xato',ok?'ajratish mos':'qayta tekshiring',ok?'#3B6D11':'#A32D2D');
+  html+='</div>';
+
+  if(diff<0) html+='<div style="background:#FCEBEB;border:0.5px solid #A32D2D;border-radius:var(--border-radius-md);padding:.5rem .9rem;font-size:12px;color:#A32D2D;margin-bottom:10px">Kamomad: '+Math.abs(diff)+' ta trek qopda yo\'q — Xitoy bilan tekshiring</div>';
+  if(diff===0) html+='<div style="background:#EAF3DE;border:0.5px solid #3B6D11;border-radius:var(--border-radius-md);padding:.5rem .9rem;font-size:12px;color:#3B6D11;margin-bottom:10px">Son mos — Xitoy yuborgan bilan qopdan topilgan teng</div>';
+
+  html+='<div class="g2" style="margin-bottom:0">';
+  html+='<div><div style="font-size:12px;color:var(--color-text-secondary);margin-bottom:4px">To\'langan ajratildi</div><div style="font-size:18px;font-weight:500;color:#3B6D11">'+fmt(d.paidOut)+'</div></div>';
+  html+='<div><div style="font-size:12px;color:var(--color-text-secondary);margin-bottom:4px">To\'lanmagan ajratildi</div><div style="font-size:18px;font-weight:500;color:#A32D2D">'+fmt(d.unpaidOut)+'</div></div>';
+  html+='</div>';
+
+  document.getElementById('qop-body').innerHTML='<div class="card">'+html+'</div>';
+
+  var period=document.getElementById('qop-period').value;
+  var hist='';
+  MOCK.dailyFarq.forEach(function(r){
+    var remain=Math.abs(r.diff)-r.closed;
+    var dcls=r.diff<0?'bu':'bp';
+    hist+='<tr><td style="font-size:11px">'+r.date+'</td><td><strong>'+r.kuryer+'</strong></td><td>'+fmt(r.china)+'</td><td>'+fmt(r.china+r.diff)+'</td><td><span class="badge '+dcls+'">'+r.diff+'</span></td>';
+    hist+='<td style="color:#3B6D11">—</td><td style="color:#A32D2D">—</td>';
+    hist+='<td><span class="badge '+(remain===0?'bp':'bw')+'">'+(remain===0?'Yopiq':'Ochiq: '+remain)+'</span></td></tr>';
+  });
+  document.getElementById('qop-history-body').innerHTML=hist;
+}
+
+function setQopTab(t){qopTab=t;renderQopPage()}
+
+function renderFarqPage(){
+  var selK=document.getElementById('farq-kuryer').value;
+  var perm=farqDB.permanent.filter(function(r){return selK==='all'||r.kuryer===selK});
+  var res=farqDB.resolved.filter(function(r){return selK==='all'||r.kuryer===selK});
+  var open=perm.filter(function(r){return r.status==='open'});
+  var closed=perm.filter(function(r){return r.status==='closed'});
+
+  document.getElementById('farq-metrics').innerHTML=
+    mc('Doimiy farqlar (kun oxiri)',fmt(perm.length),'trek raqam','#A32D2D')+
+    mc('Yopildi (keldi)',fmt(res.length),'trek qabul qilindi','#3B6D11')+
+    mc('Hali ochiq',fmt(open.length),'yopilmagan trek','#854F0B')+
+    mc('Yopilish foizi',pct(res.length,perm.length+res.length)+'%','barcha farqlardan');
+
+  var permHtml='<div class="farq-col-head"><span class="farq-col-title">Doimiy farq (kun oxiri)</span><span class="farq-col-count" style="color:#A32D2D">'+perm.length+' ta</span></div>';
+  permHtml+='<div style="font-size:11px;color:var(--color-text-tertiary);margin-bottom:8px">Bu raqam o\'zgarmaydi — Xitoy bilan hisob uchun</div>';
+  permHtml+='<div class="scroll-list">';
+  perm.forEach(function(r){
+    permHtml+='<div class="trek-item"><div><div class="trek-code">'+r.trek+'</div><div class="trek-meta">'+r.kuryer+' · '+r.fixedDate+'</div></div><span class="badge '+(r.status==='open'?'bu':'bg')+'">'+(r.status==='open'?'Ochiq':'Yopiq')+'</span></div>';
+  });
+  permHtml+='</div>';
+
+  var resHtml='<div class="farq-col-head"><span class="farq-col-title">Keyinchalik kelganlar</span><span class="farq-col-count" style="color:#3B6D11">'+res.length+' ta</span></div>';
+  resHtml+='<div style="font-size:11px;color:var(--color-text-tertiary);margin-bottom:8px">Yopilgan — qabul qilindi</div>';
+  resHtml+='<div class="scroll-list">';
+  res.forEach(function(r){
+    resHtml+='<div class="trek-item"><div><div class="trek-code">'+r.trek+'</div><div class="trek-meta">'+r.kuryer+' · yopildi: '+r.resolvedDate+'</div></div><span class="badge bp">Qabul qilindi</span></div>';
+  });
+  resHtml+='</div>';
+
+  document.getElementById('farq-panel').innerHTML='<div class="farq-col">'+permHtml+'</div><div class="farq-col">'+resHtml+'</div>';
+
+  var dailyHtml='<table class="tbl"><thead><tr><th style="width:80px">Sana</th><th style="width:65px">Kuryer</th><th style="width:70px">Farq soni</th><th style="width:70px">Yopildi</th><th style="width:70px">Qolgan</th><th>Progress</th></tr></thead><tbody>';
+  MOCK.dailyFarq.filter(function(r){return selK==='all'||r.kuryer===selK}).forEach(function(r){
+    var total=Math.abs(r.diff), rem=total-r.closed, pp=pct(r.closed,total);
+    dailyHtml+='<tr>';
+    dailyHtml+='<td style="font-size:11px;color:var(--color-text-secondary)">'+r.date+'</td>';
+    dailyHtml+='<td><strong>'+r.kuryer+'</strong></td>';
+    dailyHtml+='<td style="color:#A32D2D;font-weight:500">'+total+'</td>';
+    dailyHtml+='<td style="color:#3B6D11">'+r.closed+'</td>';
+    dailyHtml+='<td><span class="badge '+(rem===0?'bp':'bu')+'">'+rem+'</span></td>';
+    dailyHtml+='<td><div style="display:flex;align-items:center;gap:6px"><div class="bar-bg"><div class="bar-f" style="width:'+pp+'%;background:#639922"></div></div><span style="font-size:11px;color:var(--color-text-secondary)">'+pp+'%</span></div></td>';
+    dailyHtml+='</tr>';
+  });
+  dailyHtml+='</tbody></table>';
+  document.getElementById('farq-daily').innerHTML='<div class="card">'+dailyHtml+'</div>';
+}
+
+function fetchTrek(){
+  var t=document.getElementById('trek-inp').value.trim().toUpperCase();
+  var el=document.getElementById('trek-result');
+  if(!t){el.innerHTML='<div style="font-size:12px;color:var(--color-text-secondary);padding:8px 0">Trek raqamini kiriting</div>';return}
+  el.innerHTML='<div style="font-size:12px;color:var(--color-text-secondary);padding:8px 0">So\'ralyapti...</div>';
+  setTimeout(function(){
+    var d=MOCK.treks[t];
+    if(!d){el.innerHTML='<div style="background:#FCEBEB;border:0.5px solid #A32D2D;border-radius:var(--border-radius-md);padding:.5rem .9rem;font-size:12px;color:#A32D2D">Topilmadi: '+t+'</div>';return}
+    var paid=d.holat==='paid';
+    el.innerHTML='<div class="card" style="margin-top:8px"><table class="tbl"><tr><td style="color:var(--color-text-secondary);width:100px">Trek</td><td><code style="font-size:11px">'+t+'</code></td></tr><tr><td style="color:var(--color-text-secondary)">Mijoz</td><td>'+d.client+'</td></tr><tr><td style="color:var(--color-text-secondary)">Kuryer</td><td>'+d.kuryer+'</td></tr><tr><td style="color:var(--color-text-secondary)">Summa</td><td>'+fmt(d.summa)+' so\'m</td></tr><tr><td style="color:var(--color-text-secondary)">Holat</td><td><span class="badge '+(paid?'bp':'bu')+'">'+(paid?'To\'langan':'To\'lanmagan')+'</span></td></tr></table></div>';
+  },400);
+}
+
+function fetchBulk(){
+  var lines=document.getElementById('bulk-inp').value.trim().split('\n').map(function(l){return l.trim().toUpperCase()}).filter(Boolean);
+  if(!lines.length)return;
+  document.getElementById('bulk-st').textContent='Tekshirilyapti...';
+  bulkData=[];
+  setTimeout(function(){
+    lines.forEach(function(t){
+      var d=MOCK.treks[t]||{client:'Noma\'lum',summa:0,holat:'unknown',kuryer:'—'};
+      bulkData.push({trek:t,client:d.client,summa:d.summa,holat:d.holat,kuryer:d.kuryer});
+    });
+    document.getElementById('bulk-st').textContent=lines.length+' ta';
+    var paid=bulkData.filter(function(r){return r.holat==='paid'}).length;
+    var unpaid=bulkData.filter(function(r){return r.holat==='unpaid'}).length;
+    var html='<div style="display:flex;gap:8px;margin-bottom:8px"><span class="badge bp">'+paid+' to\'langan</span><span class="badge bu">'+unpaid+' to\'lanmagan</span></div>';
+    html+='<table class="tbl"><thead><tr><th style="width:130px">Trek</th><th style="width:110px">Mijoz</th><th style="width:60px">Kuryer</th><th style="width:80px">Summa</th><th>Holat</th></tr></thead><tbody>';
+    bulkData.forEach(function(r){
+      var cls=r.holat==='paid'?'bp':r.holat==='unpaid'?'bu':'bg';
+      var lbl=r.holat==='paid'?'To\'langan':r.holat==='unpaid'?'To\'lanmagan':'Noma\'lum';
+      html+='<tr><td><code style="font-size:11px">'+r.trek+'</code></td><td style="font-size:11px">'+r.client+'</td><td>'+r.kuryer+'</td><td style="font-size:11px">'+fmt(r.summa)+'</td><td><span class="badge '+cls+'">'+lbl+'</span></td></tr>';
+    });
+    html+='</tbody></table>';
+    document.getElementById('bulk-result').innerHTML=html;
+  },600);
+}
+
+function exportCSV(){
+  if(!bulkData.length)return;
+  var csv='Trek,Mijoz,Kuryer,Summa,Holat\n';
+  bulkData.forEach(function(r){csv+=r.trek+','+r.client+','+r.kuryer+','+r.summa+','+r.holat+'\n'});
+  var a=document.createElement('a');
+  a.href='data:text/csv;charset=utf-8,'+encodeURIComponent(csv);
+  a.download='trek-holat.csv';a.click();
+}
+
+initDates();
+renderDashboard();
+</script>
+
+
+</body>
+</html>

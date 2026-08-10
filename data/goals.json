@@ -1,0 +1,37 @@
+[
+  {
+    "metric": "Proaktiv (asosiy) ishlar ulushi",
+    "now": "2%",
+    "in3Months": "10%",
+    "in6Months": "20%",
+    "source": "Kunlik reyestr — 'Tur' ustuni"
+  },
+  {
+    "metric": "Takroriy muammolar ulushi",
+    "now": "o'lchanmagan",
+    "in3Months": "≤25%",
+    "in6Months": "≤15%",
+    "source": "Kunlik reyestr — 'Takroriy' ustuni"
+  },
+  {
+    "metric": "Bir xodimda to'plangan vazifa ulushi",
+    "now": "85%",
+    "in3Months": "≤35%",
+    "in6Months": "≤30%",
+    "source": "Ish taqsimoti varag'i"
+  },
+  {
+    "metric": "Rejali audit qamrovi (filial/oy)",
+    "now": "0",
+    "in3Months": "20 ta",
+    "in6Months": "40 ta",
+    "source": "Checklist varaqlari"
+  },
+  {
+    "metric": "Vaqt normasi aniqligi",
+    "now": "yo'q",
+    "in3Months": "o'lchandi",
+    "in6Months": "tasdiqlandi",
+    "source": "Quvvat hisobi varag'i"
+  }
+]

@@ -1,0 +1,27 @@
+{
+  "bonusShareOfSalary": 0.5,
+  "entryThresholdScore": 70.0,
+  "upperCapCoefficient": 1.2,
+  "gradeScale": [
+    {
+      "min": 110,
+      "label": "A'lo"
+    },
+    {
+      "min": 95,
+      "label": "Yaxshi"
+    },
+    {
+      "min": 85,
+      "label": "Qoniqarli"
+    },
+    {
+      "min": 70,
+      "label": "Past"
+    },
+    {
+      "min": 0,
+      "label": "Qoniqarsiz"
+    }
+  ]
+}

@@ -1,0 +1,11 @@
+{
+  "extends": ["next/core-web-vitals", "next/typescript"],
+  "rules": {
+    "@typescript-eslint/no-explicit-any": "error",
+    "@typescript-eslint/consistent-type-imports": "warn",
+    "@typescript-eslint/no-unused-vars": ["error", { "argsIgnorePattern": "^_", "varsIgnorePattern": "^_" }],
+    // O'zbek lotin yozuvida apostrof (bo'lim, o'zgarish) matnning tabiiy qismi —
+    // uni har joyda HTML entity bilan almashtirish matnni o'qib bo'lmas qiladi.
+    "react/no-unescaped-entities": "off"
+  }
+}

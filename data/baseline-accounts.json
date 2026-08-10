@@ -1,0 +1,62 @@
+[
+  {
+    "account": "iPost | Sifat Nazorati",
+    "cases": 9052.0,
+    "own": 8073.0,
+    "shared": 979.0,
+    "sessions": 3824.0,
+    "tracks": 6910.0,
+    "customers": 521.0,
+    "unanswered": 310.0,
+    "medianMin": 73.2,
+    "within1h": 0.4749
+  },
+  {
+    "account": "IPost | Shadiyev Saidali",
+    "cases": 3956.0,
+    "own": 3051.0,
+    "shared": 905.0,
+    "sessions": 2264.0,
+    "tracks": 2650.0,
+    "customers": 580.0,
+    "unanswered": 427.0,
+    "medianMin": 19.3,
+    "within1h": 0.6198
+  },
+  {
+    "account": "Jasur Bafaev",
+    "cases": 3680.0,
+    "own": 2798.0,
+    "shared": 882.0,
+    "sessions": 1875.0,
+    "tracks": 2696.0,
+    "customers": 500.0,
+    "unanswered": 272.0,
+    "medianMin": 32.2,
+    "within1h": 0.5625
+  },
+  {
+    "account": "YIG'INDI (takror bilan)",
+    "cases": 16688.0,
+    "own": 13922.0,
+    "shared": 2766.0,
+    "sessions": 7963.0,
+    "tracks": 12256.0,
+    "customers": 1601.0,
+    "unanswered": 1009.0,
+    "medianMin": null,
+    "within1h": null
+  },
+  {
+    "account": "Dedublikatsiyadan keyingi haqiqiy jami: 15 226 ta ish (takrorlangan 1 304 ta ish bir marta sanaldi).",
+    "cases": null,
+    "own": null,
+    "shared": null,
+    "sessions": null,
+    "tracks": null,
+    "customers": null,
+    "unanswered": null,
+    "medianMin": null,
+    "within1h": null
+  }
+]

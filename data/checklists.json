@@ -1,0 +1,275 @@
+[
+  {
+    "kind": "WAREHOUSE",
+    "title": "CHECKLIST — OMBOR VA VILOYAT TAQSIMOT MARKAZI (RS) AUDITI",
+    "note": "2 sklad (Toshkent) + 12 viloyat RS · Davriylik: har bir ob'ekt oyiga kamida 1 marta · Mas'ul: Ulug'bek M.",
+    "items": [
+      {
+        "no": 1,
+        "title": "Hudud tozaligi, yuk saqlash zonalari belgilangan",
+        "requirement": "Zonalar ajratilgan va belgilangan",
+        "max": 2
+      },
+      {
+        "no": 2,
+        "title": "Qabul qilingan yuklarning tizimda skanerlanishi",
+        "requirement": "100% skanerlanadi, 2 soat ichida",
+        "max": 2
+      },
+      {
+        "no": 3,
+        "title": "Saralash zonasida adashgan yuk qoldig'i",
+        "requirement": "Smena oxirida 0 ta qolishi kerak",
+        "max": 2
+      },
+      {
+        "no": 4,
+        "title": "Muammoli yuklar alohida zonada va belgilangan",
+        "requirement": "Alohida joy, yorliq, reyestr mavjud",
+        "max": 2
+      },
+      {
+        "no": 5,
+        "title": "Musodara va vozvrat yuklar reyestri yuritilishi",
+        "requirement": "Kunlik yangilanadi, mas'ul imzosi bor",
+        "max": 2
+      },
+      {
+        "no": 6,
+        "title": "Inventarizatsiya farqi (fakt ↔ tizim)",
+        "requirement": "Farq ≤ 0,1%",
+        "max": 2
+      },
+      {
+        "no": 7,
+        "title": "Yuk qadoqlash va shikastlanishdan himoya holati",
+        "requirement": "Shikastlangan yuk ≤ 0,5%",
+        "max": 2
+      },
+      {
+        "no": 8,
+        "title": "Videokuzatuv ishlashi va arxiv muddati",
+        "requirement": "Barcha kamera ishlaydi, arxiv ≥ 30 kun",
+        "max": 2
+      },
+      {
+        "no": 9,
+        "title": "Yong'in va mehnat xavfsizligi talablari",
+        "requirement": "O'chirgichlar amal muddatida, yo'llar bo'sh",
+        "max": 2
+      },
+      {
+        "no": 10,
+        "title": "Xodimlar smena jadvali va davomat nazorati",
+        "requirement": "Jadval mavjud, davomat yuritiladi",
+        "max": 2
+      },
+      {
+        "no": 11,
+        "title": "Yuk chiqishi hujjatlari (akt, imzo) to'liqligi",
+        "requirement": "Har bir chiqishda imzolangan akt",
+        "max": 2
+      },
+      {
+        "no": 12,
+        "title": "RS ga / RS dan jo'natish muddatiga rioya",
+        "requirement": "Belgilangan grafikdan kechikish yo'q",
+        "max": 2
+      },
+      {
+        "no": 13,
+        "title": "Xitoy yo'nalishi bo'yicha yuk qabul hujjatlari",
+        "requirement": "Invoys va tarkib ro'yxati mos",
+        "max": 2
+      },
+      {
+        "no": 14,
+        "title": "Oldingi tekshiruv kamchiliklarining bartaraf etilishi",
+        "requirement": "100% bartaraf etilgan",
+        "max": 2
+      }
+    ]
+  },
+  {
+    "kind": "BRANCH",
+    "title": "CHECKLIST — FILIAL VA HAMKOR PUNKT AUDITI",
+    "note": "iPOST, EMU, BTS, Uzpost, Starex punktlari (~1000 ta) · Reja: oyiga 40 ta · Mas'ul: Saidali Sh.",
+    "items": [
+      {
+        "no": 1,
+        "title": "Ish vaqtiga rioya (ochilish va yopilish)",
+        "requirement": "E'lon qilingan grafikka to'liq mos",
+        "max": 2
+      },
+      {
+        "no": 2,
+        "title": "Xodim tashqi ko'rinishi, forma va bejik",
+        "requirement": "Forma va bejik mavjud",
+        "max": 2
+      },
+      {
+        "no": 3,
+        "title": "Mijoz bilan salomlashish va muomala standarti",
+        "requirement": "Standart skriptga muvofiq",
+        "max": 2
+      },
+      {
+        "no": 4,
+        "title": "Yuk berishda shaxsni tasdiqlash tartibi",
+        "requirement": "Hujjat yoki SMS-kod tekshiriladi",
+        "max": 2
+      },
+      {
+        "no": 5,
+        "title": "Tizimda statusning o'z vaqtida o'zgartirilishi",
+        "requirement": "Harakatdan keyin 30 daqiqa ichida",
+        "max": 2
+      },
+      {
+        "no": 6,
+        "title": "Naqd pul qabul qilish va kassa hujjatlari",
+        "requirement": "Chek beriladi, kassa qoldig'i mos",
+        "max": 2
+      },
+      {
+        "no": 7,
+        "title": "Yuk saqlash muddati va joylashuv tartibi",
+        "requirement": "Muddati o'tgan yuk vozvratga o'tkazilgan",
+        "max": 2
+      },
+      {
+        "no": 8,
+        "title": "Vozvratga o'tkazish tartibiga rioya",
+        "requirement": "Reglament muddati buzilmagan",
+        "max": 2
+      },
+      {
+        "no": 9,
+        "title": "Mijoz shikoyat va fikr kanali mavjudligi",
+        "requirement": "Ko'rinadigan joyda, ishlaydi",
+        "max": 2
+      },
+      {
+        "no": 10,
+        "title": "Narx va aksiya ma'lumotlarining dolzarbligi",
+        "requirement": "Joriy tarifga mos, eski e'lon yo'q",
+        "max": 2
+      },
+      {
+        "no": 11,
+        "title": "Filial aloqa raqamining ishlashi",
+        "requirement": "Qo'ng'iroqqa 3 gudokda javob",
+        "max": 2
+      },
+      {
+        "no": 12,
+        "title": "Filialdagi yuk qoldig'i tizim bilan mosligi",
+        "requirement": "Farq ≤ 1%",
+        "max": 2
+      },
+      {
+        "no": 13,
+        "title": "Xodimlarning tizimni bilish darajasi (og'zaki test)",
+        "requirement": "3 ta savoldan 3 tasiga to'g'ri javob",
+        "max": 2
+      },
+      {
+        "no": 14,
+        "title": "Oldingi tekshiruv kamchiliklarining bartaraf etilishi",
+        "requirement": "100% bartaraf etilgan",
+        "max": 2
+      }
+    ]
+  },
+  {
+    "kind": "CALL",
+    "title": "CHECKLIST — QO'NG'IROQ VA CHAT SIFATINI BAHOLASH",
+    "note": "Call center, VIP operatorlar, Telegram · Norma: oyiga 200 ta · Mas'ul: Shahnoza",
+    "items": [
+      {
+        "no": 1,
+        "title": "Salomlashish va o'zini tanishtirish",
+        "requirement": "Kompaniya nomi + ism aytilgan",
+        "max": 2
+      },
+      {
+        "no": 2,
+        "title": "Mijoz muammosini bo'lmasdan tinglash",
+        "requirement": "Gapini bo'lmagan",
+        "max": 2
+      },
+      {
+        "no": 3,
+        "title": "Trek raqami / murojaat ID ni to'g'ri aniqlash",
+        "requirement": "Birinchi urinishda to'g'ri",
+        "max": 2
+      },
+      {
+        "no": 4,
+        "title": "Tizimdan to'g'ri va to'liq ma'lumot berish",
+        "requirement": "Aytilgan ma'lumot tizimga mos",
+        "max": 2
+      },
+      {
+        "no": 5,
+        "title": "Aniq muddat va'da qilish",
+        "requirement": "'Tez orada' emas, aniq sana/soat",
+        "max": 2
+      },
+      {
+        "no": 6,
+        "title": "Kutish (hold) vaqti",
+        "requirement": "30 soniyadan oshmagan, ogohlantirilgan",
+        "max": 2
+      },
+      {
+        "no": 7,
+        "title": "Muloqot ohangi va xushmuomalalik",
+        "requirement": "Ovoz balandligi va ohang me'yorda",
+        "max": 2
+      },
+      {
+        "no": 8,
+        "title": "Murojaatning CRM ga to'g'ri qayd etilishi",
+        "requirement": "To'liq izoh va to'g'ri kategoriya",
+        "max": 2
+      },
+      {
+        "no": 9,
+        "title": "Kerakli bo'limga to'g'ri marshrutlash",
+        "requirement": "Qayta yo'naltirish bo'lmagan",
+        "max": 2
+      },
+      {
+        "no": 10,
+        "title": "Mijozning ismi bilan murojaat qilish",
+        "requirement": "Kamida 1 marta ismi aytilgan",
+        "max": 2
+      },
+      {
+        "no": 11,
+        "title": "Yakunda xulosalash va qo'shimcha savol so'rash",
+        "requirement": "Kelishuv takrorlangan",
+        "max": 2
+      },
+      {
+        "no": 12,
+        "title": "Skript va reglamentga rioya",
+        "requirement": "Majburiy bandlar aytilgan",
+        "max": 2
+      },
+      {
+        "no": 13,
+        "title": "Qayta murojaat talab qilmagani (FCR)",
+        "requirement": "7 kun ichida shu masalada qayta murojaat yo'q",
+        "max": 2
+      },
+      {
+        "no": 14,
+        "title": "Va'da qilingan muddat bajarilgani",
+        "requirement": "Va'da qilingan sanada bajarilgan",
+        "max": 2
+      }
+    ]
+  }
+]

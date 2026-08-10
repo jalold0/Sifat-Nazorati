@@ -1,0 +1,487 @@
+// iPOST — Sifat nazorati (OTK) bo'limi KPI va nazorat tizimi
+// Manba: iPOST_OTK_Ish_tartibi_va_KPI.xlsx + Telegram/102 tahlili
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+// ── Foydalanuvchi va tashkiliy tuzilma ───────────────────────────────────────
+
+enum Role {
+  CEO // to'liq ko'rish + KPI tasdiqlash
+  HEAD // bo'lim boshlig'i — hamma narsani boshqaradi, KPI'ni yuboradi
+  SPECIALIST // o'z zonasi bo'yicha ishlaydi
+  VIEWER // faqat o'qish (HR, moliya)
+}
+
+model User {
+  id           String    @id @default(cuid())
+  key          String    @unique // barqaror kalit: ulugbek, jasur, saidali, head, ceo
+  fullName     String
+  shortName    String // reyestrdagi ko'rinish: "Ulug'bek M."
+  login        String    @unique
+  passwordHash String
+  role         Role
+  position     String
+  salary       Decimal?  @db.Decimal(14, 2) // oylik maosh (so'm) — bonus hisobi uchun
+  active       Boolean   @default(true)
+  lastLoginAt  DateTime?
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+
+  ownedZone      Zone?
+  ownedTasks     TaskDef[]     @relation("taskOwner")
+  backupTasks    TaskDef[]     @relation("taskBackup")
+  tickets        Ticket[]      @relation("ticketOwner")
+  createdTickets Ticket[]      @relation("ticketAuthor")
+  indicators     KpiIndicator[]
+  kpiResults     KpiResult[]
+  audits         Audit[]
+  approvedPeriods KpiPeriod[]  @relation("periodApprover")
+  overrides      KpiFact[]     @relation("factOverride")
+  actions        RootCauseAction[]
+  reviewItems    ReviewItem[]
+  activityLog    ActivityLog[]
+
+  @@index([role, active])
+}
+
+model Zone {
+  code     String  @id // A, B, C, D
+  name     String
+  location String
+  coverage String
+  outcome  String
+  ownerId  String  @unique
+  owner    User    @relation(fields: [ownerId], references: [id])
+
+  tasks   TaskDef[]
+  tickets Ticket[]
+}
+
+enum TaskKind {
+  PROACTIVE // asosiy vazifa — sifat nazorati
+  REACTIVE // boshqa bo'lim muammosini hal qilish
+}
+
+enum Priority {
+  CRITICAL
+  HIGH
+  MEDIUM
+  LOW
+}
+
+/// 43 ta biriktirilgan vazifa katalogi (Ish taqsimoti varag'i)
+model TaskDef {
+  id        Int      @id @default(autoincrement())
+  no        Int      @unique
+  zoneCode  String
+  zone      Zone     @relation(fields: [zoneCode], references: [code])
+  title     String
+  source    String
+  ownerId   String
+  owner     User     @relation("taskOwner", fields: [ownerId], references: [id])
+  backupId  String?
+  backup    User?    @relation("taskBackup", fields: [backupId], references: [id])
+  frequency String // Kunlik / Haftalik / Oylik
+  slaHours  Int?
+  priority  Priority
+  kind      TaskKind
+  active    Boolean  @default(true)
+
+  tickets Ticket[]
+
+  @@index([zoneCode, kind])
+  @@index([ownerId])
+}
+
+// ── Kunlik reyestr — butun tizimning poydevori ───────────────────────────────
+
+enum TicketStatus {
+  OPEN
+  IN_PROGRESS
+  ESCALATED
+  CLOSED
+  CANCELLED
+}
+
+enum TicketSource {
+  MANUAL // qo'lda kiritilgan
+  IMPORT // Excel importi
+  TELEGRAM
+  SYSTEM_102
+  API
+}
+
+model Ticket {
+  id       String @id @default(cuid())
+  ref      String @unique // IP-2606-0001
+  date     DateTime @db.Date // hisobot kuni
+  channel  String // Telegram, 102, Filiallar, CRM, Ombor ...
+  zoneCode String
+  zone     Zone   @relation(fields: [zoneCode], references: [code])
+
+  taskDefId    Int?
+  taskDef      TaskDef? @relation(fields: [taskDefId], references: [id])
+  category     String // vazifa turi
+  objectName   String? // filial / RS / ombor
+  description  String
+  externalRef  String? // trek raqami yoki tashqi ID
+
+  ownerId String
+  owner   User   @relation("ticketOwner", fields: [ownerId], references: [id])
+
+  priority Priority
+  kind     TaskKind
+  status   TicketStatus @default(OPEN)
+
+  receivedAt      DateTime
+  firstResponseAt DateTime?
+  escalatedAt     DateTime?
+  closedAt        DateTime?
+
+  spentHours Decimal? @db.Decimal(7, 2)
+  slaHours   Int
+  slaMet     Boolean? // yopilganda hisoblanadi
+  isRepeat   Boolean  @default(false)
+
+  rootCause   String?
+  actionTaken String?
+
+  source      TicketSource @default(MANUAL)
+  createdById String
+  createdBy   User         @relation("ticketAuthor", fields: [createdById], references: [id])
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+
+  @@index([date])
+  @@index([ownerId, date])
+  @@index([zoneCode, date])
+  @@index([status])
+  @@index([kind, date])
+  @@index([externalRef])
+}
+
+// ── KPI ──────────────────────────────────────────────────────────────────────
+
+enum Direction {
+  HIGHER_BETTER
+  LOWER_BETTER
+}
+
+enum MetricSource {
+  AUTO // reyestr/audit ma'lumotidan avtomatik hisoblanadi
+  MANUAL // tashqi tizimdan qo'lda kiritiladi
+}
+
+enum KpiUnit {
+  PERCENT
+  HOURS
+  COUNT
+  RATIO
+}
+
+/// KPI pasporti — ko'rsatkichning "qonuni"
+model KpiIndicator {
+  id           Int          @id @default(autoincrement())
+  code         String       @unique // ulugbek_zoneA_resolution_rate
+  no           Int
+  ownerId      String
+  owner        User         @relation(fields: [ownerId], references: [id])
+  name         String
+  shortLabel   String
+  weight       Decimal      @db.Decimal(5, 4) // 0.25 = 25 ball
+  direction    Direction
+  target       Decimal      @db.Decimal(12, 4)
+  targetText   String // "≥ 95%"
+  unit         KpiUnit
+  formula      String
+  dataSource   String
+  metric       String // hisoblash metrikasi kodi
+  metricSource MetricSource
+  active       Boolean      @default(true)
+
+  facts KpiFact[]
+
+  @@index([ownerId, active])
+}
+
+enum PeriodStatus {
+  DRAFT // to'ldirilmoqda
+  TRIAL // sinov rejimi — ball hisoblanadi, bonus to'lanmaydi
+  SUBMITTED // bo'lim boshlig'i CEO ga yubordi
+  APPROVED // CEO tasdiqladi — bonus to'lovga asos
+  REJECTED // CEO qaytardi
+}
+
+/// Hisobot oyi va uning sozlamalari
+model KpiPeriod {
+  id          Int          @id @default(autoincrement())
+  period      String       @unique // 2026-06
+  label       String // "Iyun 2026"
+  status      PeriodStatus @default(DRAFT)
+  bonusShare  Decimal      @db.Decimal(4, 3) // 0.5 — maoshdagi ulush
+  threshold   Decimal      @db.Decimal(5, 2) // 70 ball
+  cap         Decimal      @db.Decimal(4, 3) // 1.2
+  workingDays Int
+  note        String?
+
+  submittedAt  DateTime?
+  approvedAt   DateTime?
+  approvedById String?
+  approvedBy   User?     @relation("periodApprover", fields: [approvedById], references: [id])
+  ceoComment   String?
+
+  facts   KpiFact[]
+  results KpiResult[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+/// Bir oy + bir ko'rsatkich kesimidagi FAKT
+model KpiFact {
+  id          Int          @id @default(autoincrement())
+  periodId    Int
+  period      KpiPeriod    @relation(fields: [periodId], references: [id], onDelete: Cascade)
+  indicatorId Int
+  indicator   KpiIndicator @relation(fields: [indicatorId], references: [id], onDelete: Cascade)
+
+  autoValue   Decimal? @db.Decimal(14, 4) // reyestrdan hisoblangan
+  manualValue Decimal? @db.Decimal(14, 4) // qo'lda kiritilgan / override
+  usedValue   Decimal? @db.Decimal(14, 4) // yakuniy qiymat (manual ustun turadi)
+  achievement Decimal? @db.Decimal(8, 4)
+  score       Decimal? @db.Decimal(8, 4)
+
+  comment        String?
+  overriddenById String?
+  overriddenBy   User?    @relation("factOverride", fields: [overriddenById], references: [id])
+  updatedAt      DateTime @updatedAt
+
+  @@unique([periodId, indicatorId])
+}
+
+/// Oy yakuni bo'yicha xodim natijasi (muzlatilgan snapshot)
+model KpiResult {
+  id         Int       @id @default(autoincrement())
+  periodId   Int
+  period     KpiPeriod @relation(fields: [periodId], references: [id], onDelete: Cascade)
+  userId     String
+  user       User      @relation(fields: [userId], references: [id])
+  totalScore Decimal   @db.Decimal(8, 4)
+  grade      String
+  salary     Decimal?  @db.Decimal(14, 2)
+  bonus      Decimal   @db.Decimal(14, 2)
+  paid       Boolean   @default(false)
+  updatedAt  DateTime  @updatedAt
+
+  @@unique([periodId, userId])
+}
+
+// ── Checklist auditlari ──────────────────────────────────────────────────────
+
+enum ChecklistKind {
+  WAREHOUSE // Ombor va viloyat taqsimot markazi (RS)
+  BRANCH // Filial va hamkor punkt
+  CALL // Qo'ng'iroq va chat sifati
+}
+
+model ChecklistTemplate {
+  id     Int           @id @default(autoincrement())
+  kind   ChecklistKind @unique
+  title  String
+  note   String
+  active Boolean       @default(true)
+
+  items  ChecklistItem[]
+  audits Audit[]
+}
+
+model ChecklistItem {
+  id          Int               @id @default(autoincrement())
+  templateId  Int
+  template    ChecklistTemplate @relation(fields: [templateId], references: [id], onDelete: Cascade)
+  no          Int
+  title       String
+  requirement String
+  max         Int               @default(2)
+
+  answers AuditAnswer[]
+
+  @@unique([templateId, no])
+}
+
+model Audit {
+  id         Int               @id @default(autoincrement())
+  templateId Int
+  template   ChecklistTemplate @relation(fields: [templateId], references: [id])
+  kind       ChecklistKind
+  objectName String // filial nomi / sklad / operator F.I.Sh.
+  objectCode String?
+  externalRef String? // murojaat ID (chat/qo'ng'iroq bahosi uchun)
+  auditedAt  DateTime          @db.Date
+  auditorId  String
+  auditor    User              @relation(fields: [auditorId], references: [id])
+
+  previousPercent Decimal? @db.Decimal(5, 4)
+  totalScore      Int
+  maxScore        Int
+  percent         Decimal  @db.Decimal(5, 4)
+  verdict         String
+  notes           String?
+
+  answers   AuditAnswer[]
+  createdAt DateTime      @default(now())
+
+  @@index([kind, auditedAt])
+  @@index([auditorId, auditedAt])
+}
+
+model AuditAnswer {
+  id      Int           @id @default(autoincrement())
+  auditId Int
+  audit   Audit         @relation(fields: [auditId], references: [id], onDelete: Cascade)
+  itemId  Int
+  item    ChecklistItem @relation(fields: [itemId], references: [id])
+  score   Int // 0 / 1 / 2
+  note    String?
+
+  @@unique([auditId, itemId])
+}
+
+// ── Quvvat hisobi ────────────────────────────────────────────────────────────
+
+model CapacityScenario {
+  id             Int      @id @default(autoincrement())
+  name           String
+  period         String // 2026-06
+  monthlyVolume  Int
+  workingDays    Int
+  hoursPerDay    Decimal  @db.Decimal(4, 2)
+  specialists    Decimal  @db.Decimal(4, 2)
+  utilisation    Decimal  @db.Decimal(4, 3) // 0.85
+  proactiveShare Decimal  @db.Decimal(4, 3) // 0.20
+  isBaseline     Boolean  @default(false)
+  note           String?
+  createdAt      DateTime @default(now())
+
+  zones CapacityZone[]
+
+  @@unique([name, period])
+}
+
+model CapacityZone {
+  id             Int              @id @default(autoincrement())
+  scenarioId     Int
+  scenario       CapacityScenario @relation(fields: [scenarioId], references: [id], onDelete: Cascade)
+  zoneCode       String
+  flowShare      Decimal          @db.Decimal(4, 3)
+  minutesPerCase Decimal          @db.Decimal(6, 2)
+
+  @@unique([scenarioId, zoneCode])
+}
+
+// ── Root-cause va tizimli yechimlar ──────────────────────────────────────────
+
+enum ActionStatus {
+  PLANNED
+  IN_PROGRESS
+  DONE
+  VERIFIED // natija tasdiqlangan — KPI'ga shu holat kiradi
+  CANCELLED
+}
+
+model RootCauseAction {
+  id              Int          @id @default(autoincrement())
+  period          String // 2026-06
+  title           String
+  problem         String
+  repeatCount     Int          @default(0)
+  rootCause       String
+  solution        String
+  responsibleDept String
+  dueDate         DateTime?    @db.Date
+  status          ActionStatus @default(PLANNED)
+  verifiedAt      DateTime?
+  effect          String?
+  createdById     String
+  createdBy       User         @relation(fields: [createdById], references: [id])
+  createdAt       DateTime     @default(now())
+  updatedAt       DateTime     @updatedAt
+
+  @@index([period, status])
+}
+
+// ── Tekshirish ro'yxati (Telegramda javob izi qolmagan ishlar) ───────────────
+
+enum ReviewResult {
+  PENDING
+  RESOLVED
+  UNRESOLVED
+  NOT_RELEVANT
+}
+
+model ReviewItem {
+  id           Int          @id @default(autoincrement())
+  occurredOn   DateTime     @db.Date
+  track        String?
+  customer     String
+  originType   String // Tashqi / Ichki
+  category     String
+  account      String
+  text         String
+  hasTrack     Boolean
+  result       ReviewResult @default(PENDING)
+  resolvedWhere String?
+  note         String?
+  assignedToId String?
+  assignedTo   User?        @relation(fields: [assignedToId], references: [id])
+  updatedAt    DateTime     @updatedAt
+
+  @@index([result])
+  @@index([hasTrack, result])
+  @@index([track])
+}
+
+// ── Baseline (tarixiy o'lchov — grafiklar uchun) ─────────────────────────────
+
+model BaselineMonth {
+  period                  String  @id // 2026-06
+  label                   String
+  cases                   Int
+  noTrace                 Int
+  withTrack               Int
+  medianFirstResponseMin  Decimal @db.Decimal(8, 2)
+  system102Cases          Int?
+}
+
+model Goal {
+  id         Int    @id @default(autoincrement())
+  metric     String @unique
+  current    String
+  inThree    String
+  inSix      String
+  dataSource String
+}
+
+// ── O'zgarishlar izi (CEO nazorati uchun) ────────────────────────────────────
+
+model ActivityLog {
+  id        Int      @id @default(autoincrement())
+  actorId   String?
+  actor     User?    @relation(fields: [actorId], references: [id])
+  action    String // ticket.create, kpi.override, period.approve ...
+  entity    String
+  entityId  String?
+  summary   String
+  createdAt DateTime @default(now())
+
+  @@index([createdAt])
+  @@index([entity, entityId])
+}

@@ -1,0 +1,27 @@
+{
+  "inputs": {
+    "monthlyVolume": 5579.0,
+    "workingDays": 21.0,
+    "hoursPerDay": 8.0,
+    "specialists": 3.0,
+    "utilisation": 0.85,
+    "proactiveShare": 0.2
+  },
+  "zoneLoad": [
+    {
+      "zone": "A",
+      "flowShare": 0.3,
+      "minutesPerCase": 6.0
+    },
+    {
+      "zone": "B",
+      "flowShare": 0.4,
+      "minutesPerCase": 7.0
+    },
+    {
+      "zone": "C",
+      "flowShare": 0.3,
+      "minutesPerCase": 9.0
+    }
+  ]
+}

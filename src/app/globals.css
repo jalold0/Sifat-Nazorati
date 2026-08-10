@@ -1,0 +1,156 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/*
+  Dizayn tili — mavjud CEO hisobotlari bilan bir xil:
+  neytral fon, oq kartochkalar, tabular raqamlar, ko'k (Telegram) va to'q sariq (102) urg'ular.
+
+  Ranglar IKKI shaklda saqlanadi:
+    --*-rgb  → kanal qiymatlari, Tailwind shaffoflik modifikatori uchun (bg-brand/12)
+    --*      → tayyor rang, SVG va inline uslublarda to'g'ridan-to'g'ri ishlatiladi
+  var() kechikib almashtirilgani uchun qorong'i rejimda faqat kanallarni qayta belgilash kifoya.
+*/
+:root {
+  color-scheme: light;
+
+  --plane-rgb: 246 246 244;
+  --surface-rgb: 255 255 255;
+  --raised-rgb: 250 250 248;
+  --ink-rgb: 11 11 11;
+  --ink2-rgb: 82 81 78;
+  --muted-rgb: 139 137 131;
+  --line-rgb: 226 225 218;
+  --grid-rgb: 231 230 224;
+  --brand-rgb: 42 120 214;
+  --accent-rgb: 235 104 52;
+  --ok-rgb: 28 140 90;
+  --warn-rgb: 201 138 18;
+  --bad-rgb: 208 59 59;
+
+  --font-sans: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    color-scheme: dark;
+
+    --plane-rgb: 13 13 13;
+    --surface-rgb: 25 25 24;
+    --raised-rgb: 34 34 33;
+    --ink-rgb: 247 247 245;
+    --ink2-rgb: 195 194 183;
+    --muted-rgb: 141 139 131;
+    --line-rgb: 51 51 49;
+    --grid-rgb: 44 44 42;
+    --brand-rgb: 74 147 232;
+    --accent-rgb: 240 120 74;
+    --ok-rgb: 53 180 124;
+    --warn-rgb: 224 165 42;
+    --bad-rgb: 227 91 91;
+  }
+}
+
+:root {
+  --plane: rgb(var(--plane-rgb));
+  --surface: rgb(var(--surface-rgb));
+  --raised: rgb(var(--raised-rgb));
+  --ink: rgb(var(--ink-rgb));
+  --ink2: rgb(var(--ink2-rgb));
+  --muted: rgb(var(--muted-rgb));
+  --line: rgb(var(--line-rgb));
+  --grid: rgb(var(--grid-rgb));
+  --brand: rgb(var(--brand-rgb));
+  --accent: rgb(var(--accent-rgb));
+  --ok: rgb(var(--ok-rgb));
+  --warn: rgb(var(--warn-rgb));
+  --bad: rgb(var(--bad-rgb));
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  padding: 0;
+  margin: 0;
+}
+
+body {
+  background: var(--plane);
+  color: var(--ink);
+  font-family: var(--font-sans);
+  font-size: 14px;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Raqamlar jadvalda tekis turishi uchun */
+.tnum {
+  font-variant-numeric: tabular-nums;
+}
+
+@layer components {
+  .card {
+    @apply rounded-card border border-line bg-surface;
+  }
+
+  .field-label {
+    @apply mb-1.5 block text-[12px] font-semibold uppercase tracking-wide text-muted;
+  }
+
+  .field {
+    @apply w-full rounded-lg border border-line bg-raised px-3 py-2 text-[13.5px] text-ink
+           outline-none transition placeholder:text-muted
+           focus:border-brand focus:ring-2 focus:ring-brand/20 disabled:opacity-60;
+  }
+
+  .btn {
+    @apply inline-flex items-center justify-center gap-2 rounded-lg px-3.5 py-2 text-[13px]
+           font-semibold transition disabled:cursor-not-allowed disabled:opacity-50;
+  }
+
+  .btn-primary {
+    @apply btn bg-ink text-plane hover:opacity-90;
+  }
+
+  .btn-brand {
+    @apply btn bg-brand text-white hover:opacity-90;
+  }
+
+  .btn-ghost {
+    @apply btn border border-line bg-surface text-ink2 hover:bg-raised hover:text-ink;
+  }
+
+  .btn-danger {
+    @apply btn bg-bad text-white hover:opacity-90;
+  }
+
+  .th {
+    @apply border-b border-grid px-3 py-2 text-left text-[11px] font-semibold uppercase
+           tracking-[0.04em] text-muted;
+  }
+
+  .td {
+    @apply border-b border-grid/70 px-3 py-2.5 align-top text-[13px] text-ink;
+  }
+
+  .eyebrow {
+    @apply text-[11.5px] font-semibold uppercase tracking-[0.09em] text-muted;
+  }
+}
+
+/* Chop etishda faqat mazmun qoladi — CEO hisobotni bosib olishi mumkin */
+@media print {
+  body {
+    background: #fff;
+  }
+  .no-print {
+    display: none !important;
+  }
+  .card {
+    break-inside: avoid;
+    box-shadow: none;
+  }
+}

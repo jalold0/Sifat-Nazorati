@@ -145,11 +145,9 @@ export default async function KpiPage({ searchParams }: { searchParams: Promise<
                 <tr key={e.userId}>
                   <td className="td font-semibold">{e.shortName}</td>
                   <td className="td text-[12px] text-ink2">{e.position}</td>
-                  <td className="td tnum text-right font-semibold">
-                    {badge.showScore ? score(e.card.totalScore) : '—'}
-                  </td>
+                  <td className="td tnum text-right font-semibold">{score(e.card.totalScore)}</td>
                   <td className="td">
-                    <Badge tone={badge.tone}>{badge.label}</Badge>
+                    {badge ? <Badge tone={badge.tone}>{badge.label}</Badge> : <span className="text-muted">—</span>}
                   </td>
                   {showMoney ? <td className="td tnum text-right text-[12.5px]">{money(e.salary)}</td> : null}
                   {showMoney ? (
@@ -184,11 +182,7 @@ export default async function KpiPage({ searchParams }: { searchParams: Promise<
                     <p className="tnum text-[15px] font-semibold">{money(e.card.bonus)}</p>
                   </div>
                 ) : null}
-                {gradeBadge(e.card).showScore ? (
-                  <ScoreGauge score={e.card.totalScore} threshold={p.settings.threshold} size={132} />
-                ) : (
-                  <Badge>Ma&apos;lumot yo&apos;q</Badge>
-                )}
+                <ScoreGauge score={e.card.totalScore} threshold={p.settings.threshold} size={132} />
               </div>
             }
           />
@@ -275,11 +269,12 @@ export default async function KpiPage({ searchParams }: { searchParams: Promise<
                 <td className="td font-semibold">JAMI</td>
                 <td className="td tnum text-right font-semibold">{number(e.card.weightTotal)}</td>
                 <td className="td" colSpan={3} />
-                <td className="td tnum text-right text-[14px] font-semibold">
-                  {gradeBadge(e.card).showScore ? score(e.card.totalScore) : '—'}
-                </td>
+                <td className="td tnum text-right text-[14px] font-semibold">{score(e.card.totalScore)}</td>
                 <td className="td">
-                  <Badge tone={gradeBadge(e.card).tone}>{gradeBadge(e.card).label}</Badge>
+                  {(() => {
+                    const badge = gradeBadge(e.card);
+                    return badge ? <Badge tone={badge.tone}>{badge.label}</Badge> : <span className="text-muted">—</span>;
+                  })()}
                 </td>
               </tr>
             </tfoot>

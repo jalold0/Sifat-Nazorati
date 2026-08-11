@@ -139,25 +139,15 @@ export default async function DashboardPage({
                       <p className="truncate text-[13px] font-semibold text-ink">{e.shortName}</p>
                       <p className="truncate text-[11px] text-muted">{e.position}</p>
                     </div>
-                    <Badge tone={badge.tone}>{badge.label}</Badge>
+                    {/* Baho faqat o'lchov bo'lganda ko'rsatiladi */}
+                    {badge ? <Badge tone={badge.tone}>{badge.label}</Badge> : null}
                   </div>
 
-                  {badge.showScore ? (
-                    <div className="flex justify-center py-1">
-                      <ScoreGauge score={e.card.totalScore} threshold={cards.period.settings.threshold} size={150} />
-                    </div>
-                  ) : (
-                    // Ball ko'rsatilmaydi — 0,0 "yomon natija" deb o'qilishi mumkin
-                    <div className="flex h-[86px] items-center justify-center text-center">
-                      <p className="text-[11.5px] leading-relaxed text-muted">
-                        Hali hech narsa o'lchanmagan.
-                        <br />
-                        Reyestr to'ldirilgach ball chiqadi.
-                      </p>
-                    </div>
-                  )}
+                  <div className="flex justify-center py-1">
+                    <ScoreGauge score={e.card.totalScore} threshold={cards.period.settings.threshold} size={150} />
+                  </div>
 
-                  {e.card.missingFacts > 0 && badge.showScore ? (
+                  {e.card.missingFacts > 0 ? (
                     <p className="mt-1 text-center text-[11px] font-medium text-warn">
                       {e.card.missingFacts} ko'rsatkichda fakt yo'q
                     </p>

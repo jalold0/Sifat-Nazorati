@@ -234,11 +234,12 @@ export default async function ReportPage({ searchParams }: { searchParams: Promi
                   <td className="td font-medium">{e.shortName}</td>
                   <td className="td tnum text-right">{number(load?.count ?? 0)}</td>
                   <td className="td tnum text-right">{hours(load?.spentHours ?? 0)}</td>
-                  <td className="td tnum text-right font-semibold">
-                    {gradeBadge(e.card).showScore ? score(e.card.totalScore) : '—'}
-                  </td>
+                  <td className="td tnum text-right font-semibold">{score(e.card.totalScore)}</td>
                   <td className="td">
-                    <Badge tone={gradeBadge(e.card).tone}>{gradeBadge(e.card).label}</Badge>
+                    {(() => {
+                      const badge = gradeBadge(e.card);
+                      return badge ? <Badge tone={badge.tone}>{badge.label}</Badge> : <span className="text-muted">—</span>;
+                    })()}
                   </td>
                   {showMoney ? (
                     <td className="td tnum text-right">{e.card.bonus > 0 ? money(e.card.bonus) : '—'}</td>

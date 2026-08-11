@@ -35,27 +35,20 @@ export interface PeriodWithSettings {
 
 const DEFAULTS = { bonusShare: 0.5, threshold: 70, cap: 1.2 };
 
-/** Davrni ochadi (bo'lmasa yaratadi) va sozlamalarini qaytaradi. */
-export async function ensurePeriod(period: string): Promise<PeriodWithSettings> {
-  const existing = await db.kpiPeriod.findUnique({
-    where: { period },
-    include: { approvedBy: { select: { shortName: true } } },
-  });
+const PERIOD_INCLUDE = { approvedBy: { select: { shortName: true } } } as const;
 
-  const row =
-    existing ??
-    (await db.kpiPeriod.create({
-      data: {
-        period,
-        label: periodLabel(period),
-        workingDays: workingDaysIn(period),
-        bonusShare: DEFAULTS.bonusShare,
-        threshold: DEFAULTS.threshold,
-        cap: DEFAULTS.cap,
-        status: 'DRAFT',
-      },
-      include: { approvedBy: { select: { shortName: true } } },
-    }));
+/**
+ * Davrni ochadi (bo'lmasa yaratadi) va sozlamalarini qaytaradi.
+ *
+ * Yaratish poygaga (race) chidamli: bir vaqtda kelgan bir necha so'rov
+ * (masalan sahifa yuklanishi + prefetch) yangi oyni birga ochishga urinadi.
+ * Unique cheklov ishga tushsa, yozuv boshqa so'rov tomonidan yaratilgan —
+ * shuning uchun xato qaytarilmaydi, mavjud yozuv o'qiladi.
+ */
+export async function ensurePeriod(period: string): Promise<PeriodWithSettings> {
+  const existing = await db.kpiPeriod.findUnique({ where: { period }, include: PERIOD_INCLUDE });
+
+  const row = existing ?? (await createPeriod(period));
 
   return {
     id: row.id,
@@ -74,6 +67,31 @@ export async function ensurePeriod(period: string): Promise<PeriodWithSettings> 
       cap: num(row.cap) ?? DEFAULTS.cap,
     },
   };
+}
+
+/**
+ * Davrni yaratadi; parallel so'rov allaqachon yaratgan bo'lsa — o'shani qaytaradi.
+ *
+ * `skipDuplicates` bilan INSERT ... ON CONFLICT DO NOTHING bajariladi:
+ * poyga holatida istisno ham, log'da chalg'ituvchi "xato" ham chiqmaydi.
+ */
+async function createPeriod(period: string) {
+  await db.kpiPeriod.createMany({
+    data: [
+      {
+        period,
+        label: periodLabel(period),
+        workingDays: workingDaysIn(period),
+        bonusShare: DEFAULTS.bonusShare,
+        threshold: DEFAULTS.threshold,
+        cap: DEFAULTS.cap,
+        status: 'DRAFT',
+      },
+    ],
+    skipDuplicates: true,
+  });
+
+  return db.kpiPeriod.findUniqueOrThrow({ where: { period }, include: PERIOD_INCLUDE });
 }
 
 export async function listPeriods(limit = 24) {

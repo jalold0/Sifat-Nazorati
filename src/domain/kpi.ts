@@ -119,6 +119,12 @@ export interface Scorecard {
   bonusBlockedReason: string | null;
   /** Fakt kiritilmagan ko'rsatkichlar soni */
   missingFacts: number;
+  /**
+   * Hech bir ko'rsatkichda fakt yo'q — ya'ni hali hech narsa o'lchanmagan.
+   * Bunday holatda ball ham, baho ham ma'noga ega emas: 0 ball "yomon ishladi"
+   * degani emas, "ma'lumot yo'q" degani. Ko'rsatishda shu farq saqlanishi shart.
+   */
+  hasNoData: boolean;
   settings: KpiSettings;
 }
 
@@ -153,6 +159,7 @@ export function buildScorecard({
     bonus: trialMode ? 0 : round(bonusOf(rawTotal, salary, settings), 2),
     bonusBlockedReason,
     missingFacts: indicators.filter((i) => i.fact === null).length,
+    hasNoData: indicators.length > 0 && indicators.every((i) => i.fact === null),
     settings,
   };
 }

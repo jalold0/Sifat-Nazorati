@@ -150,6 +150,32 @@ describe('buildScorecard — Ulug`bek M. (Excel bilan qatorlab taqqoslash)', () 
     expect(trial.bonusBlockedReason).toMatch(/Sinov rejimi/);
   });
 
+  it('hech bir faktsiz: hasNoData true — 0 ball "yomon ishladi" degani emas', () => {
+    const empty = buildScorecard({
+      indicators: indicators.map((i) => ({ ...i, fact: null })),
+      salary: EXCEL.ulugbek.salary,
+    });
+    expect(empty.hasNoData).toBe(true);
+    expect(empty.totalScore).toBe(0);
+    expect(empty.missingFacts).toBe(indicators.length);
+  });
+
+  it('kamida bitta fakt bo`lsa hasNoData false', () => {
+    const partial = buildScorecard({
+      indicators: indicators.map((i, idx) => (idx === 0 ? i : { ...i, fact: null })),
+      salary: EXCEL.ulugbek.salary,
+    });
+    expect(partial.hasNoData).toBe(false);
+  });
+
+  it('to`liq to`ldirilgan kartada hasNoData false', () => {
+    expect(card.hasNoData).toBe(false);
+  });
+
+  it('ko`rsatkichsiz karta hasNoData bermaydi (bo`sh pasport)', () => {
+    expect(buildScorecard({ indicators: [], salary: null }).hasNoData).toBe(false);
+  });
+
   it('fakt kiritilmagan ko`rsatkichlar sanaladi va ball bermaydi', () => {
     const partial = buildScorecard({
       indicators: indicators.map((i, idx) => (idx === 0 ? { ...i, fact: null } : i)),

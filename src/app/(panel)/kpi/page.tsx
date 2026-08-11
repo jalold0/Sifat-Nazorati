@@ -4,6 +4,7 @@ import { ScoreGauge } from '@/components/charts';
 import { Badge, Callout, Card, CardHead, Empty, PageHead, ProgressBar, Table } from '@/components/ui';
 import { canApprovePeriod, canOverrideKpi, canSeeSalary, requireSession } from '@/lib/auth';
 import { byUnit, dateTime, money, number, percent, score } from '@/lib/format';
+import { gradeBadge } from '@/lib/grade';
 import { lastPeriods, periodLabel, periodOf } from '@/lib/period';
 import { scorecards } from '@/server/kpi';
 import { PERIOD_STATUS_LABEL } from '@/server/shared';
@@ -13,14 +14,6 @@ import { PeriodSettingsForm, RecalcButton, StatusButton } from './workflow';
 
 export const metadata = { title: 'KPI hisobi' };
 export const dynamic = 'force-dynamic';
-
-const GRADE_TONE = {
-  "A'lo": 'ok',
-  Yaxshi: 'ok',
-  Qoniqarli: 'warn',
-  Past: 'bad',
-  Qoniqarsiz: 'bad',
-} as const;
 
 export default async function KpiPage({ searchParams }: { searchParams: Promise<{ davr?: string }> }) {
   const session = await requireSession();
@@ -146,13 +139,17 @@ export default async function KpiPage({ searchParams }: { searchParams: Promise<
               </tr>
             </thead>
             <tbody>
-              {data.employees.map((e) => (
+              {data.employees.map((e) => {
+                const badge = gradeBadge(e.card);
+                return (
                 <tr key={e.userId}>
                   <td className="td font-semibold">{e.shortName}</td>
                   <td className="td text-[12px] text-ink2">{e.position}</td>
-                  <td className="td tnum text-right font-semibold">{score(e.card.totalScore)}</td>
+                  <td className="td tnum text-right font-semibold">
+                    {badge.showScore ? score(e.card.totalScore) : '—'}
+                  </td>
                   <td className="td">
-                    <Badge tone={GRADE_TONE[e.card.grade]}>{e.card.grade}</Badge>
+                    <Badge tone={badge.tone}>{badge.label}</Badge>
                   </td>
                   {showMoney ? <td className="td tnum text-right text-[12.5px]">{money(e.salary)}</td> : null}
                   {showMoney ? (
@@ -161,10 +158,13 @@ export default async function KpiPage({ searchParams }: { searchParams: Promise<
                     </td>
                   ) : null}
                   <td className="td text-[11.5px] text-muted">
-                    {e.card.bonusBlockedReason ?? (e.card.missingFacts > 0 ? `${e.card.missingFacts} faktsiz` : '')}
+                    {e.card.hasNoData
+                      ? "hali hech narsa o'lchanmagan"
+                      : (e.card.bonusBlockedReason ?? (e.card.missingFacts > 0 ? `${e.card.missingFacts} faktsiz` : ''))}
                   </td>
                 </tr>
-              ))}
+                );
+              })}
             </tbody>
           </Table>
         )}
@@ -184,7 +184,11 @@ export default async function KpiPage({ searchParams }: { searchParams: Promise<
                     <p className="tnum text-[15px] font-semibold">{money(e.card.bonus)}</p>
                   </div>
                 ) : null}
-                <ScoreGauge score={e.card.totalScore} threshold={p.settings.threshold} size={132} />
+                {gradeBadge(e.card).showScore ? (
+                  <ScoreGauge score={e.card.totalScore} threshold={p.settings.threshold} size={132} />
+                ) : (
+                  <Badge>Ma&apos;lumot yo&apos;q</Badge>
+                )}
               </div>
             }
           />
@@ -271,9 +275,11 @@ export default async function KpiPage({ searchParams }: { searchParams: Promise<
                 <td className="td font-semibold">JAMI</td>
                 <td className="td tnum text-right font-semibold">{number(e.card.weightTotal)}</td>
                 <td className="td" colSpan={3} />
-                <td className="td tnum text-right text-[14px] font-semibold">{score(e.card.totalScore)}</td>
+                <td className="td tnum text-right text-[14px] font-semibold">
+                  {gradeBadge(e.card).showScore ? score(e.card.totalScore) : '—'}
+                </td>
                 <td className="td">
-                  <Badge tone={GRADE_TONE[e.card.grade]}>{e.card.grade}</Badge>
+                  <Badge tone={gradeBadge(e.card).tone}>{gradeBadge(e.card).label}</Badge>
                 </td>
               </tr>
             </tfoot>

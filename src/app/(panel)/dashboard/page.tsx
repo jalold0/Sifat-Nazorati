@@ -5,6 +5,7 @@ import { Badge, Callout, Card, CardHead, Empty, PageHead, ProgressBar, StatTile,
 import { canWrite, requireSession } from '@/lib/auth';
 import { db } from '@/lib/db';
 import { date, hours, number, percent, score } from '@/lib/format';
+import { gradeBadge } from '@/lib/grade';
 import { periodLabel, periodOf } from '@/lib/period';
 import { coverage } from '@/server/audits';
 import { baselineMonths } from '@/server/baseline';
@@ -14,14 +15,6 @@ import { CHECKLIST_LABEL, PERIOD_STATUS_LABEL, PRIORITY_LABEL } from '@/server/s
 
 export const metadata = { title: 'Boshqaruv paneli' };
 export const dynamic = 'force-dynamic';
-
-const GRADE_TONE = {
-  "A'lo": 'ok',
-  Yaxshi: 'ok',
-  Qoniqarli: 'warn',
-  Past: 'bad',
-  Qoniqarsiz: 'bad',
-} as const;
 
 export default async function DashboardPage({
   searchParams,
@@ -137,27 +130,41 @@ export default async function DashboardPage({
           <Empty>KPI pasporti hali sozlanmagan.</Empty>
         ) : (
           <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
-            {cards.employees.map((e) => (
-              <div key={e.userId} className="rounded-xl border border-line bg-raised p-4">
-                <div className="mb-1 flex items-start justify-between gap-2">
-                  <div className="min-w-0">
-                    <p className="truncate text-[13px] font-semibold text-ink">{e.shortName}</p>
-                    <p className="truncate text-[11px] text-muted">{e.position}</p>
+            {cards.employees.map((e) => {
+              const badge = gradeBadge(e.card);
+              return (
+                <div key={e.userId} className="rounded-xl border border-line bg-raised p-4">
+                  <div className="mb-1 flex items-start justify-between gap-2">
+                    <div className="min-w-0">
+                      <p className="truncate text-[13px] font-semibold text-ink">{e.shortName}</p>
+                      <p className="truncate text-[11px] text-muted">{e.position}</p>
+                    </div>
+                    <Badge tone={badge.tone}>{badge.label}</Badge>
                   </div>
-                  <Badge tone={GRADE_TONE[e.card.grade]}>{e.card.grade}</Badge>
-                </div>
 
-                <div className="flex justify-center py-1">
-                  <ScoreGauge score={e.card.totalScore} threshold={cards.period.settings.threshold} size={150} />
-                </div>
+                  {badge.showScore ? (
+                    <div className="flex justify-center py-1">
+                      <ScoreGauge score={e.card.totalScore} threshold={cards.period.settings.threshold} size={150} />
+                    </div>
+                  ) : (
+                    // Ball ko'rsatilmaydi — 0,0 "yomon natija" deb o'qilishi mumkin
+                    <div className="flex h-[86px] items-center justify-center text-center">
+                      <p className="text-[11.5px] leading-relaxed text-muted">
+                        Hali hech narsa o'lchanmagan.
+                        <br />
+                        Reyestr to'ldirilgach ball chiqadi.
+                      </p>
+                    </div>
+                  )}
 
-                {e.card.missingFacts > 0 ? (
-                  <p className="mt-1 text-center text-[11px] font-medium text-warn">
-                    {e.card.missingFacts} ko'rsatkichda fakt yo'q
-                  </p>
-                ) : null}
-              </div>
-            ))}
+                  {e.card.missingFacts > 0 && badge.showScore ? (
+                    <p className="mt-1 text-center text-[11px] font-medium text-warn">
+                      {e.card.missingFacts} ko'rsatkichda fakt yo'q
+                    </p>
+                  ) : null}
+                </div>
+              );
+            })}
           </div>
         )}
       </Card>

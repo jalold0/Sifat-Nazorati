@@ -5,6 +5,7 @@ import { Badge, Card, CardHead, Empty, PageHead, Table } from '@/components/ui';
 import { canSeeSalary, requireSession } from '@/lib/auth';
 import { db } from '@/lib/db';
 import { date, hours, money, number, percent, score } from '@/lib/format';
+import { gradeBadge } from '@/lib/grade';
 import { lastPeriods, periodLabel, periodOf } from '@/lib/period';
 import { coverage } from '@/server/audits';
 import { scorecards } from '@/server/kpi';
@@ -233,19 +234,11 @@ export default async function ReportPage({ searchParams }: { searchParams: Promi
                   <td className="td font-medium">{e.shortName}</td>
                   <td className="td tnum text-right">{number(load?.count ?? 0)}</td>
                   <td className="td tnum text-right">{hours(load?.spentHours ?? 0)}</td>
-                  <td className="td tnum text-right font-semibold">{score(e.card.totalScore)}</td>
+                  <td className="td tnum text-right font-semibold">
+                    {gradeBadge(e.card).showScore ? score(e.card.totalScore) : '—'}
+                  </td>
                   <td className="td">
-                    <Badge
-                      tone={
-                        e.card.grade === "A'lo" || e.card.grade === 'Yaxshi'
-                          ? 'ok'
-                          : e.card.grade === 'Qoniqarli'
-                            ? 'warn'
-                            : 'bad'
-                      }
-                    >
-                      {e.card.grade}
-                    </Badge>
+                    <Badge tone={gradeBadge(e.card).tone}>{gradeBadge(e.card).label}</Badge>
                   </td>
                   {showMoney ? (
                     <td className="td tnum text-right">{e.card.bonus > 0 ? money(e.card.bonus) : '—'}</td>

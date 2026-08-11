@@ -47,7 +47,7 @@ export function FactEditor({
 
   if (locked) {
     return (
-      <p className="text-[11.5px] text-muted">
+      <p className="text-micro text-muted">
         {row.comment ? `Izoh: ${row.comment}` : 'Davr tasdiqlangan — o‘zgartirilmaydi'}
       </p>
     );
@@ -56,7 +56,7 @@ export function FactEditor({
   return (
     <div>
       {!open ? (
-        <button type="button" className="text-[11.5px] font-semibold text-brand" onClick={() => setOpen(true)}>
+        <button type="button" className="text-micro font-semibold text-brand" onClick={() => setOpen(true)}>
           {row.manualValue !== null ? 'Tuzatishni o‘zgartirish' : row.metricSource === 'AUTO' ? 'Qo‘lda tuzatish' : 'Fakt kiritish'}
         </button>
       ) : (
@@ -95,25 +95,25 @@ export function FactEditor({
             />
           </div>
 
-          {state.error ? <p className="text-[11.5px] font-medium text-bad">{state.error}</p> : null}
-          {state.ok ? <p className="text-[11.5px] font-medium text-ok">{state.ok}</p> : null}
+          {state.error ? <p className="text-micro font-medium text-bad">{state.error}</p> : null}
+          {state.ok ? <p className="text-micro font-medium text-ok">{state.ok}</p> : null}
 
           <div className="flex gap-2">
-            <button type="submit" className="btn-brand !py-1.5 !text-[12px]" disabled={pending}>
+            <button type="submit" className="btn-brand !py-1.5 !text-meta" disabled={pending}>
               {pending ? 'Saqlanmoqda…' : 'Saqlash'}
             </button>
-            <button type="button" className="btn-ghost !py-1.5 !text-[12px]" onClick={() => setOpen(false)}>
+            <button type="button" className="btn-ghost !py-1.5 !text-meta" onClick={() => setOpen(false)}>
               Yopish
             </button>
           </div>
-          <p className="text-[11px] leading-relaxed text-muted">
+          <p className="text-micro leading-relaxed text-muted">
             Bo'sh qoldirilsa — avtomatik qiymat qaytariladi. Formula: {row.formula}
           </p>
         </form>
       )}
 
       {row.comment && !open ? (
-        <p className="mt-0.5 text-[11px] leading-snug text-muted">
+        <p className="mt-0.5 text-micro leading-snug text-muted">
           {row.overriddenBy ? `${row.overriddenBy}: ` : ''}
           {row.comment}
         </p>

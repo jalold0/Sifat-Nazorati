@@ -43,7 +43,7 @@ export default async function AuditPage({ searchParams }: { searchParams: Promis
         lede="Shikoyat kelgan joyni emas, tizimni tekshirish. Audit soni va sifati to'g'ridan-to'g'ri KPI'ga kiradi."
         actions={
           <form method="get" className="flex items-center gap-2">
-            <select name="davr" defaultValue={period} className="field !py-1.5 !text-[12.5px]">
+            <select name="davr" defaultValue={period} className="field !py-1.5 !text-meta">
               {lastPeriods(8)
                 .reverse()
                 .map((v) => (
@@ -64,15 +64,15 @@ export default async function AuditPage({ searchParams }: { searchParams: Promis
           const ratio = c.plan > 0 ? c.count / c.plan : 0;
           return (
             <Card key={c.kind}>
-              <p className="text-[12px] font-medium text-ink2">{CHECKLIST_LABEL[c.kind]}</p>
-              <p className="tnum mt-1 text-[24px] font-semibold leading-none">
+              <p className="text-meta font-medium text-ink2">{CHECKLIST_LABEL[c.kind]}</p>
+              <p className="tnum mt-1 text-stat leading-none">
                 {number(c.count)}
-                <span className="ml-1 text-[14px] font-medium text-muted">/ {number(c.plan)} reja</span>
+                <span className="ml-1 text-body font-medium text-muted">/ {number(c.plan)} reja</span>
               </p>
               <div className="mt-3">
                 <ProgressBar value={ratio} tone={ratio >= 0.9 ? 'ok' : ratio >= 0.5 ? 'warn' : 'bad'} />
               </div>
-              <p className="mt-2 text-[11.5px] text-muted">
+              <p className="mt-2 text-micro text-muted">
                 O'rtacha natija {percent(c.avgPercent, 0)}
                 {c.failing > 0 ? ` · ${c.failing} ta eskalatsiya` : ''}
               </p>
@@ -82,7 +82,7 @@ export default async function AuditPage({ searchParams }: { searchParams: Promis
       </div>
 
       {worst.length > 0 ? (
-        <Card className="mt-4">
+        <Card className="mt-section">
           <CardHead
             title="Qayta tekshiruv talab qiladi"
             note="75% dan past natija olgan ob'ektlar — 7 kun ichida qaytadan ko'riladi"
@@ -101,8 +101,8 @@ export default async function AuditPage({ searchParams }: { searchParams: Promis
               {worst.map((a) => (
                 <tr key={a.id}>
                   <td className="td font-medium">{a.objectName}</td>
-                  <td className="td text-[12px] text-ink2">{CHECKLIST_LABEL[a.kind]}</td>
-                  <td className="td tnum whitespace-nowrap text-[12px]">{date(a.auditedAt)}</td>
+                  <td className="td text-meta text-ink2">{CHECKLIST_LABEL[a.kind]}</td>
+                  <td className="td tnum whitespace-nowrap text-meta">{date(a.auditedAt)}</td>
                   <td className="td tnum text-right font-semibold">{percent(Number(a.percent), 0)}</td>
                   <td className="td">
                     <Badge tone={Number(a.percent) < 0.6 ? 'bad' : 'warn'}>{a.verdict}</Badge>
@@ -115,7 +115,7 @@ export default async function AuditPage({ searchParams }: { searchParams: Promis
       ) : null}
 
       {canWrite(session.role) ? (
-        <Card className="mt-4">
+        <Card className="mt-section">
           <CardHead
             title="Yangi audit"
             note="Baholash: 2 — to'liq bajarilgan · 1 — qisman · 0 — bajarilmagan. Har bir 0 va 1 ga dalil majburiy."
@@ -126,7 +126,7 @@ export default async function AuditPage({ searchParams }: { searchParams: Promis
         <Callout tone="neutral">Audit kiritish bo'lim xodimlari huquqida. Siz natijalarni ko'rasiz.</Callout>
       )}
 
-      <Card className="mt-4">
+      <Card className="mt-section">
         <CardHead title="Davr auditlari" note={`${number(audits.length)} ta tekshiruv`} />
         {audits.length === 0 ? (
           <Empty>Bu davrda audit o'tkazilmagan.</Empty>
@@ -146,14 +146,14 @@ export default async function AuditPage({ searchParams }: { searchParams: Promis
             <tbody>
               {audits.map((a) => (
                 <tr key={a.id}>
-                  <td className="td tnum whitespace-nowrap text-[12px]">{date(a.auditedAt)}</td>
+                  <td className="td tnum whitespace-nowrap text-meta">{date(a.auditedAt)}</td>
                   <td className="td font-medium">
                     {a.objectName}
-                    {a.objectCode ? <span className="ml-1 text-[11px] text-muted">{a.objectCode}</span> : null}
-                    {a.externalRef ? <p className="text-[11px] text-muted">{a.externalRef}</p> : null}
+                    {a.objectCode ? <span className="ml-1 text-micro text-muted">{a.objectCode}</span> : null}
+                    {a.externalRef ? <p className="text-micro text-muted">{a.externalRef}</p> : null}
                   </td>
-                  <td className="td text-[12px] text-ink2">{CHECKLIST_LABEL[a.kind]}</td>
-                  <td className="td text-[12px]">{a.auditor.shortName}</td>
+                  <td className="td text-meta text-ink2">{CHECKLIST_LABEL[a.kind]}</td>
+                  <td className="td text-meta">{a.auditor.shortName}</td>
                   <td className="td tnum text-right">
                     {a.totalScore} / {a.maxScore}
                   </td>

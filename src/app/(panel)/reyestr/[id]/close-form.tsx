@@ -32,7 +32,7 @@ export function CloseForm({ id, now, suggestedHours }: { id: string; now: string
             defaultValue={suggestedHours}
             required
           />
-          <p className="mt-1 text-[11.5px] text-muted">Taxminiy qiymat qabul vaqtidan hisoblandi — tuzatib qo'ying.</p>
+          <p className="mt-1 text-micro text-muted">Taxminiy qiymat qabul vaqtidan hisoblandi — tuzatib qo'ying.</p>
         </div>
       </div>
 
@@ -62,18 +62,18 @@ export function CloseForm({ id, now, suggestedHours }: { id: string; now: string
         />
       </div>
 
-      <label className="flex cursor-pointer items-center gap-2.5 text-[13px]">
+      <label className="flex cursor-pointer items-center gap-2.5 text-body">
         <input type="checkbox" name="isRepeat" className="h-4 w-4 accent-[var(--brand)]" />
         Takroriy muammo — shu masala avval ham bo'lgan
       </label>
 
       {state.error ? (
-        <p role="alert" className="rounded-lg bg-bad/10 px-3 py-2 text-[12.5px] font-medium text-bad">
+        <p role="alert" className="rounded-lg bg-bad/10 px-3 py-2 text-meta font-medium text-bad">
           {state.error}
         </p>
       ) : null}
       {state.ok ? (
-        <p role="status" className="rounded-lg bg-ok/10 px-3 py-2 text-[12.5px] font-medium text-ok">
+        <p role="status" className="rounded-lg bg-ok/10 px-3 py-2 text-meta font-medium text-ok">
           {state.ok}
         </p>
       ) : null}

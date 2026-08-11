@@ -74,7 +74,7 @@ export function AuditForm({ templates, today }: { templates: TemplateOption[]; t
               </option>
             ))}
           </select>
-          {template ? <p className="mt-1 text-[11.5px] text-muted">{template.note}</p> : null}
+          {template ? <p className="mt-1 text-micro text-muted">{template.note}</p> : null}
         </div>
 
         <div>
@@ -126,12 +126,12 @@ export function AuditForm({ templates, today }: { templates: TemplateOption[]; t
                   <td className="td tnum text-muted">{item.no}</td>
                   <td className="td">
                     <p className="font-medium">{item.title}</p>
-                    <p className="mt-0.5 text-[11.5px] text-muted">Talab: {item.requirement}</p>
+                    <p className="mt-0.5 text-micro text-muted">Talab: {item.requirement}</p>
                   </td>
                   <td className="td">
                     <select
                       name={`score-${item.id}`}
-                      className="field !py-1.5 !text-[12.5px]"
+                      className="field !py-1.5 !text-meta"
                       value={value ?? ''}
                       onChange={(e) =>
                         setAnswers((prev) => ({ ...prev, [item.id]: Number(e.target.value) }))
@@ -148,7 +148,7 @@ export function AuditForm({ templates, today }: { templates: TemplateOption[]; t
                   <td className="td">
                     <input
                       name={`note-${item.id}`}
-                      className="field !py-1.5 !text-[12.5px]"
+                      className="field !py-1.5 !text-meta"
                       placeholder={weak ? 'Dalil majburiy: foto, hujjat raqami, trek' : 'ixtiyoriy'}
                       required={weak}
                     />
@@ -172,9 +172,9 @@ export function AuditForm({ templates, today }: { templates: TemplateOption[]; t
         <div className="flex flex-wrap items-center justify-between gap-4 rounded-xl border border-line bg-raised px-4 py-3">
           <div>
             <p className="eyebrow">Joriy natija</p>
-            <p className="tnum mt-0.5 text-[20px] font-semibold">
+            <p className="tnum mt-0.5 text-stat">
               {live.total} / {live.max}
-              <span className="ml-2 text-[14px] font-medium text-ink2">
+              <span className="ml-2 text-body font-medium text-ink2">
                 {Math.round(live.percent * 100)}%
               </span>
             </p>
@@ -182,7 +182,7 @@ export function AuditForm({ templates, today }: { templates: TemplateOption[]; t
           <div className="text-right">
             <p className="eyebrow">Xulosa</p>
             <p
-              className={`mt-0.5 text-[13px] font-semibold ${
+              className={`mt-0.5 text-body font-semibold ${
                 live.verdict.level === 'GOOD'
                   ? 'text-ok'
                   : live.verdict.level === 'ACCEPTABLE'
@@ -192,7 +192,7 @@ export function AuditForm({ templates, today }: { templates: TemplateOption[]; t
             >
               {live.verdict.label}
             </p>
-            <p className="mt-0.5 text-[11.5px] text-muted">
+            <p className="mt-0.5 text-micro text-muted">
               {live.answered} / {template?.items.length ?? 0} band baholandi
             </p>
           </div>
@@ -200,12 +200,12 @@ export function AuditForm({ templates, today }: { templates: TemplateOption[]; t
       ) : null}
 
       {state.error ? (
-        <p role="alert" className="rounded-lg bg-bad/10 px-3 py-2 text-[12.5px] font-medium text-bad">
+        <p role="alert" className="rounded-lg bg-bad/10 px-3 py-2 text-meta font-medium text-bad">
           {state.error}
         </p>
       ) : null}
       {state.ok ? (
-        <p role="status" className="rounded-lg bg-ok/10 px-3 py-2 text-[12.5px] font-medium text-ok">
+        <p role="status" className="rounded-lg bg-ok/10 px-3 py-2 text-meta font-medium text-ok">
           {state.ok}
         </p>
       ) : null}

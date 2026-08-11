@@ -69,10 +69,10 @@ export default async function DistributionPage() {
                   <td className="td font-semibold">{z.code}</td>
                   <td className="td">
                     <p className="font-medium">{z.name}</p>
-                    <p className="mt-0.5 text-[11.5px] text-muted">{z.coverage}</p>
+                    <p className="mt-0.5 text-micro text-muted">{z.coverage}</p>
                   </td>
-                  <td className="td whitespace-nowrap text-[12.5px]">{z.owner.shortName}</td>
-                  <td className="td text-[12px] text-ink2">{z.outcome}</td>
+                  <td className="td whitespace-nowrap text-meta">{z.owner.shortName}</td>
+                  <td className="td text-meta text-ink2">{z.outcome}</td>
                 </tr>
               ))}
             </tbody>
@@ -91,7 +91,7 @@ export default async function DistributionPage() {
               tone: b.total / tasks.length > 0.4 ? 'bad' : 'brand',
             }))}
           />
-          <p className="mt-4 text-[12.5px] text-ink2">
+          <p className="mt-section text-meta text-ink2">
             Eng ko'p yuklangan xodimda vazifalarning {percent(maxShare, 0)} qismi.{' '}
             {maxShare > 0.4 ? (
               <span className="font-semibold text-bad">40% chegarasi buzilgan — taqsimotni qayta ko'rish kerak.</span>
@@ -102,12 +102,12 @@ export default async function DistributionPage() {
         </Card>
       </div>
 
-      <Card className="mt-4">
+      <Card className="mt-section">
         <CardHead
           title={`Vazifalar katalogi — ${number(tasks.length)} ta`}
           note="Kunlik reyestrda murojaat shu katalogga bog'lanadi — shunda SLA va mas'ul avtomatik to'ldiriladi"
         />
-        <Table>
+        <Table stickyHead maxHeight={640}>
           <thead>
             <tr>
               <th className="th w-10">№</th>
@@ -128,11 +128,11 @@ export default async function DistributionPage() {
                 <td className="td tnum text-muted">{t.no}</td>
                 <td className="td font-semibold">{t.zoneCode}</td>
                 <td className="td max-w-[340px]">{t.title}</td>
-                <td className="td text-[12px] text-ink2">{t.source}</td>
-                <td className="td whitespace-nowrap text-[12px]">{t.owner.shortName}</td>
-                <td className="td whitespace-nowrap text-[12px] text-muted">{t.backup?.shortName ?? '—'}</td>
-                <td className="td whitespace-nowrap text-[12px]">{t.frequency}</td>
-                <td className="td tnum text-right text-[12px]">{t.slaHours ? `${t.slaHours} soat` : '—'}</td>
+                <td className="td text-meta text-ink2">{t.source}</td>
+                <td className="td whitespace-nowrap text-meta">{t.owner.shortName}</td>
+                <td className="td whitespace-nowrap text-meta text-muted">{t.backup?.shortName ?? '—'}</td>
+                <td className="td whitespace-nowrap text-meta">{t.frequency}</td>
+                <td className="td tnum text-right text-meta">{t.slaHours ? `${t.slaHours} soat` : '—'}</td>
                 <td className="td">
                   <Badge tone={t.priority === 'CRITICAL' ? 'bad' : t.priority === 'HIGH' ? 'warn' : 'neutral'}>
                     {PRIORITY_LABEL[t.priority]}
@@ -147,12 +147,12 @@ export default async function DistributionPage() {
         </Table>
       </Card>
 
-      <Card className="mt-4">
+      <Card className="mt-section">
         <CardHead
           title={`KPI pasporti — ${number(indicators.length)} ko'rsatkich`}
           note="Har bir ko'rsatkichning formulasi va manbasi. Nizo chiqsa, shu jadval hal qiladi."
         />
-        <Table>
+        <Table stickyHead maxHeight={640}>
           <thead>
             <tr>
               <th className="th w-10">№</th>
@@ -169,15 +169,15 @@ export default async function DistributionPage() {
             {indicators.map((i) => (
               <tr key={i.id}>
                 <td className="td tnum text-muted">{i.no}</td>
-                <td className="td whitespace-nowrap text-[12px]">{i.owner.shortName}</td>
+                <td className="td whitespace-nowrap text-meta">{i.owner.shortName}</td>
                 <td className="td font-medium">{i.name}</td>
                 <td className="td tnum text-right">{number(Number(i.weight) * 100)}</td>
-                <td className="td whitespace-nowrap text-[12px]">
+                <td className="td whitespace-nowrap text-meta">
                   {i.direction === 'HIGHER_BETTER' ? 'Yuqori yaxshi' : 'Past yaxshi'}
                 </td>
                 <td className="td whitespace-nowrap font-semibold">{i.targetText}</td>
-                <td className="td max-w-[300px] text-[11.5px] text-ink2">{i.formula}</td>
-                <td className="td text-[11.5px]">
+                <td className="td max-w-[300px] text-micro text-ink2">{i.formula}</td>
+                <td className="td text-micro">
                   <Badge tone={i.metricSource === 'AUTO' ? 'brand' : 'neutral'}>
                     {i.metricSource === 'AUTO' ? 'Avtomatik' : "Qo'lda"}
                   </Badge>

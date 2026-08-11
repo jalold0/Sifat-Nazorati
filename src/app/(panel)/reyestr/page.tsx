@@ -95,8 +95,8 @@ export default async function RegistryPage({
       </div>
 
       {/* ── Filtrlar ──────────────────────────────────────────────────────── */}
-      <Card className="mt-4 no-print" padded={false}>
-        <form className="grid gap-3 p-4 sm:grid-cols-3 lg:grid-cols-7" method="get">
+      <Card className="mt-section no-print" padded={false}>
+        <form className="grid gap-3 p-3.5 sm:grid-cols-3 lg:grid-cols-7" method="get">
           <div>
             <label className="field-label" htmlFor="davr">
               Davr
@@ -182,14 +182,14 @@ export default async function RegistryPage({
       </Card>
 
       {/* ── Jadval ────────────────────────────────────────────────────────── */}
-      <Card className="mt-4" padded={false}>
+      <Card className="mt-section" padded={false}>
         {rows.length === 0 ? (
           <div className="p-5">
             <Empty>Bu shartlar bo'yicha murojaat topilmadi.</Empty>
           </div>
         ) : (
           <>
-            <Table>
+            <Table stickyHead maxHeight={720}>
               <thead>
                 <tr>
                   <th className="th">ID / sana</th>
@@ -212,35 +212,35 @@ export default async function RegistryPage({
                         <Link href={`/reyestr/${t.id}`} className="font-semibold text-brand">
                           {t.ref}
                         </Link>
-                        <p className="tnum mt-0.5 text-[11.5px] text-muted">{date(t.date)}</p>
+                        <p className="tnum mt-0.5 text-micro text-muted">{date(t.date)}</p>
                       </td>
-                      <td className="td whitespace-nowrap text-[12.5px]">
+                      <td className="td whitespace-nowrap text-meta">
                         {t.channel}
-                        <p className="mt-0.5 text-[11.5px] text-muted">
+                        <p className="mt-0.5 text-micro text-muted">
                           Zona {t.zoneCode} · {KIND_LABEL[t.kind]}
                         </p>
                       </td>
                       <td className="td max-w-[320px]">
-                        <p className="line-clamp-2 text-[12.5px]">{t.description}</p>
-                        {t.objectName ? <p className="mt-0.5 text-[11.5px] text-muted">{t.objectName}</p> : null}
+                        <p className="line-clamp-2 text-meta">{t.description}</p>
+                        {t.objectName ? <p className="mt-0.5 text-micro text-muted">{t.objectName}</p> : null}
                         {t.isRepeat ? (
                           <Badge tone="warn" className="mt-1">
                             Takroriy
                           </Badge>
                         ) : null}
                       </td>
-                      <td className="td whitespace-nowrap text-[12.5px]">{t.owner.shortName}</td>
+                      <td className="td whitespace-nowrap text-meta">{t.owner.shortName}</td>
                       <td className="td">
                         <Badge tone={t.priority === 'CRITICAL' ? 'bad' : t.priority === 'HIGH' ? 'warn' : 'neutral'}>
                           {PRIORITY_LABEL[t.priority]}
                         </Badge>
                       </td>
-                      <td className="td whitespace-nowrap text-[12.5px]">{STATUS_LABEL[t.status]}</td>
+                      <td className="td whitespace-nowrap text-meta">{STATUS_LABEL[t.status]}</td>
                       <td className="td">
                         <Badge tone={badge.tone}>{badge.label}</Badge>
-                        <p className="tnum mt-0.5 text-[11px] text-muted">{t.slaHours} soat</p>
+                        <p className="tnum mt-0.5 text-micro text-muted">{t.slaHours} soat</p>
                       </td>
-                      <td className="td tnum whitespace-nowrap text-right text-[12px]">
+                      <td className="td tnum whitespace-nowrap text-right text-meta">
                         <span className="text-ink2">{time(t.receivedAt)}</span>
                         {t.closedAt ? <p className="text-muted">{time(t.closedAt)} yopildi</p> : null}
                         {t.spentHours ? <p className="font-semibold">{hours(Number(t.spentHours))}</p> : null}
@@ -252,7 +252,7 @@ export default async function RegistryPage({
             </Table>
 
             <div className="flex items-center justify-between gap-3 border-t border-grid px-4 py-3">
-              <p className="text-[12px] text-muted">
+              <p className="text-meta text-muted">
                 {number((page - 1) * PAGE_SIZE + 1)}–{number(Math.min(page * PAGE_SIZE, total))} / {number(total)} ta
               </p>
               <div className="no-print flex gap-2">

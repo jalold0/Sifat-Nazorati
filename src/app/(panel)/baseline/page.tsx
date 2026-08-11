@@ -64,7 +64,7 @@ export default async function BaselinePage() {
         title="O'lchanmagan kanal — haqiqiy hajm"
         lede="102 tizimi orqali kelgan murojaatlar har doim sanalgan. Telegram oqimi hech qachon o'lchanmagan. Uchala xodimning yozishmalari tahlil qilinganda, bu kanal 102 dan bir necha barobar katta ekani aniqlandi."
         actions={
-          <div className="text-right text-[11.5px] text-muted">
+          <div className="text-right text-micro text-muted">
             <p>
               Versiya #{current.id} · {dateTime(current.importedAt)}
             </p>
@@ -77,33 +77,33 @@ export default async function BaselinePage() {
       <div className="grid gap-4 lg:grid-cols-2">
         <Card className="relative overflow-hidden">
           <div className="absolute inset-y-0 left-0 w-[5px]" style={{ background: 'var(--brand)' }} />
-          <p className="text-[12.5px] font-semibold text-ink2">TELEGRAM</p>
-          <p className="text-[12px] text-muted">O'lchanmagan kanal · tizim yo'q, status yo'q</p>
-          <p className="tnum mt-3 text-[42px] font-semibold leading-none tracking-[-0.035em] text-brand">
+          <p className="text-meta font-semibold text-ink2">TELEGRAM</p>
+          <p className="text-meta text-muted">O'lchanmagan kanal · tizim yo'q, status yo'q</p>
+          <p className="tnum mt-3 text-stat-lg leading-none tracking-[-0.035em] text-brand">
             {number(cases2026)}
           </p>
-          <p className="mt-2 text-[12.5px] text-ink2">unikal ish · 2026 yil, trek raqami bo'yicha takrorsiz</p>
-          <p className="mt-2 border-t border-grid pt-2 text-[11.5px] text-muted">
+          <p className="mt-2 text-meta text-ink2">unikal ish · 2026 yil, trek raqami bo'yicha takrorsiz</p>
+          <p className="mt-2 border-t border-grid pt-2 text-micro text-muted">
             Butun kuzatuv davri bo'yicha — {number(s.totalCases)} ta ish.
           </p>
         </Card>
 
         <Card className="relative overflow-hidden">
           <div className="absolute inset-y-0 left-0 w-[5px]" style={{ background: 'var(--accent)' }} />
-          <p className="text-[12.5px] font-semibold text-ink2">102 TIZIMI</p>
-          <p className="text-[12px] text-muted">Tizimli kanal · status, arxiv, hisobot bor</p>
-          <p className="tnum mt-3 text-[42px] font-semibold leading-none tracking-[-0.035em] text-accent">
+          <p className="text-meta font-semibold text-ink2">102 TIZIMI</p>
+          <p className="text-meta text-muted">Tizimli kanal · status, arxiv, hisobot bor</p>
+          <p className="tnum mt-3 text-stat-lg leading-none tracking-[-0.035em] text-accent">
             {number(s.system102Cases)}
           </p>
-          <p className="mt-2 text-[12.5px] text-ink2">murojaat · platformadagi &quot;Jami&quot; ustuni</p>
-          <p className="mt-2 border-t border-grid pt-2 text-[11.5px] text-muted">
+          <p className="mt-2 text-meta text-ink2">murojaat · platformadagi &quot;Jami&quot; ustuni</p>
+          <p className="mt-2 border-t border-grid pt-2 text-micro text-muted">
             Nisbat: Telegram oqimi 102 dan{' '}
             <b className="text-ink">{number(s.channelRatio, 2)}×</b> katta.
           </p>
         </Card>
       </div>
 
-      <Card className="mt-4">
+      <Card className="mt-section">
         <CardHead
           title="Kanallar ulushi"
           note="Bo'lim ish hajmining asosiy qismi hisobotlarda ko'rinmayapti"
@@ -118,7 +118,7 @@ export default async function BaselinePage() {
       </Card>
 
       {/* ── Ishlar holati ─────────────────────────────────────────────────── */}
-      <div className="mt-4 grid grid-cols-2 gap-3 lg:grid-cols-4">
+      <div className="mt-section grid grid-cols-2 gap-3 lg:grid-cols-4">
         <StatTile
           label="Telegramda javob izi yo'q"
           value={number(s.noTraceCases)}
@@ -150,7 +150,7 @@ export default async function BaselinePage() {
       </Callout>
 
       {/* ── Oylik dinamika ───────────────────────────────────────────────── */}
-      <Card className="mt-4">
+      <Card className="mt-section">
         <CardHead
           title="Telegram oqimi oyma-oy"
           note="Punktir chiziq — 102 tizimining oylik o'rtachasi. Har oyda Telegram oqimi 102 dan ikki-uch barobar yuqori."
@@ -163,7 +163,7 @@ export default async function BaselinePage() {
       </Card>
 
       {/* ── Akkauntlar kesimi ────────────────────────────────────────────── */}
-      <Card className="mt-4">
+      <Card className="mt-section">
         <CardHead
           title="Akkauntlar kesimi"
           note="Ustunlar yig'indisi umumiy raqamdan katta: ulashilgan ishlar har ikkala akkauntda sanaladi"
@@ -206,7 +206,7 @@ export default async function BaselinePage() {
             <tr>
               <td className="td font-semibold text-ok">Haqiqiy jami (takrorsiz)</td>
               <td className="td tnum text-right font-semibold text-ok">{number(s.totalCases)}</td>
-              <td className="td text-[11.5px] text-muted" colSpan={8}>
+              <td className="td text-micro text-muted" colSpan={8}>
                 {number(s.sharedCases)} ta takrorlangan ish bir marta sanaldi · {number(s.excludedCases)} ta shubhali
                 chat hisobga olinmadi
               </td>
@@ -221,7 +221,7 @@ export default async function BaselinePage() {
       </Card>
 
       {/* ── Yuklama profili ──────────────────────────────────────────────── */}
-      <div className="mt-4 grid gap-4 lg:grid-cols-2">
+      <div className="mt-section grid gap-4 lg:grid-cols-2">
         <Card>
           <CardHead
             title="Soatlik yuklama"
@@ -240,7 +240,7 @@ export default async function BaselinePage() {
             height={190}
             valueFormat={() => ''}
           />
-          <p className="mt-2 text-[11.5px] text-muted">
+          <p className="mt-2 text-micro text-muted">
             Yashil — ish vaqti (09:00–18:00). Kulrang ustunlar ish vaqtidan tashqari oqim:{' '}
             {percent(s.outsideHoursShare, 0)}.
           </p>
@@ -259,7 +259,7 @@ export default async function BaselinePage() {
       </div>
 
       {/* ── Mavzular ─────────────────────────────────────────────────────── */}
-      <Card className="mt-4">
+      <Card className="mt-section">
         <CardHead
           title="Mavzular tasnifi"
           note="Avtomatik aniqlangan. Eng ko'p uchraydigan mavzular — bot va avtomatlashtirish uchun birinchi nishon."
@@ -274,7 +274,7 @@ export default async function BaselinePage() {
       </Card>
 
       {/* ── 102 tizimi ───────────────────────────────────────────────────── */}
-      <Card className="mt-4">
+      <Card className="mt-section">
         <CardHead
           title="102 tizimi — xodimlar kesimi"
           note="Rahbar qatoridagi murojaatlarning bir qismi mutaxassislar bilan kesishadi: tasdiqlashdan oldin u ham tekshiruv o'tkazadi."
@@ -295,8 +295,8 @@ export default async function BaselinePage() {
             {current.operators.map((o) => (
               <tr key={o.login}>
                 <td className="td font-medium">{o.name}</td>
-                <td className="td tnum text-[12px] text-muted">{o.login}</td>
-                <td className="td text-[12px]">{o.role}</td>
+                <td className="td tnum text-meta text-muted">{o.login}</td>
+                <td className="td text-meta">{o.role}</td>
                 <td className="td tnum text-right font-semibold">{number(o.total)}</td>
                 <td className="td tnum text-right">{number(o.status)}</td>
                 <td className="td tnum text-right">{number(o.archive)}</td>
@@ -315,7 +315,7 @@ export default async function BaselinePage() {
       </Card>
 
       {/* ── Import tarixi ────────────────────────────────────────────────── */}
-      <Card className="mt-4">
+      <Card className="mt-section">
         <CardHead
           title="Yangilanish tarixi"
           note="Har bir eksport yangi versiya bo'lib saqlanadi — eski o'lchov o'chmaydi"
@@ -344,7 +344,7 @@ export default async function BaselinePage() {
                   ) : null}
                 </td>
                 <td className="td tnum whitespace-nowrap">{dateTime(h.importedAt)}</td>
-                <td className="td text-[12.5px]">{h.importedByName ?? 'tizim'}</td>
+                <td className="td text-meta">{h.importedByName ?? 'tizim'}</td>
                 <td className="td tnum text-right font-semibold">{number(h.totalCases)}</td>
                 <td className="td tnum text-right">
                   {h.delta === null ? (
@@ -359,7 +359,7 @@ export default async function BaselinePage() {
                   )}
                 </td>
                 <td className="td tnum text-right">{number(h.noTraceCases)}</td>
-                <td className="td text-[11.5px] text-muted">
+                <td className="td text-micro text-muted">
                   {h.note ?? '—'}
                   {h.sourceFile ? <p className="tnum">{h.sourceFile}</p> : null}
                 </td>
@@ -380,7 +380,7 @@ export default async function BaselinePage() {
         Telegram → CRM integratsiyasi paydo bo'lgandan keyin bu qo'lda qadam yo'qoladi.
       </Callout>
 
-      <p className="mt-5 text-center text-[11.5px] leading-relaxed text-muted">
+      <p className="mt-5 text-center text-micro leading-relaxed text-muted">
         Metodika: 1 ish = 1 unikal trek. Treksiz murojaatlar (mijoz + kun) juftligi bo'yicha bitta ish deb olingan.
         OTK xodimlarining o'zaro yozishmasi ({number(s.totalSessions)} suhbatdan) umumiy hisobdan chiqarilgan.
         Jami xabar: {number(s.totalMessages)}.

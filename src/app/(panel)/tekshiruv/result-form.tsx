@@ -22,7 +22,7 @@ export function ResultForm({
   return (
     <form action={action} className="space-y-1.5">
       <input type="hidden" name="id" value={id} />
-      <select name="result" defaultValue={result} className="field !py-1.5 !text-[12px]">
+      <select name="result" defaultValue={result} className="field !py-1.5 !text-meta">
         <option value="PENDING">Tekshirilmagan</option>
         <option value="RESOLVED">Hal qilingan</option>
         <option value="UNRESOLVED">Hal qilinmagan</option>
@@ -30,7 +30,7 @@ export function ResultForm({
       </select>
       <input
         name="resolvedWhere"
-        className="field !py-1.5 !text-[12px]"
+        className="field !py-1.5 !text-meta"
         list={`where-${id}`}
         defaultValue={resolvedWhere ?? ''}
         placeholder="Qayerda hal qilindi"
@@ -40,12 +40,12 @@ export function ResultForm({
           <option key={w} value={w} />
         ))}
       </datalist>
-      <input name="note" className="field !py-1.5 !text-[12px]" defaultValue={note ?? ''} placeholder="Izoh" />
-      <button type="submit" className="btn-ghost !py-1.5 !text-[12px]" disabled={pending}>
+      <input name="note" className="field !py-1.5 !text-meta" defaultValue={note ?? ''} placeholder="Izoh" />
+      <button type="submit" className="btn-ghost !py-1.5 !text-meta" disabled={pending}>
         {pending ? '…' : 'Saqlash'}
       </button>
-      {state.error ? <p className="text-[11px] font-medium text-bad">{state.error}</p> : null}
-      {state.ok ? <p className="text-[11px] font-medium text-ok">{state.ok}</p> : null}
+      {state.error ? <p className="text-micro font-medium text-bad">{state.error}</p> : null}
+      {state.ok ? <p className="text-micro font-medium text-ok">{state.ok}</p> : null}
     </form>
   );
 }

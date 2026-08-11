@@ -68,7 +68,7 @@ export default async function CapacityPage({ searchParams }: { searchParams: Pro
       </Callout>
 
       {baselineResult ? (
-        <Card className="mt-4">
+        <Card className="mt-section">
           <CardHead
             title={`Saqlangan hisob — ${baseline?.name}`}
             note={`${baseline?.period} · oylik oqim ${number(baselineResult.inputs.monthlyVolume)} ta`}
@@ -86,7 +86,7 @@ export default async function CapacityPage({ searchParams }: { searchParams: Pro
         </Card>
       ) : null}
 
-      <Card className="mt-4">
+      <Card className="mt-section">
         <CardHead
           title="Kalkulyator"
           note="Qiymatlarni o'zgartirsangiz natija darhol qayta hisoblanadi — rahbariyat bilan suhbatda jonli ko'rsatish mumkin"
@@ -94,7 +94,7 @@ export default async function CapacityPage({ searchParams }: { searchParams: Pro
         <ScenarioForm defaults={defaults} measured={measuredMap} />
       </Card>
 
-      <Card className="mt-4">
+      <Card className="mt-section">
         <CardHead title="Saqlangan sxemalar" note="Turli farazlarni taqqoslash uchun" />
         {scenarios.length === 0 ? (
           <Empty>Hali sxema saqlanmagan.</Empty>
@@ -114,11 +114,11 @@ export default async function CapacityPage({ searchParams }: { searchParams: Pro
               {scenarios.map((s) => (
                 <tr key={s.id}>
                   <td className="td font-medium">{s.name}</td>
-                  <td className="td text-[12px]">{periodLabel(s.period)}</td>
+                  <td className="td text-meta">{periodLabel(s.period)}</td>
                   <td className="td tnum text-right">{number(s.monthlyVolume)}</td>
                   <td className="td tnum text-right">{number(Number(s.specialists), 1)}</td>
                   <td className="td tnum text-right">{percent(Number(s.proactiveShare), 0)}</td>
-                  <td className="td text-[12px] text-muted">{s.note ?? '—'}</td>
+                  <td className="td text-meta text-muted">{s.note ?? '—'}</td>
                 </tr>
               ))}
             </tbody>
@@ -132,8 +132,8 @@ export default async function CapacityPage({ searchParams }: { searchParams: Pro
 function Cell({ label, value, bad }: { label: string; value: string; bad?: boolean }) {
   return (
     <div className="rounded-xl border border-line bg-raised p-3.5">
-      <p className="text-[12px] text-ink2">{label}</p>
-      <p className={`tnum mt-1 text-[21px] font-semibold leading-none ${bad ? 'text-bad' : 'text-ink'}`}>{value}</p>
+      <p className="text-meta text-ink2">{label}</p>
+      <p className={`tnum mt-1 text-stat leading-none ${bad ? 'text-bad' : 'text-ink'}`}>{value}</p>
     </div>
   );
 }

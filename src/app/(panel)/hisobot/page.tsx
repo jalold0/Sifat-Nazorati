@@ -89,7 +89,7 @@ export default async function ReportPage({ searchParams }: { searchParams: Promi
         actions={
           <>
             <form method="get" className="flex items-center gap-2">
-              <select name="davr" defaultValue={period} className="field !py-1.5 !text-[12.5px]">
+              <select name="davr" defaultValue={period} className="field !py-1.5 !text-meta">
                 {lastPeriods(8)
                   .reverse()
                   .map((v) => (
@@ -132,10 +132,10 @@ export default async function ReportPage({ searchParams }: { searchParams: Promi
               <tr key={t.label}>
                 <td className="td font-medium">{t.label}</td>
                 <td className="td tnum text-right font-semibold">{t.fact}</td>
-                <td className="td text-[12.5px]">{t.target}</td>
+                <td className="td text-meta">{t.target}</td>
                 <td className="td">
                   {t.met === null ? (
-                    <span className="text-[12px] text-muted">ma'lumot yo'q</span>
+                    <span className="text-meta text-muted">ma'lumot yo'q</span>
                   ) : (
                     <Badge tone={t.met ? 'ok' : 'bad'}>{t.met ? '✔ Bajarildi' : '✘ Bajarilmadi'}</Badge>
                   )}
@@ -171,7 +171,7 @@ export default async function ReportPage({ searchParams }: { searchParams: Promi
       </Card>
 
       {/* ── 2. Zonalar ────────────────────────────────────────────────────── */}
-      <Card className="mt-4">
+      <Card className="mt-section">
         <CardHead title="2. Zonalar bo'yicha" />
         {zones.length === 0 ? (
           <Empty>Ma'lumot yo'q.</Empty>
@@ -206,7 +206,7 @@ export default async function ReportPage({ searchParams }: { searchParams: Promi
       </Card>
 
       {/* ── 3. Xodimlar yuklamasi va KPI ──────────────────────────────────── */}
-      <Card className="mt-4">
+      <Card className="mt-section">
         <CardHead
           title="3. Xodimlar bo'yicha yuklama va natija"
           note={
@@ -260,7 +260,7 @@ export default async function ReportPage({ searchParams }: { searchParams: Promi
       </Card>
 
       {/* ── 4. Kanallar va audit qamrovi ──────────────────────────────────── */}
-      <div className="mt-4 grid gap-4 lg:grid-cols-2">
+      <div className="mt-section grid gap-4 lg:grid-cols-2">
         <Card>
           <CardHead title="4. Kanallar kesimi" note="Har bir kanal hisobotda ko'rinishi shart" />
           {channels.length === 0 ? (
@@ -313,12 +313,12 @@ export default async function ReportPage({ searchParams }: { searchParams: Promi
       </div>
 
       {/* ── 6. Takrorlanadigan sabablar ───────────────────────────────────── */}
-      <Card className="mt-4">
+      <Card className="mt-section">
         <CardHead
           title="6. Takrorlanadigan sabablar (TOP-10)"
           note="Root-cause tahlili — takrorlanishni to'xtatish uchun asos"
           right={
-            <Link href="/yechimlar" className="text-[12.5px] font-semibold text-brand">
+            <Link href="/yechimlar" className="text-meta font-semibold text-brand">
               Tizimli yechimlar →
             </Link>
           }
@@ -348,7 +348,7 @@ export default async function ReportPage({ searchParams }: { searchParams: Promi
       </Card>
 
       {/* ── 7. Tizimli yechimlar ──────────────────────────────────────────── */}
-      <Card className="mt-4">
+      <Card className="mt-section">
         <CardHead title="7. Tizimli yechimlar va choralar" note="Natijasi tasdiqlangan yechimlar KPI'ga kiradi" />
         {actions.length === 0 ? (
           <Empty>Bu davrda tizimli yechim kiritilmagan.</Empty>
@@ -368,10 +368,10 @@ export default async function ReportPage({ searchParams }: { searchParams: Promi
               {actions.map((a) => (
                 <tr key={a.id}>
                   <td className="td font-medium">{a.title}</td>
-                  <td className="td text-[12px] text-ink2">{a.rootCause}</td>
-                  <td className="td text-[12px]">{a.solution}</td>
-                  <td className="td text-[12px]">{a.responsibleDept}</td>
-                  <td className="td tnum whitespace-nowrap text-[12px]">{date(a.dueDate)}</td>
+                  <td className="td text-meta text-ink2">{a.rootCause}</td>
+                  <td className="td text-meta">{a.solution}</td>
+                  <td className="td text-meta">{a.responsibleDept}</td>
+                  <td className="td tnum whitespace-nowrap text-meta">{date(a.dueDate)}</td>
                   <td className="td">
                     <Badge tone={a.status === 'VERIFIED' ? 'ok' : a.status === 'CANCELLED' ? 'bad' : 'neutral'}>
                       {ACTION_STATUS_LABEL[a.status]}
@@ -384,7 +384,7 @@ export default async function ReportPage({ searchParams }: { searchParams: Promi
         )}
       </Card>
 
-      <p className="mt-6 text-center text-[11.5px] text-muted">
+      <p className="mt-6 text-center text-micro text-muted">
         Hisobot {periodLabel(period)} uchun avtomatik shakllantirildi · manba: kunlik reyestr, checklist auditlari,
         tizimli yechimlar reyestri
       </p>

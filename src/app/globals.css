@@ -19,14 +19,14 @@
   --raised-rgb: 250 250 248;
   --ink-rgb: 11 11 11;
   --ink2-rgb: 82 81 78;
-  --muted-rgb: 139 137 131;
-  --line-rgb: 226 225 218;
-  --grid-rgb: 231 230 224;
+  --muted-rgb: 132 130 124;
+  --line-rgb: 228 227 220;
+  --grid-rgb: 235 234 228;
   --brand-rgb: 42 120 214;
   --accent-rgb: 235 104 52;
   --ok-rgb: 28 140 90;
-  --warn-rgb: 201 138 18;
-  --bad-rgb: 208 59 59;
+  --warn-rgb: 193 131 15;
+  --bad-rgb: 205 56 56;
 
   --font-sans: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
 }
@@ -35,15 +35,15 @@
   :root {
     color-scheme: dark;
 
-    --plane-rgb: 13 13 13;
-    --surface-rgb: 25 25 24;
-    --raised-rgb: 34 34 33;
+    --plane-rgb: 12 12 12;
+    --surface-rgb: 24 24 23;
+    --raised-rgb: 32 32 31;
     --ink-rgb: 247 247 245;
-    --ink2-rgb: 195 194 183;
-    --muted-rgb: 141 139 131;
-    --line-rgb: 51 51 49;
-    --grid-rgb: 44 44 42;
-    --brand-rgb: 74 147 232;
+    --ink2-rgb: 191 190 180;
+    --muted-rgb: 138 136 128;
+    --line-rgb: 48 48 46;
+    --grid-rgb: 41 41 39;
+    --brand-rgb: 79 150 234;
     --accent-rgb: 240 120 74;
     --ok-rgb: 53 180 124;
     --warn-rgb: 224 165 42;
@@ -81,38 +81,59 @@ body {
   background: var(--plane);
   color: var(--ink);
   font-family: var(--font-sans);
-  font-size: 14px;
-  line-height: 1.5;
+  font-size: 13.5px;
+  line-height: 1.55;
   -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
 }
 
-/* Raqamlar jadvalda tekis turishi uchun */
+/* Raqamlar jadvalda ustun bo'ylab tekis turishi uchun */
 .tnum {
   font-variant-numeric: tabular-nums;
+  font-feature-settings: 'tnum' 1;
 }
 
 @layer components {
+  /* ── Sirtlar ─────────────────────────────────────────────────────────── */
   .card {
-    @apply rounded-card border border-line bg-surface;
+    @apply rounded-card border border-line bg-surface shadow-card;
   }
 
+  /* Kartochka ichidagi ikkinchi darajali blok */
+  .tile {
+    @apply rounded-tile border border-line bg-raised;
+  }
+
+  /* ── Matn ────────────────────────────────────────────────────────────── */
+  .eyebrow {
+    @apply text-label uppercase text-muted;
+  }
+
+  /* ── Shakl elementlari ───────────────────────────────────────────────── */
   .field-label {
-    @apply mb-1.5 block text-[12px] font-semibold uppercase tracking-wide text-muted;
+    @apply mb-1.5 block text-label uppercase text-muted;
   }
 
   .field {
-    @apply w-full rounded-lg border border-line bg-raised px-3 py-2 text-[13.5px] text-ink
+    @apply w-full rounded-lg border border-line bg-raised px-3 py-2 text-body text-ink
            outline-none transition placeholder:text-muted
-           focus:border-brand focus:ring-2 focus:ring-brand/20 disabled:opacity-60;
+           focus:border-brand focus:bg-surface focus:ring-2 focus:ring-brand/15
+           disabled:opacity-60;
+  }
+
+  select.field {
+    @apply cursor-pointer pr-8;
   }
 
   .btn {
-    @apply inline-flex items-center justify-center gap-2 rounded-lg px-3.5 py-2 text-[13px]
-           font-semibold transition disabled:cursor-not-allowed disabled:opacity-50;
+    @apply inline-flex select-none items-center justify-center gap-2 rounded-lg px-3.5 py-2
+           text-meta font-semibold transition
+           focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand/30
+           disabled:cursor-not-allowed disabled:opacity-50;
   }
 
   .btn-primary {
-    @apply btn bg-ink text-plane hover:opacity-90;
+    @apply btn bg-ink text-plane hover:opacity-90 active:opacity-100;
   }
 
   .btn-brand {
@@ -120,37 +141,96 @@ body {
   }
 
   .btn-ghost {
-    @apply btn border border-line bg-surface text-ink2 hover:bg-raised hover:text-ink;
+    @apply btn border border-line bg-surface text-ink2 hover:border-line hover:bg-raised hover:text-ink;
   }
 
   .btn-danger {
     @apply btn bg-bad text-white hover:opacity-90;
   }
 
+  /* ── Jadval ──────────────────────────────────────────────────────────── */
   .th {
-    @apply border-b border-grid px-3 py-2 text-left text-[11px] font-semibold uppercase
-           tracking-[0.04em] text-muted;
+    @apply whitespace-nowrap border-b border-grid bg-surface px-3 py-2 text-left
+           text-label uppercase text-muted;
+  }
+
+  /* Uzun jadvallarda sarlavha yopishib turadi */
+  .th-sticky {
+    @apply sticky top-0 z-10;
   }
 
   .td {
-    @apply border-b border-grid/70 px-3 py-2.5 align-top text-[13px] text-ink;
+    @apply border-b border-grid/60 px-3 py-2 align-top text-body text-ink;
   }
 
-  .eyebrow {
-    @apply text-[11.5px] font-semibold uppercase tracking-[0.09em] text-muted;
+  /* Jadval qatorining ustuni bo'ylab raqam — o'ngga tekis va tabular */
+  .td-num {
+    @apply td tnum text-right;
+  }
+
+  /* Yakuniy (JAMI) qator */
+  .tr-total > .td {
+    @apply border-t border-grid bg-raised font-semibold;
+  }
+
+  /* ── Ma'lumot yo'q holati ────────────────────────────────────────────── */
+  .empty {
+    @apply rounded-tile border border-dashed border-grid px-4 py-9 text-center text-meta text-muted;
   }
 }
 
-/* Chop etishda faqat mazmun qoladi — CEO hisobotni bosib olishi mumkin */
+/*
+  Chop etish — CEO hisobotni qog'ozda ham o'qiydi.
+  Sidebar, tugmalar va filtrlar chiqmaydi; kartochkalar bo'linmaydi.
+*/
 @media print {
+  @page {
+    size: A4;
+    margin: 14mm 12mm;
+  }
+
   body {
     background: #fff;
+    font-size: 10.5pt;
   }
+
   .no-print {
     display: none !important;
   }
+
   .card {
     break-inside: avoid;
+    border-color: #d8d7d0;
     box-shadow: none;
+  }
+
+  /*
+    Ekranda uzun jadvallar ichki aylantirish bilan cheklangan.
+    Chop etishda cheklov olib tashlanadi — aks holda qatorlar kesilib qoladi.
+    Balandlik inline uslubda berilgani uchun !important zarur.
+  */
+  .table-scroll {
+    max-height: none !important;
+    overflow: visible !important;
+  }
+
+  /* Yopishqoq sarlavha chop etishda oddiy holatga qaytadi */
+  thead th {
+    position: static !important;
+  }
+
+  /* Jadval sarlavhasi har bir sahifada takrorlanadi */
+  thead {
+    display: table-header-group;
+  }
+
+  tr {
+    break-inside: avoid;
+  }
+
+  /* Chop etishda ranglar saqlanadi (holat belgilari uchun muhim) */
+  * {
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
   }
 }

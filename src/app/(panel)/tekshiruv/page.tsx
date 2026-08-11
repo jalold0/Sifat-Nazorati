@@ -96,7 +96,7 @@ export default async function ReviewPage({
       </Callout>
 
       {byCategory.length > 0 ? (
-        <Card className="mt-4">
+        <Card className="mt-section">
           <CardHead title="Kategoriyalar" note="Qaysi mavzuda iz qolmagani ko'proq" />
           <Table>
             <thead>
@@ -117,7 +117,7 @@ export default async function ReviewPage({
         </Card>
       ) : null}
 
-      <Card className="mt-4 no-print" padded={false}>
+      <Card className="mt-section no-print" padded={false}>
         <form method="get" className="grid gap-3 p-4 sm:grid-cols-4">
           <div>
             <label className="field-label" htmlFor="natija">
@@ -159,14 +159,14 @@ export default async function ReviewPage({
         </form>
       </Card>
 
-      <Card className="mt-4" padded={false}>
+      <Card className="mt-section" padded={false}>
         {rows.length === 0 ? (
           <div className="p-5">
             <Empty>Bu shartlar bo'yicha yozuv topilmadi.</Empty>
           </div>
         ) : (
           <>
-            <Table>
+            <Table stickyHead maxHeight={760}>
               <thead>
                 <tr>
                   <th className="th">Sana</th>
@@ -181,16 +181,16 @@ export default async function ReviewPage({
               <tbody>
                 {rows.map((r) => (
                   <tr key={r.id}>
-                    <td className="td tnum whitespace-nowrap text-[12px]">{date(r.occurredOn)}</td>
-                    <td className="td tnum text-[12px]">{r.track ?? '—'}</td>
-                    <td className="td text-[12px]">
+                    <td className="td tnum whitespace-nowrap text-meta">{date(r.occurredOn)}</td>
+                    <td className="td tnum text-meta">{r.track ?? '—'}</td>
+                    <td className="td text-meta">
                       {r.customer}
-                      <p className="text-[11px] text-muted">{r.originType}</p>
+                      <p className="text-micro text-muted">{r.originType}</p>
                     </td>
-                    <td className="td text-[12px]">{r.category}</td>
+                    <td className="td text-meta">{r.category}</td>
                     <td className="td max-w-[300px]">
-                      <p className="line-clamp-2 text-[12px] text-ink2">{r.text || '—'}</p>
-                      <p className="mt-0.5 text-[11px] text-muted">{r.account}</p>
+                      <p className="line-clamp-2 text-meta text-ink2">{r.text || '—'}</p>
+                      <p className="mt-0.5 text-micro text-muted">{r.account}</p>
                     </td>
                     <td className="td">
                       <Badge
@@ -206,8 +206,8 @@ export default async function ReviewPage({
                       >
                         {REVIEW_RESULT_LABEL[r.result]}
                       </Badge>
-                      {r.resolvedWhere ? <p className="mt-1 text-[11px] text-muted">{r.resolvedWhere}</p> : null}
-                      {r.assignedTo ? <p className="text-[10.5px] text-muted">{r.assignedTo.shortName}</p> : null}
+                      {r.resolvedWhere ? <p className="mt-1 text-micro text-muted">{r.resolvedWhere}</p> : null}
+                      {r.assignedTo ? <p className="text-micro text-muted">{r.assignedTo.shortName}</p> : null}
                     </td>
                     <td className="td">
                       <ResultForm id={r.id} result={r.result} resolvedWhere={r.resolvedWhere} note={r.note} />
@@ -218,7 +218,7 @@ export default async function ReviewPage({
             </Table>
 
             <div className="flex items-center justify-between gap-3 border-t border-grid px-4 py-3">
-              <p className="text-[12px] text-muted">
+              <p className="text-meta text-muted">
                 {number((page - 1) * PAGE_SIZE + 1)}–{number(Math.min(page * PAGE_SIZE, total))} / {number(total)} ta
               </p>
               <div className="flex gap-2">

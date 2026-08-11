@@ -51,7 +51,7 @@ export default async function NewTicketPage() {
         muammo takrorlanaveradi. Sarflangan vaqt yozilmasa, shtat masalasini raqam bilan asoslab bo'lmaydi.
       </Callout>
 
-      <Card className="mt-4">
+      <Card className="mt-section">
         <TicketForm
           tasks={tasks}
           users={users}

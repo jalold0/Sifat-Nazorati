@@ -158,14 +158,14 @@ export function ScenarioForm({
         <div className="mb-2 flex items-end justify-between gap-3">
           <p className="eyebrow">2. Zonalar bo'yicha yuklama</p>
           {measured ? (
-            <button type="button" className="btn-ghost !py-1.5 !text-[12px]" onClick={applyMeasured}>
+            <button type="button" className="btn-ghost !py-1.5 !text-meta" onClick={applyMeasured}>
               Reyestrdan o'lchangan normani qo'llash
             </button>
           ) : null}
         </div>
 
         {measured ? (
-          <p className="mb-2 text-[11.5px] text-muted">
+          <p className="mb-2 text-micro text-muted">
             Reyestrda vaqt qayd etilgan murojaatlar ulushi: {percent(measured.coverage, 0)}.
             {measured.coverage < 0.8
               ? ' 80% dan past — norma hali ishonchsiz, xronometrajni davom ettiring.'
@@ -197,7 +197,7 @@ export function ScenarioForm({
                         name={`flow-${z.zoneCode}`}
                         type="number"
                         step="0.1"
-                        className="field !py-1.5 !text-[12.5px]"
+                        className="field !py-1.5 !text-meta"
                         value={z.flowSharePercent}
                         onChange={(e) => setZone(z.zoneCode, 'flowSharePercent', e.target.value)}
                       />
@@ -207,7 +207,7 @@ export function ScenarioForm({
                         name={`min-${z.zoneCode}`}
                         type="number"
                         step="0.1"
-                        className="field !py-1.5 !text-[12.5px]"
+                        className="field !py-1.5 !text-meta"
                         value={z.minutesPerCase}
                         onChange={(e) => setZone(z.zoneCode, 'minutesPerCase', e.target.value)}
                       />
@@ -222,7 +222,7 @@ export function ScenarioForm({
         </div>
 
         {result?.flowShareWarning ? (
-          <p className="mt-2 text-[12px] font-medium text-bad">
+          <p className="mt-2 text-meta font-medium text-bad">
             Zona ulushlari yig'indisi 100% emas — natija noto'g'ri bo'ladi.
           </p>
         ) : null}
@@ -279,12 +279,12 @@ export function ScenarioForm({
       </div>
 
       {state.error ? (
-        <p role="alert" className="rounded-lg bg-bad/10 px-3 py-2 text-[12.5px] font-medium text-bad">
+        <p role="alert" className="rounded-lg bg-bad/10 px-3 py-2 text-meta font-medium text-bad">
           {state.error}
         </p>
       ) : null}
       {state.ok ? (
-        <p role="status" className="rounded-lg bg-ok/10 px-3 py-2 text-[12.5px] font-medium text-ok">
+        <p role="status" className="rounded-lg bg-ok/10 px-3 py-2 text-meta font-medium text-ok">
           {state.ok}
         </p>
       ) : null}
@@ -331,7 +331,7 @@ function Field({
       />
       {/* Serverga yuboriladigan haqiqiy qiymat */}
       <input type="hidden" name={name} value={transformName ? String(Number(value) / 100) : value} />
-      {hint ? <p className="mt-1 text-[11px] text-muted">{hint}</p> : null}
+      {hint ? <p className="mt-1 text-micro text-muted">{hint}</p> : null}
     </div>
   );
 }
@@ -350,9 +350,9 @@ function Metric({
   const cls = { neutral: 'text-ink', ok: 'text-ok', bad: 'text-bad', accent: 'text-accent' }[tone];
   return (
     <div className="rounded-xl border border-line bg-raised p-3.5">
-      <p className="text-[12px] text-ink2">{label}</p>
-      <p className={`tnum mt-1 text-[20px] font-semibold leading-none ${cls}`}>{value}</p>
-      {hint ? <p className="mt-1.5 text-[11px] text-muted">{hint}</p> : null}
+      <p className="text-meta text-ink2">{label}</p>
+      <p className={`tnum mt-1 text-stat leading-none ${cls}`}>{value}</p>
+      {hint ? <p className="mt-1.5 text-micro text-muted">{hint}</p> : null}
     </div>
   );
 }

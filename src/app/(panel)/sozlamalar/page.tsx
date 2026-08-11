@@ -37,28 +37,28 @@ export default async function SettingsPage() {
       <div className="grid gap-4 lg:grid-cols-3">
         <Card>
           <p className="eyebrow">KPI ko'rsatkichlari</p>
-          <p className="tnum mt-1 text-[24px] font-semibold leading-none">{number(autoCount + manualCount)}</p>
-          <p className="mt-2 text-[12px] text-ink2">
+          <p className="tnum mt-1 text-stat leading-none">{number(autoCount + manualCount)}</p>
+          <p className="mt-2 text-meta text-ink2">
             {number(autoCount)} ta avtomatik (reyestrdan) · {number(manualCount)} ta qo'lda kiritiladi
           </p>
         </Card>
         <Card>
           <p className="eyebrow">Checklistlar</p>
-          <p className="tnum mt-1 text-[24px] font-semibold leading-none">{number(templates.length)}</p>
-          <p className="mt-2 text-[12px] text-ink2">
+          <p className="tnum mt-1 text-stat leading-none">{number(templates.length)}</p>
+          <p className="mt-2 text-meta text-ink2">
             {templates.map((t) => `${t._count.items} band`).join(' · ')}
           </p>
         </Card>
         <Card>
           <p className="eyebrow">Ochilgan davrlar</p>
-          <p className="tnum mt-1 text-[24px] font-semibold leading-none">{number(periods.length)}</p>
-          <p className="mt-2 text-[12px] text-ink2">
+          <p className="tnum mt-1 text-stat leading-none">{number(periods.length)}</p>
+          <p className="mt-2 text-meta text-ink2">
             {periods.filter((p) => p.status === 'APPROVED').length} ta tasdiqlangan
           </p>
         </Card>
       </div>
 
-      <Card className="mt-4">
+      <Card className="mt-section">
         <CardHead
           title="Xodimlar"
           note="Maosh kiritilmagan xodimga bonus hisoblanmaydi — ball baribir hisoblanadi"
@@ -82,19 +82,19 @@ export default async function SettingsPage() {
               <tr key={u.id}>
                 <td className="td">
                   <p className="font-semibold">{u.fullName}</p>
-                  <p className="text-[11.5px] text-muted">{u.position}</p>
+                  <p className="text-micro text-muted">{u.position}</p>
                   {!u.active ? (
                     <Badge tone="bad" className="mt-1">
                       Faolsiz
                     </Badge>
                   ) : null}
                 </td>
-                <td className="td tnum text-[12px]">{u.login}</td>
-                <td className="td text-[12px]">{ROLE_LABEL[u.role]}</td>
+                <td className="td tnum text-meta">{u.login}</td>
+                <td className="td text-meta">{ROLE_LABEL[u.role]}</td>
                 <td className="td tnum text-right">{number(u._count.ownedTasks)}</td>
                 <td className="td tnum text-right">{number(u._count.indicators)}</td>
                 {showMoney ? <td className="td tnum text-right">{money(u.salary ? Number(u.salary) : null)}</td> : null}
-                <td className="td tnum whitespace-nowrap text-[11.5px] text-muted">{dateTime(u.lastLoginAt)}</td>
+                <td className="td tnum whitespace-nowrap text-micro text-muted">{dateTime(u.lastLoginAt)}</td>
                 <td className="td">
                   <UserForm
                     id={u.id}
@@ -108,7 +108,7 @@ export default async function SettingsPage() {
                   {u.id === session.sub || canEdit ? (
                     <PasswordForm id={u.id} label={u.id === session.sub ? 'O‘z parolim' : 'Yangi parol'} />
                   ) : (
-                    <span className="text-[12px] text-muted">—</span>
+                    <span className="text-meta text-muted">—</span>
                   )}
                 </td>
               </tr>

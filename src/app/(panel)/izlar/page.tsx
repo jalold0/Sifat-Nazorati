@@ -87,14 +87,14 @@ export default async function ActivityLogPage({
         </form>
       </Card>
 
-      <Card className="mt-4" padded={false}>
+      <Card className="mt-section" padded={false}>
         {rows.length === 0 ? (
           <div className="p-5">
             <Empty>Hozircha yozuv yo'q.</Empty>
           </div>
         ) : (
           <>
-            <Table>
+            <Table stickyHead maxHeight={760}>
               <thead>
                 <tr>
                   <th className="th">Vaqt</th>
@@ -106,17 +106,17 @@ export default async function ActivityLogPage({
               <tbody>
                 {rows.map((r) => (
                   <tr key={r.id}>
-                    <td className="td tnum whitespace-nowrap text-[12px] text-ink2">{dateTime(r.createdAt)}</td>
-                    <td className="td whitespace-nowrap text-[12.5px] font-medium">{r.actor?.shortName ?? 'tizim'}</td>
-                    <td className="td whitespace-nowrap text-[12.5px]">{ACTION_LABEL[r.action] ?? r.action}</td>
-                    <td className="td text-[12px] text-ink2">{r.summary}</td>
+                    <td className="td tnum whitespace-nowrap text-meta text-ink2">{dateTime(r.createdAt)}</td>
+                    <td className="td whitespace-nowrap text-meta font-medium">{r.actor?.shortName ?? 'tizim'}</td>
+                    <td className="td whitespace-nowrap text-meta">{ACTION_LABEL[r.action] ?? r.action}</td>
+                    <td className="td text-meta text-ink2">{r.summary}</td>
                   </tr>
                 ))}
               </tbody>
             </Table>
 
             <div className="flex items-center justify-between gap-3 border-t border-grid px-4 py-3">
-              <p className="text-[12px] text-muted">
+              <p className="text-meta text-muted">
                 {number((page - 1) * PAGE_SIZE + 1)}–{number(Math.min(page * PAGE_SIZE, total))} / {number(total)}
               </p>
               <div className="flex gap-2">

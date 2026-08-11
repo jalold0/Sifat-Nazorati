@@ -75,7 +75,7 @@ export function ColumnChart({
               x={cx}
               y={padT + plotH - barH - 7}
               textAnchor="middle"
-              style={{ fill: 'var(--ink)', fontSize: 12, fontWeight: 640 }}
+              style={{ fill: 'var(--ink)', fontSize: 11.5, fontWeight: 640 }}
               className="tnum"
             >
               {valueFormat(d.value)}
@@ -84,7 +84,7 @@ export function ColumnChart({
               x={cx}
               y={height - 9}
               textAnchor="middle"
-              style={{ fill: 'var(--muted)', fontSize: 11.5 }}
+              style={{ fill: 'var(--muted)', fontSize: 11 }}
             >
               {d.label}
             </text>
@@ -108,7 +108,7 @@ export function ColumnChart({
               x={W - padR}
               y={y(reference) - 7}
               textAnchor="end"
-              style={{ fill: 'var(--accent)', fontSize: 11.5, fontWeight: 640 }}
+              style={{ fill: 'var(--accent)', fontSize: 11, fontWeight: 640 }}
             >
               {referenceLabel}
             </text>
@@ -131,12 +131,12 @@ export function BarList({
 }) {
   const max = maxOverride ?? Math.max(...data.map((d) => d.value), 1);
   return (
-    <ul className="space-y-2.5">
+    <ul className="space-y-3">
       {data.map((d) => (
         <li key={d.label}>
-          <div className="mb-1 flex items-baseline justify-between gap-3">
-            <span className="text-[12.5px] text-ink2">{d.label}</span>
-            <span className="tnum text-[12.5px] font-semibold text-ink">{valueFormat(d.value)}</span>
+          <div className="mb-1.5 flex items-baseline justify-between gap-3">
+            <span className="text-meta text-ink2">{d.label}</span>
+            <span className="tnum text-meta font-semibold text-ink">{valueFormat(d.value)}</span>
           </div>
           <div className="h-2 w-full overflow-hidden rounded-full bg-grid">
             <div
@@ -223,7 +223,7 @@ export function SplitBar({
       </div>
       <div className="mt-2 flex flex-wrap gap-x-4 gap-y-1">
         {parts.map((p) => (
-          <span key={p.label} className="inline-flex items-center gap-1.5 text-[12px] text-ink2">
+          <span key={p.label} className="inline-flex items-center gap-1.5 text-meta text-ink2">
             <i className="inline-block h-2.5 w-2.5 rounded-sm" style={{ background: color(p.tone) }} />
             {p.label} — <span className="tnum font-semibold">{number((p.value / total) * 100, 1)}%</span>
           </span>

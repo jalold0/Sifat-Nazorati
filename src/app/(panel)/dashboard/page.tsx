@@ -85,7 +85,7 @@ export default async function DashboardPage({
       ) : null}
 
       {/* ── Asosiy ko'rsatkichlar ─────────────────────────────────────────── */}
-      <div className="mt-6 grid grid-cols-2 gap-3 lg:grid-cols-4">
+      <div className="grid grid-cols-2 gap-3 lg:grid-cols-4">
         <StatTile
           label="Jami murojaat"
           value={number(summary.total)}
@@ -115,12 +115,12 @@ export default async function DashboardPage({
       </div>
 
       {/* ── KPI natijalari ────────────────────────────────────────────────── */}
-      <Card className="mt-4">
+      <Card className="mt-section">
         <CardHead
           title="Xodimlar KPI natijasi"
           note={`Bo'lim o'rtachasi ${score(cards.departmentAverage)} ball · kirish chegarasi ${number(cards.period.settings.threshold)} · yuqori chegara ${number(cards.period.settings.cap * 100)}%`}
           right={
-            <Link href={`/kpi?davr=${period}`} className="text-[12.5px] font-semibold text-brand">
+            <Link href={`/kpi?davr=${period}`} className="text-meta font-semibold text-brand">
               Batafsil →
             </Link>
           }
@@ -129,15 +129,15 @@ export default async function DashboardPage({
         {cards.employees.length === 0 ? (
           <Empty>KPI pasporti hali sozlanmagan.</Empty>
         ) : (
-          <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+          <div className="grid gap-3.5 sm:grid-cols-2 xl:grid-cols-4">
             {cards.employees.map((e) => {
               const badge = gradeBadge(e.card);
               return (
-                <div key={e.userId} className="rounded-xl border border-line bg-raised p-4">
+                <div key={e.userId} className="tile p-4">
                   <div className="mb-1 flex items-start justify-between gap-2">
                     <div className="min-w-0">
-                      <p className="truncate text-[13px] font-semibold text-ink">{e.shortName}</p>
-                      <p className="truncate text-[11px] text-muted">{e.position}</p>
+                      <p className="truncate text-body font-semibold text-ink">{e.shortName}</p>
+                      <p className="truncate text-micro text-muted">{e.position}</p>
                     </div>
                     {/* Baho faqat o'lchov bo'lganda ko'rsatiladi */}
                     {badge ? <Badge tone={badge.tone}>{badge.label}</Badge> : null}
@@ -148,7 +148,7 @@ export default async function DashboardPage({
                   </div>
 
                   {e.card.missingFacts > 0 ? (
-                    <p className="mt-1 text-center text-[11px] font-medium text-warn">
+                    <p className="mt-1 text-center text-micro font-medium text-warn">
                       {e.card.missingFacts} ko'rsatkichda fakt yo'q
                     </p>
                   ) : null}
@@ -159,14 +159,14 @@ export default async function DashboardPage({
         )}
       </Card>
 
-      <div className="mt-4 grid gap-4 lg:grid-cols-2">
+      <div className="mt-section grid gap-section lg:grid-cols-2">
         {/* ── Kechikkan murojaatlar ──────────────────────────────────────── */}
         <Card>
           <CardHead
             title="Darhol chora talab qiladi"
             note="Ochiq, lekin SLA muddati o'tgan murojaatlar"
             right={
-              <Link href="/reyestr?holat=OPEN" className="text-[12.5px] font-semibold text-brand">
+              <Link href="/reyestr?holat=OPEN" className="text-meta font-semibold text-brand">
                 Reyestr →
               </Link>
             }
@@ -190,15 +190,15 @@ export default async function DashboardPage({
                       <Link href={`/reyestr/${t.id}`} className="font-semibold text-brand">
                         {t.ref}
                       </Link>
-                      <p className="mt-0.5 line-clamp-1 text-[11.5px] text-muted">{t.description}</p>
+                      <p className="mt-0.5 line-clamp-1 text-micro text-muted">{t.description}</p>
                     </td>
-                    <td className="td whitespace-nowrap text-[12.5px]">{t.owner.shortName}</td>
+                    <td className="td whitespace-nowrap text-meta">{t.owner.shortName}</td>
                     <td className="td">
                       <Badge tone={t.priority === 'CRITICAL' ? 'bad' : t.priority === 'HIGH' ? 'warn' : 'neutral'}>
                         {PRIORITY_LABEL[t.priority]}
                       </Badge>
                     </td>
-                    <td className="td tnum whitespace-nowrap text-[12px] text-ink2">{date(t.receivedAt)}</td>
+                    <td className="td tnum whitespace-nowrap text-meta text-ink2">{date(t.receivedAt)}</td>
                   </tr>
                 ))}
               </tbody>
@@ -232,14 +232,14 @@ export default async function DashboardPage({
         </Card>
       </div>
 
-      <div className="mt-4 grid gap-4 lg:grid-cols-3">
+      <div className="mt-section grid gap-section lg:grid-cols-3">
         {/* ── Audit qamrovi ──────────────────────────────────────────────── */}
         <Card className="lg:col-span-2">
           <CardHead
             title="Rejali audit qamrovi"
             note="Shikoyat kelgan joyni emas, tizimni tekshirish — proaktiv ishning o'zagi"
             right={
-              <Link href="/audit" className="text-[12.5px] font-semibold text-brand">
+              <Link href="/audit" className="text-meta font-semibold text-brand">
                 Auditlar →
               </Link>
             }
@@ -250,8 +250,8 @@ export default async function DashboardPage({
               return (
                 <div key={c.kind}>
                   <div className="mb-1.5 flex items-baseline justify-between gap-3">
-                    <span className="text-[12.5px] text-ink2">{CHECKLIST_LABEL[c.kind]}</span>
-                    <span className="tnum text-[12.5px] font-semibold">
+                    <span className="text-meta text-ink2">{CHECKLIST_LABEL[c.kind]}</span>
+                    <span className="tnum text-meta font-semibold">
                       {number(c.count)} / {number(c.plan)}
                       {c.avgPercent !== null ? (
                         <span className="ml-2 font-normal text-muted">o'rtacha {percent(c.avgPercent, 0)}</span>
@@ -260,7 +260,7 @@ export default async function DashboardPage({
                   </div>
                   <ProgressBar value={ratio} tone={ratio >= 0.9 ? 'ok' : ratio >= 0.5 ? 'warn' : 'bad'} />
                   {c.failing > 0 ? (
-                    <p className="mt-1 text-[11.5px] font-medium text-bad">
+                    <p className="mt-1 text-micro font-medium text-bad">
                       {c.failing} ta ob'ekt 60% dan past — rahbariyatga eskalatsiya
                     </p>
                   ) : null}
@@ -296,7 +296,7 @@ export default async function DashboardPage({
 
       {/* ── Tarixiy oqim ──────────────────────────────────────────────────── */}
       {trend.length > 1 ? (
-        <Card className="mt-4">
+        <Card className="mt-section">
           <CardHead
             title="Telegram oqimi — o'lchangan baseline"
             note="Tizim joriy etilishidan oldingi haqiqiy hajm (trek bo'yicha dedublikatsiya qilingan). Punktir chiziq — 102 tizimining oylik o'rtachasi."
@@ -307,7 +307,7 @@ export default async function DashboardPage({
 
       {/* ── 6 oylik maqsadlar ─────────────────────────────────────────────── */}
       {goals.length > 0 ? (
-        <Card className="mt-4">
+        <Card className="mt-section">
           <CardHead title="6 oylik maqsadlar" note="Rahbariyat bilan kelishilgan yo'l xaritasi" />
           <Table>
             <thead>
@@ -326,7 +326,7 @@ export default async function DashboardPage({
                   <td className="td tnum text-ink2">{g.current}</td>
                   <td className="td tnum">{g.inThree}</td>
                   <td className="td tnum font-semibold">{g.inSix}</td>
-                  <td className="td text-[12px] text-muted">{g.dataSource}</td>
+                  <td className="td text-meta text-muted">{g.dataSource}</td>
                 </tr>
               ))}
             </tbody>

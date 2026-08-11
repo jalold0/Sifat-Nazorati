@@ -81,20 +81,20 @@ export default async function TicketPage({ params }: { params: Promise<{ id: str
         </Callout>
       ) : null}
 
-      <div className="mt-4 grid gap-4 lg:grid-cols-[1.1fr_1fr]">
+      <div className="mt-section grid gap-4 lg:grid-cols-[1.1fr_1fr]">
         <Card>
           <CardHead title="Murojaat ma'lumotlari" />
           <dl className="divide-y divide-grid">
             {rows.map(([label, value]) => (
               <div key={label} className="flex items-baseline justify-between gap-4 py-2">
-                <dt className="text-[12.5px] text-muted">{label}</dt>
-                <dd className="tnum text-right text-[13px] font-medium">{value}</dd>
+                <dt className="text-meta text-muted">{label}</dt>
+                <dd className="tnum text-right text-body font-medium">{value}</dd>
               </div>
             ))}
           </dl>
 
           {ticket.firstResponseAt ? (
-            <p className="mt-3 text-[12px] text-ink2">
+            <p className="mt-3 text-meta text-ink2">
               Birinchi javob {hours(hoursBetween(ticket.receivedAt, ticket.firstResponseAt))} ichida berilgan.
             </p>
           ) : null}
@@ -126,11 +126,11 @@ export default async function TicketPage({ params }: { params: Promise<{ id: str
               <div className="space-y-3">
                 <div>
                   <p className="eyebrow mb-1">Sabab (root cause)</p>
-                  <p className="text-[13px] leading-relaxed text-ink2">{ticket.rootCause ?? '—'}</p>
+                  <p className="text-body leading-relaxed text-ink2">{ticket.rootCause ?? '—'}</p>
                 </div>
                 <div>
                   <p className="eyebrow mb-1">Ko'rilgan chora</p>
-                  <p className="text-[13px] leading-relaxed text-ink2">{ticket.actionTaken ?? '—'}</p>
+                  <p className="text-body leading-relaxed text-ink2">{ticket.actionTaken ?? '—'}</p>
                 </div>
                 {ticket.isRepeat ? (
                   <Badge tone="warn">Takroriy muammo — root-cause tahliliga kiritilishi kerak</Badge>
@@ -156,7 +156,7 @@ export default async function TicketPage({ params }: { params: Promise<{ id: str
           {ticket.status === 'CLOSED' ? (
             <Card>
               <CardHead title="Yakuniy holat" />
-              <p className="text-[13px] text-ink2">
+              <p className="text-body text-ink2">
                 Murojaat {dateTime(ticket.closedAt)} da yopilgan.{' '}
                 {ticket.slaMet === true
                   ? 'SLA muddati bajarilgan.'
@@ -166,7 +166,7 @@ export default async function TicketPage({ params }: { params: Promise<{ id: str
                 Yopishga {hours(hoursBetween(ticket.receivedAt, ticket.closedAt ?? now))} ketgan
                 {ticket.spentHours ? `, sarflangan mehnat vaqti ${hours(Number(ticket.spentHours))}` : ''}.
               </p>
-              <p className="mt-2 text-[12px] text-muted">
+              <p className="mt-2 text-meta text-muted">
                 Sarflangan vaqt zona normasini o'lchashda ishlatiladi — {number(ticket.slaHours)} soatlik SLA bilan
                 aralashtirmang.
               </p>

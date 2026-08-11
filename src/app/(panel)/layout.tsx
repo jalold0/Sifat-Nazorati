@@ -32,8 +32,8 @@ export default async function PanelLayout({ children }: { children: React.ReactN
       <aside className="no-print sticky top-0 hidden h-screen w-[248px] shrink-0 flex-col border-r border-line bg-surface lg:flex">
         <div className="border-b border-line px-5 py-4">
           <Link href="/dashboard" className="block">
-            <p className="text-[15px] font-semibold tracking-[-0.01em]">iPOST · OTK</p>
-            <p className="mt-0.5 text-[11.5px] text-muted">Sifat nazorati KPI tizimi</p>
+            <p className="text-title">iPOST · OTK</p>
+            <p className="mt-0.5 text-micro text-muted">Sifat nazorati KPI tizimi</p>
           </Link>
         </div>
 
@@ -41,11 +41,11 @@ export default async function PanelLayout({ children }: { children: React.ReactN
           <Nav items={items} />
         </div>
 
-        <div className="border-t border-line px-4 py-3">
-          <p className="truncate text-[12.5px] font-semibold text-ink">{session.name}</p>
-          <p className="mb-2 text-[11px] text-muted">{ROLE_LABEL[session.role]}</p>
+        <div className="border-t border-line px-4 py-3.5">
+          <p className="truncate text-meta font-semibold text-ink">{session.name}</p>
+          <p className="mb-2 text-micro text-muted">{ROLE_LABEL[session.role]}</p>
           <form action={logoutAction}>
-            <button type="submit" className="text-[11.5px] font-semibold text-muted transition hover:text-bad">
+            <button type="submit" className="text-micro font-semibold text-muted transition hover:text-bad">
               Chiqish
             </button>
           </form>
@@ -56,12 +56,12 @@ export default async function PanelLayout({ children }: { children: React.ReactN
         <header className="no-print sticky top-0 z-30 flex items-center justify-between gap-3 border-b border-line bg-surface/92 px-4 py-2.5 backdrop-blur lg:hidden">
           <MobileNav items={items} />
           <div className="text-right">
-            <p className="text-[12px] font-semibold leading-tight">{session.name}</p>
-            <p className="text-[10.5px] text-muted">{ROLE_LABEL[session.role]}</p>
+            <p className="text-meta font-semibold leading-tight">{session.name}</p>
+            <p className="text-micro text-muted">{ROLE_LABEL[session.role]}</p>
           </div>
         </header>
 
-        <main className="mx-auto max-w-[1240px] px-4 py-6 lg:px-8 lg:py-8">{children}</main>
+        <main className="mx-auto max-w-[1280px] px-4 py-6 lg:px-8 lg:py-9">{children}</main>
       </div>
     </div>
   );

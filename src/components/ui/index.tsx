@@ -1,6 +1,9 @@
 /**
- * Umumiy UI primitivlari. Barchasi server komponent sifatida ishlaydi
- * (interaktivlik kerak bo'lgan joyda alohida 'use client' fayllar bor).
+ * Umumiy UI primitivlari.
+ *
+ * Barcha o'lchamlar `tailwind.config.ts` dagi nomlangan shkaladan olinadi
+ * (text-display / title / stat / body / meta / label / micro) — sahifalarda
+ * tarqoq px qiymatlar ishlatilmaydi, shuning uchun ierarxiya bir xil qoladi.
  */
 
 import clsx from 'clsx';
@@ -15,7 +18,7 @@ export function Card({
   className?: string;
   padded?: boolean;
 }) {
-  return <section className={clsx('card', padded && 'p-5', className)}>{children}</section>;
+  return <section className={clsx('card', padded && 'p-card', className)}>{children}</section>;
 }
 
 export function CardHead({
@@ -28,10 +31,10 @@ export function CardHead({
   right?: ReactNode;
 }) {
   return (
-    <header className="mb-4 flex items-start justify-between gap-4">
-      <div>
-        <h2 className="text-[15px] font-semibold tracking-[-0.006em] text-ink">{title}</h2>
-        {note ? <p className="mt-0.5 text-[12.5px] text-muted">{note}</p> : null}
+    <header className="mb-4 flex flex-wrap items-start justify-between gap-x-5 gap-y-2">
+      <div className="min-w-0 max-w-3xl">
+        <h2 className="text-title text-ink">{title}</h2>
+        {note ? <p className="mt-1 text-meta text-muted">{note}</p> : null}
       </div>
       {right ? <div className="shrink-0">{right}</div> : null}
     </header>
@@ -50,11 +53,11 @@ export function PageHead({
   actions?: ReactNode;
 }) {
   return (
-    <header className="mb-6 flex flex-wrap items-end justify-between gap-4">
-      <div className="max-w-2xl">
-        {eyebrow ? <p className="eyebrow mb-1.5">{eyebrow}</p> : null}
-        <h1 className="text-[24px] font-semibold leading-tight tracking-[-0.02em] text-ink">{title}</h1>
-        {lede ? <p className="mt-2 text-[13.5px] leading-relaxed text-ink2">{lede}</p> : null}
+    <header className="mb-section flex flex-wrap items-end justify-between gap-x-6 gap-y-4">
+      <div className="max-w-[62ch]">
+        {eyebrow ? <p className="eyebrow mb-2">{eyebrow}</p> : null}
+        <h1 className="text-display text-ink">{title}</h1>
+        {lede ? <p className="mt-2.5 text-body text-ink2">{lede}</p> : null}
       </div>
       {actions ? <div className="no-print flex flex-wrap items-center gap-2">{actions}</div> : null}
     </header>
@@ -73,12 +76,12 @@ const TONE_TEXT: Record<Tone, string> = {
 };
 
 const TONE_CHIP: Record<Tone, string> = {
-  neutral: 'bg-ink/8 text-ink2',
-  brand: 'bg-brand/12 text-brand',
-  ok: 'bg-ok/12 text-ok',
-  warn: 'bg-warn/14 text-warn',
-  bad: 'bg-bad/12 text-bad',
-  accent: 'bg-accent/12 text-accent',
+  neutral: 'bg-ink/[0.06] text-ink2',
+  brand: 'bg-brand/10 text-brand',
+  ok: 'bg-ok/10 text-ok',
+  warn: 'bg-warn/12 text-warn',
+  bad: 'bg-bad/10 text-bad',
+  accent: 'bg-accent/10 text-accent',
 };
 
 export function Badge({
@@ -93,7 +96,7 @@ export function Badge({
   return (
     <span
       className={clsx(
-        'inline-flex items-center whitespace-nowrap rounded-md px-2 py-0.5 text-[11.5px] font-semibold',
+        'inline-flex items-center whitespace-nowrap rounded-md px-2 py-[3px] text-micro font-semibold',
         TONE_CHIP[tone],
         className,
       )}
@@ -103,7 +106,12 @@ export function Badge({
   );
 }
 
-/** Katta raqamli ko'rsatkich kartochkasi. */
+/**
+ * Katta raqamli ko'rsatkich.
+ * Ierarxiya: yorliq (kichik) → qiymat (katta) → maqsad → izoh.
+ * Maqsad va izoh bir-biridan ajratilgan, chunki maqsad — o'lchov mezoni,
+ * izoh esa qo'shimcha tafsilot.
+ */
 export function StatTile({
   label,
   value,
@@ -118,13 +126,17 @@ export function StatTile({
   target?: string;
 }) {
   return (
-    <div className="card p-4">
-      <p className="text-[12px] font-medium text-ink2">{label}</p>
-      <p className={clsx('tnum mt-1.5 text-[26px] font-semibold leading-none tracking-[-0.025em]', TONE_TEXT[tone])}>
-        {value}
-      </p>
-      {target ? <p className="mt-1.5 text-[11.5px] text-muted">Maqsad: {target}</p> : null}
-      {hint ? <p className="mt-1 text-[11.5px] text-muted">{hint}</p> : null}
+    <div className="card flex flex-col p-4">
+      <p className="text-meta text-ink2">{label}</p>
+      <p className={clsx('tnum mt-2 text-stat', TONE_TEXT[tone])}>{value}</p>
+      <div className="mt-auto">
+        {target ? (
+          <p className="mt-2.5 text-micro text-muted">
+            Maqsad <span className="tnum font-semibold text-ink2">{target}</span>
+          </p>
+        ) : null}
+        {hint ? <p className="mt-1 text-micro text-muted">{hint}</p> : null}
+      </div>
     </div>
   );
 }
@@ -132,9 +144,9 @@ export function StatTile({
 export function ProgressBar({
   value,
   tone = 'brand',
-  height = 8,
+  height = 6,
 }: {
-  /** 0..1+ — 1 dan oshsa chegara chizig'i ko'rinadi */
+  /** 0..1+ — 1 dan oshsa chegara buzilgani ko'rinadi */
   value: number;
   tone?: Tone;
   height?: number;
@@ -159,20 +171,42 @@ export function ProgressBar({
   );
 }
 
-export function Table({ children, className }: { children: ReactNode; className?: string }) {
+/**
+ * Jadval o'ramasi. Uzun jadvallarda `stickyHead` sarlavhani yopishtirib qo'yadi,
+ * `maxHeight` esa sahifani cho'zib ketmasligi uchun ichki aylantirishni yoqadi.
+ */
+export function Table({
+  children,
+  className,
+  stickyHead = false,
+  maxHeight,
+}: {
+  children: ReactNode;
+  className?: string;
+  stickyHead?: boolean;
+  maxHeight?: number;
+}) {
   return (
-    <div className="-mx-1 overflow-x-auto px-1">
-      <table className={clsx('w-full border-collapse', className)}>{children}</table>
+    <div
+      // `table-scroll` — chop etishda balandlik cheklovi bekor qilinishi uchun (globals.css)
+      className={clsx('-mx-1 overflow-x-auto px-1', maxHeight && 'table-scroll overflow-y-auto')}
+      style={maxHeight ? { maxHeight } : undefined}
+    >
+      <table
+        className={clsx(
+          'w-full border-collapse',
+          stickyHead && '[&_thead_th]:sticky [&_thead_th]:top-0 [&_thead_th]:z-10',
+          className,
+        )}
+      >
+        {children}
+      </table>
     </div>
   );
 }
 
 export function Empty({ children }: { children: ReactNode }) {
-  return (
-    <div className="rounded-lg border border-dashed border-grid px-4 py-10 text-center text-[13px] text-muted">
-      {children}
-    </div>
-  );
+  return <div className="empty">{children}</div>;
 }
 
 /** Muhim izoh / ogohlantirish bloki. */
@@ -180,10 +214,12 @@ export function Callout({
   children,
   tone = 'brand',
   title,
+  className,
 }: {
   children: ReactNode;
   tone?: Tone;
   title?: string;
+  className?: string;
 }) {
   const border: Record<Tone, string> = {
     neutral: 'border-l-ink2',
@@ -194,19 +230,33 @@ export function Callout({
     accent: 'border-l-accent',
   };
   return (
-    <div className={clsx('rounded-r-lg border-l-[3px] bg-raised px-4 py-3', border[tone])}>
-      {title ? <p className="mb-1 text-[13px] font-semibold text-ink">{title}</p> : null}
-      <div className="text-[12.5px] leading-relaxed text-ink2">{children}</div>
+    <div
+      className={clsx(
+        'mt-section rounded-r-tile border-l-[3px] bg-raised px-4 py-3.5',
+        border[tone],
+        className,
+      )}
+    >
+      {title ? <p className="mb-1 text-body font-semibold text-ink">{title}</p> : null}
+      <div className="text-meta leading-relaxed text-ink2">{children}</div>
     </div>
   );
 }
 
 export function Divider({ label }: { label?: string }) {
-  if (!label) return <hr className="my-6 border-grid" />;
+  if (!label) return <hr className="my-section border-grid" />;
   return (
-    <div className="my-6 flex items-center gap-3">
+    <div className="my-section flex items-center gap-3">
       <span className="eyebrow whitespace-nowrap">{label}</span>
       <hr className="w-full border-grid" />
     </div>
   );
+}
+
+/**
+ * Sahifa bo'limlari orasidagi bir xil masofa.
+ * Har joyda `mt-4` yozish o'rniga bitta qoida.
+ */
+export function Stack({ children, className }: { children: ReactNode; className?: string }) {
+  return <div className={clsx('space-y-section', className)}>{children}</div>;
 }

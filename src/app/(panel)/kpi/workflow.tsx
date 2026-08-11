@@ -13,8 +13,8 @@ export function RecalcButton({ period }: { period: string }) {
       <button type="submit" className="btn-ghost" disabled={pending}>
         {pending ? 'Hisoblanmoqda…' : 'Reyestrdan qayta hisoblash'}
       </button>
-      {state.error ? <span className="text-[11px] font-medium text-bad">{state.error}</span> : null}
-      {state.ok ? <span className="text-[11px] font-medium text-ok">{state.ok}</span> : null}
+      {state.error ? <span className="text-micro font-medium text-bad">{state.error}</span> : null}
+      {state.ok ? <span className="text-micro font-medium text-ok">{state.ok}</span> : null}
     </form>
   );
 }
@@ -41,13 +41,13 @@ export function StatusButton({
       <input type="hidden" name="period" value={period} />
       <input type="hidden" name="status" value={status} />
       {needsComment ? (
-        <input name="comment" className="field !py-1.5 !text-[12px]" placeholder="Izoh (majburiy)" />
+        <input name="comment" className="field !py-1.5 !text-meta" placeholder="Izoh (majburiy)" />
       ) : null}
       <button type="submit" className={cls} disabled={pending}>
         {pending ? '…' : label}
       </button>
-      {state.error ? <p className="text-[11px] font-medium text-bad">{state.error}</p> : null}
-      {state.ok ? <p className="text-[11px] font-medium text-ok">{state.ok}</p> : null}
+      {state.error ? <p className="text-micro font-medium text-bad">{state.error}</p> : null}
+      {state.ok ? <p className="text-micro font-medium text-ok">{state.ok}</p> : null}
     </form>
   );
 }
@@ -133,8 +133,8 @@ export function PeriodSettingsForm({
         <input id="note" name="note" className="field" defaultValue={note ?? ''} placeholder="masalan: bayram kunlari chiqarildi" />
       </div>
 
-      {state.error ? <p className="text-[12px] font-medium text-bad">{state.error}</p> : null}
-      {state.ok ? <p className="text-[12px] font-medium text-ok">{state.ok}</p> : null}
+      {state.error ? <p className="text-meta font-medium text-bad">{state.error}</p> : null}
+      {state.ok ? <p className="text-meta font-medium text-ok">{state.ok}</p> : null}
 
       <button type="submit" className="btn-brand" disabled={pending}>
         {pending ? 'Saqlanmoqda…' : 'Sozlamalarni saqlash'}

@@ -74,8 +74,8 @@ export function SolutionForm({ period, today }: { period: string; today: string 
         </div>
       </div>
 
-      {state.error ? <p className="text-[12.5px] font-medium text-bad">{state.error}</p> : null}
-      {state.ok ? <p className="text-[12.5px] font-medium text-ok">{state.ok}</p> : null}
+      {state.error ? <p className="text-meta font-medium text-bad">{state.error}</p> : null}
+      {state.ok ? <p className="text-meta font-medium text-ok">{state.ok}</p> : null}
 
       <button type="submit" className="btn-primary" disabled={pending}>
         {pending ? 'Saqlanmoqda…' : 'Yechimni qo‘shish'}
@@ -90,19 +90,19 @@ export function StatusForm({ id, status }: { id: number; status: string }) {
   return (
     <form action={action} className="space-y-1.5">
       <input type="hidden" name="id" value={id} />
-      <select name="status" defaultValue={status} className="field !py-1.5 !text-[12px]">
+      <select name="status" defaultValue={status} className="field !py-1.5 !text-meta">
         <option value="PLANNED">Rejalashtirilgan</option>
         <option value="IN_PROGRESS">Bajarilmoqda</option>
         <option value="DONE">Bajarildi</option>
         <option value="VERIFIED">Natija tasdiqlandi</option>
         <option value="CANCELLED">Bekor qilindi</option>
       </select>
-      <input name="effect" className="field !py-1.5 !text-[12px]" placeholder="Erishilgan natija" />
-      <button type="submit" className="btn-ghost !py-1.5 !text-[12px]" disabled={pending}>
+      <input name="effect" className="field !py-1.5 !text-meta" placeholder="Erishilgan natija" />
+      <button type="submit" className="btn-ghost !py-1.5 !text-meta" disabled={pending}>
         {pending ? '…' : 'Yangilash'}
       </button>
-      {state.error ? <p className="text-[11px] font-medium text-bad">{state.error}</p> : null}
-      {state.ok ? <p className="text-[11px] font-medium text-ok">{state.ok}</p> : null}
+      {state.error ? <p className="text-micro font-medium text-bad">{state.error}</p> : null}
+      {state.ok ? <p className="text-micro font-medium text-ok">{state.ok}</p> : null}
     </form>
   );
 }

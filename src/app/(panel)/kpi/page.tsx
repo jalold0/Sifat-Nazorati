@@ -41,7 +41,7 @@ export default async function KpiPage({ searchParams }: { searchParams: Promise<
         actions={
           <>
             <form method="get" className="flex items-center gap-2">
-              <select name="davr" defaultValue={period} className="field !py-1.5 !text-[12.5px]">
+              <select name="davr" defaultValue={period} className="field !py-1.5 !text-meta">
                 {periodOptions.map((v) => (
                   <option key={v} value={v}>
                     {periodLabel(v)}
@@ -118,7 +118,7 @@ export default async function KpiPage({ searchParams }: { searchParams: Promise<
       </Card>
 
       {/* ── Umumiy natija ────────────────────────────────────────────────── */}
-      <Card className="mt-4">
+      <Card className="mt-section">
         <CardHead
           title="Bo'lim bo'yicha yakuniy natija"
           note={`O'rtacha ${score(data.departmentAverage)} ball${showMoney ? ` · jami bonus ${money(data.bonusTotal)}` : ''}`}
@@ -126,7 +126,7 @@ export default async function KpiPage({ searchParams }: { searchParams: Promise<
         {data.employees.length === 0 ? (
           <Empty>KPI pasporti sozlanmagan — sozlamalar bo'limiga qarang.</Empty>
         ) : (
-          <Table>
+          <Table stickyHead>
             <thead>
               <tr>
                 <th className="th">Xodim</th>
@@ -144,18 +144,18 @@ export default async function KpiPage({ searchParams }: { searchParams: Promise<
                 return (
                 <tr key={e.userId}>
                   <td className="td font-semibold">{e.shortName}</td>
-                  <td className="td text-[12px] text-ink2">{e.position}</td>
+                  <td className="td text-meta text-ink2">{e.position}</td>
                   <td className="td tnum text-right font-semibold">{score(e.card.totalScore)}</td>
                   <td className="td">
                     {badge ? <Badge tone={badge.tone}>{badge.label}</Badge> : <span className="text-muted">—</span>}
                   </td>
-                  {showMoney ? <td className="td tnum text-right text-[12.5px]">{money(e.salary)}</td> : null}
+                  {showMoney ? <td className="td tnum text-right text-meta">{money(e.salary)}</td> : null}
                   {showMoney ? (
                     <td className="td tnum text-right font-semibold">
                       {e.card.bonus > 0 ? money(e.card.bonus) : '—'}
                     </td>
                   ) : null}
-                  <td className="td text-[11.5px] text-muted">
+                  <td className="td text-micro text-muted">
                     {e.card.hasNoData
                       ? "hali hech narsa o'lchanmagan"
                       : (e.card.bonusBlockedReason ?? (e.card.missingFacts > 0 ? `${e.card.missingFacts} faktsiz` : ''))}
@@ -170,7 +170,7 @@ export default async function KpiPage({ searchParams }: { searchParams: Promise<
 
       {/* ── Har bir xodimning kartasi ────────────────────────────────────── */}
       {visible.map((e) => (
-        <Card key={e.userId} className="mt-4">
+        <Card key={e.userId} className="mt-section">
           <CardHead
             title={`${e.fullName} — ${e.position}`}
             note={`Og'irliklar yig'indisi ${number(e.card.weightTotal)} ball${e.card.weightTotal !== 100 ? ' ⚠ 100 bo‘lishi kerak' : ''}`}
@@ -179,7 +179,7 @@ export default async function KpiPage({ searchParams }: { searchParams: Promise<
                 {showMoney && e.card.bonus > 0 ? (
                   <div className="text-right">
                     <p className="eyebrow">Bonus</p>
-                    <p className="tnum text-[15px] font-semibold">{money(e.card.bonus)}</p>
+                    <p className="tnum text-title">{money(e.card.bonus)}</p>
                   </div>
                 ) : null}
                 <ScoreGauge score={e.card.totalScore} threshold={p.settings.threshold} size={132} />
@@ -187,7 +187,7 @@ export default async function KpiPage({ searchParams }: { searchParams: Promise<
             }
           />
 
-          <Table>
+          <Table stickyHead>
             <thead>
               <tr>
                 <th className="th w-8">№</th>
@@ -208,10 +208,10 @@ export default async function KpiPage({ searchParams }: { searchParams: Promise<
                     <td className="td tnum text-muted">{r.no}</td>
                     <td className="td">
                       <p className="font-medium">{r.name}</p>
-                      <p className="mt-0.5 text-[11px] text-muted">{r.dataSource}</p>
+                      <p className="mt-0.5 text-micro text-muted">{r.dataSource}</p>
                     </td>
                     <td className="td tnum text-right">{number(r.weight * 100)}</td>
-                    <td className="td whitespace-nowrap text-[12.5px]">{r.targetText}</td>
+                    <td className="td whitespace-nowrap text-meta">{r.targetText}</td>
                     <td className="td tnum text-right">
                       {r.usedValue === null ? (
                         <span className="font-medium text-warn">kiritilmagan</span>
@@ -219,7 +219,7 @@ export default async function KpiPage({ searchParams }: { searchParams: Promise<
                         <span className="font-semibold">{byUnit(r.usedValue, r.unit)}</span>
                       )}
                       {overridden ? (
-                        <p className="text-[10.5px] text-accent">
+                        <p className="text-micro text-accent">
                           qo'lda · avto: {byUnit(r.autoValue, r.unit)}
                         </p>
                       ) : null}
@@ -242,7 +242,7 @@ export default async function KpiPage({ searchParams }: { searchParams: Promise<
                     </td>
                     <td className="td tnum text-right font-semibold">
                       {score(r.score)}
-                      <span className="ml-1 text-[11px] font-normal text-muted">/ {number(r.maxScore)}</span>
+                      <span className="ml-1 text-micro font-normal text-muted">/ {number(r.maxScore)}</span>
                     </td>
                     <td className="td w-[190px]">
                       <Badge tone={r.metricSource === 'AUTO' ? 'brand' : 'neutral'}>
@@ -253,7 +253,7 @@ export default async function KpiPage({ searchParams }: { searchParams: Promise<
                           <FactEditor period={period} row={r} locked={false} />
                         </div>
                       ) : r.comment ? (
-                        <p className="mt-1 text-[11px] text-muted">
+                        <p className="mt-1 text-micro text-muted">
                           {r.overriddenBy ? `${r.overriddenBy}: ` : ''}
                           {r.comment}
                         </p>
@@ -269,7 +269,7 @@ export default async function KpiPage({ searchParams }: { searchParams: Promise<
                 <td className="td font-semibold">JAMI</td>
                 <td className="td tnum text-right font-semibold">{number(e.card.weightTotal)}</td>
                 <td className="td" colSpan={3} />
-                <td className="td tnum text-right text-[14px] font-semibold">{score(e.card.totalScore)}</td>
+                <td className="td tnum text-right text-body font-semibold">{score(e.card.totalScore)}</td>
                 <td className="td">
                   {(() => {
                     const badge = gradeBadge(e.card);
@@ -284,7 +284,7 @@ export default async function KpiPage({ searchParams }: { searchParams: Promise<
 
       {/* ── Davr sozlamalari ─────────────────────────────────────────────── */}
       {canEdit ? (
-        <Card className="mt-4">
+        <Card className="mt-section">
           <CardHead
             title="Davr sozlamalari"
             note="O'zgartirilgandan keyin ballar avtomatik qayta hisoblanadi"

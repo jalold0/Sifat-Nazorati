@@ -109,7 +109,7 @@ export function TicketForm({
               </option>
             ))}
           </select>
-          <p className="mt-1 text-[11.5px] text-muted">
+          <p className="mt-1 text-micro text-muted">
             Tanlansa — zona, mas'ul, SLA, ustuvorlik va ish turi avtomatik to'ldiriladi.
           </p>
         </div>
@@ -336,13 +336,13 @@ export function TicketForm({
             className="field"
             placeholder="masalan: 2.42"
           />
-          <p className="mt-1 text-[11.5px] text-muted">
+          <p className="mt-1 text-micro text-muted">
             Xronometraj — vaqt normasi va shtat hisobi shu ustundan chiqadi.
           </p>
         </div>
 
         <div className="flex items-end">
-          <label className="flex cursor-pointer items-center gap-2.5 text-[13px]">
+          <label className="flex cursor-pointer items-center gap-2.5 text-body">
             <input type="checkbox" name="isRepeat" className="h-4 w-4 accent-[var(--brand)]" />
             Takroriy muammo (shu masala avval ham bo'lgan)
           </label>
@@ -370,12 +370,12 @@ export function TicketForm({
       </fieldset>
 
       {state.error ? (
-        <p role="alert" className="rounded-lg bg-bad/10 px-3 py-2 text-[12.5px] font-medium text-bad">
+        <p role="alert" className="rounded-lg bg-bad/10 px-3 py-2 text-meta font-medium text-bad">
           {state.error}
         </p>
       ) : null}
       {state.ok ? (
-        <p role="status" className="rounded-lg bg-ok/10 px-3 py-2 text-[12.5px] font-medium text-ok">
+        <p role="status" className="rounded-lg bg-ok/10 px-3 py-2 text-meta font-medium text-ok">
           {state.ok} — KPI ko'rsatkichlari qayta hisoblandi.
         </p>
       ) : null}

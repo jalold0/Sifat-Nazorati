@@ -63,7 +63,7 @@ export function Nav({ items }: { items: NavItem[] }) {
                     <Link
                       href={item.href}
                       className={clsx(
-                        'flex items-center gap-2.5 rounded-lg px-3 py-2 text-[13px] font-medium transition',
+                        'flex items-center gap-2.5 rounded-lg px-3 py-[7px] text-meta font-medium transition',
                         active
                           ? 'bg-ink text-plane'
                           : 'text-ink2 hover:bg-raised hover:text-ink',

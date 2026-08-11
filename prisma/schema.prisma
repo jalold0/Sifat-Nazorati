@@ -48,6 +48,7 @@ model User {
   actions        RootCauseAction[]
   reviewItems    ReviewItem[]
   activityLog    ActivityLog[]
+  baselineImports BaselineImport[]
 
   @@index([role, active])
 }
@@ -449,16 +450,131 @@ model ReviewItem {
   @@index([track])
 }
 
-// ── Baseline (tarixiy o'lchov — grafiklar uchun) ─────────────────────────────
+// ── Telegram baseline — versiyalangan o'lchov ────────────────────────────────
+//
+// Telegram eksporti vaqti-vaqti bilan qo'lda yangilanadi (to'g'ridan-to'g'ri
+// integratsiya paydo bo'lguncha). Har bir yangilash — YANGI VERSIYA:
+// eski o'lchov o'chmaydi, tarixda sanasi va kim yuklagani bilan qoladi.
+// Faqat bitta versiya `isCurrent` bo'ladi — sahifalar o'shani ko'rsatadi.
 
-model BaselineMonth {
-  period                  String  @id // 2026-06
-  label                   String
-  cases                   Int
-  noTrace                 Int
-  withTrack               Int
-  medianFirstResponseMin  Decimal @db.Decimal(8, 2)
-  system102Cases          Int?
+model BaselineImport {
+  id         Int      @id @default(autoincrement())
+  label      String // "Telegram eksporti — 10.08.2026"
+  periodFrom DateTime @db.Date
+  periodTo   DateTime @db.Date
+  sourceFile String? // manba fayl nomi
+  note       String?
+  isCurrent  Boolean  @default(false)
+
+  importedAt   DateTime @default(now())
+  importedById String?
+  importedBy   User?    @relation(fields: [importedById], references: [id])
+
+  // ── Dedublikatsiya qilingan yig'ma ko'rsatkichlar ──
+  // Diqqat: akkauntlar yig'indisi bundan KATTA bo'ladi — ulashilgan ishlar
+  // har ikkalasida sanaladi. Hisobotda faqat shu yerdagi raqamlar ishlatiladi.
+  totalCases      Int // 15 226 — unikal ish
+  withTrack       Int // 10 908 — trek raqami aniqlangan
+  withoutTrack    Int // 4 318 — (mijoz + kun) bo'yicha guruhlangan
+  uniqueCustomers Int
+  sharedCases     Int // 1 304 — bir necha xodim chatida uchragan
+  accountsSum     Int // 16 688 — dedublikatsiyagacha (taqqoslash uchun)
+  excludedCases   Int // 144 — shubhali, hisobga olinmagan
+
+  answeredCases  Int // 12 685
+  lateAnswered   Int // 1 239
+  noTraceCases   Int // 1 029 — Telegramda javob izi yo'q
+  otherChannel   Int // 183 — boshqa kanalda ishlangan
+  noReplyNeeded  Int // 90 — javob talab qilmagan
+
+  medianFirstResponseMin Decimal @db.Decimal(8, 2)
+  within1hShare          Decimal @db.Decimal(5, 4)
+  within24hShare         Decimal @db.Decimal(5, 4)
+  outsideHoursShare      Decimal @db.Decimal(5, 4)
+
+  system102Cases Int // 6 061 — taqqoslash uchun
+  totalMessages  Int
+  totalSessions  Int
+
+  accounts   BaselineAccount[]
+  months     BaselineMonthStat[]
+  breakdowns BaselineBreakdown[]
+  operators  Baseline102Operator[]
+
+  @@index([isCurrent])
+  @@index([importedAt])
+}
+
+/// Akkauntlar kesimi — yig'indisi umumiy raqamdan katta (ulashilgan ishlar sababli)
+model BaselineAccount {
+  id        Int            @id @default(autoincrement())
+  importId  Int
+  import    BaselineImport @relation(fields: [importId], references: [id], onDelete: Cascade)
+  account   String
+  cases     Int
+  ownOnly   Int
+  shared    Int
+  sessions  Int
+  tracks    Int
+  customers Int
+  unanswered Int
+  medianMin Decimal?       @db.Decimal(8, 2)
+  within1h  Decimal?       @db.Decimal(5, 4)
+
+  @@unique([importId, account])
+}
+
+/// Oylik dinamika (takrorsiz) — dashboard grafigi shu jadvaldan o'qiydi
+model BaselineMonthStat {
+  id                     Int            @id @default(autoincrement())
+  importId               Int
+  import                 BaselineImport @relation(fields: [importId], references: [id], onDelete: Cascade)
+  period                 String // 2026-06
+  label                  String
+  cases                  Int
+  noTrace                Int
+  withTrack              Int
+  medianFirstResponseMin Decimal        @db.Decimal(8, 2)
+  system102Cases         Int?
+
+  @@unique([importId, period])
+  @@index([period])
+}
+
+enum BreakdownKind {
+  HOUR // soatlik yuklama profili
+  WEEKDAY // hafta kunlari bo'yicha
+  TOPIC // mavzu tasnifi
+}
+
+/// Yuklama profili va mavzular — bir jadvalda, turi bilan ajratilgan
+model BaselineBreakdown {
+  id        Int            @id @default(autoincrement())
+  importId  Int
+  import    BaselineImport @relation(fields: [importId], references: [id], onDelete: Cascade)
+  kind      BreakdownKind
+  label     String // "11:00", "Dushanba", "To'lov / pul"
+  value     Int
+  sortOrder Int
+
+  @@unique([importId, kind, label])
+  @@index([importId, kind])
+}
+
+/// 102 tizimi — xodimlar samaradorligi (tashqi platformadan)
+model Baseline102Operator {
+  id       Int            @id @default(autoincrement())
+  importId Int
+  import   BaselineImport @relation(fields: [importId], references: [id], onDelete: Cascade)
+  name     String
+  login    String
+  role     String
+  total    Int
+  status   Int
+  archive  Int
+  approved Int
+
+  @@unique([importId, login])
 }
 
 model Goal {

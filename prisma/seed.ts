@@ -87,15 +87,6 @@ interface GoalJson {
   source: string;
 }
 
-interface BaselineMonthJson {
-  period: string;
-  label: string;
-  cases: number;
-  noTrace: number;
-  withTrack: number;
-  medianFirstResponseMin: number;
-}
-
 interface ReviewJson {
   date: string;
   track: string | null;
@@ -340,26 +331,15 @@ async function main() {
   }
   console.log(`  ✔ ${goals.length} maqsad`);
 
-  // 8. Telegram baseline (grafiklar uchun) ----------------------------------
-  const monthly = load<BaselineMonthJson[]>('baseline-monthly.json');
-  // 102 tizimining oylik o'rtachasi — taqqoslash chizig'i uchun
-  const avg102 = Math.round(6061 / 7.3);
-  for (const m of monthly) {
-    await db.baselineMonth.upsert({
-      where: { period: m.period },
-      create: {
-        period: m.period,
-        label: m.label,
-        cases: m.cases,
-        noTrace: m.noTrace,
-        withTrack: m.withTrack,
-        medianFirstResponseMin: m.medianFirstResponseMin,
-        system102Cases: m.period >= '2026-01' ? avg102 : null,
-      },
-      update: { cases: m.cases, noTrace: m.noTrace, withTrack: m.withTrack },
-    });
-  }
-  console.log(`  ✔ ${monthly.length} oylik baseline`);
+  // 8. Telegram baseline ----------------------------------------------------
+  // Baseline versiyalangan bo'lgani uchun seed uni to'g'ridan-to'g'ri yozmaydi —
+  // `pnpm import:baseline` alohida versiya yaratadi va tarixda sanasi qoladi.
+  const baselineCount = await db.baselineImport.count();
+  console.log(
+    baselineCount === 0
+      ? "  · Telegram baseline yo'q — `pnpm import:baseline` bilan yuklang"
+      : `  · Telegram baseline: ${baselineCount} versiya (o'zgartirilmadi)`,
+  );
 
   // 9. Tekshirish ro'yxati (javob izi yo'q ishlar) --------------------------
   const alreadyImported = await db.reviewItem.count();

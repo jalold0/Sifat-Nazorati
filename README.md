@@ -70,6 +70,7 @@ albatta almashtiring** — `/sozlamalar` sahifasida.
 | `/yechimlar`  | Root-cause → tizimli yechim → natija. Faqat tasdiqlangani KPI'ga kiradi      |
 | `/tekshiruv`  | Telegramda javob izi qolmagan 1 029 ishni tekshirish                         |
 | `/quvvat`     | Shtat ehtiyoji: yuklama %, FTE taqchilligi. Norma reyestrdan o'lchanadi      |
+| `/baseline`   | Telegram o'lchovi: akkauntlar kesimi, 102 bilan taqqoslash, yuklama profili, mavzular; yangilanish tarixi |
 | `/hisobot`    | Oylik hisobot — avtomatik yig'iladi, chop etishga tayyor                     |
 | `/taqsimot`   | 43 vazifa va 20 KPI pasporti — tizimning "qonuni"                            |
 | `/izlar`      | O'zgarishlar tarixi (CEO va bo'lim boshlig'i uchun)                          |
@@ -130,6 +131,34 @@ Manba Excel fayllar yangilansa:
 ```bash
 python scripts/extract_sources.py "C:/Users/user/Desktop/OTK KPI tizimi"
 pnpm db:seed
+```
+
+## Telegram baseline'ni yangilash
+
+Telegram o'lchovi **versiyalangan**: har bir yangi eksport alohida versiya bo'lib yuklanadi,
+eskisi o'chmaydi — `/baseline` sahifasining "Yangilanish tarixi" bo'limida sanasi va kim
+yuklagani bilan qoladi. Bu to'g'ridan-to'g'ri Telegram → CRM integratsiyasi paydo bo'lguncha
+ishlatiladigan qo'lda tartib.
+
+```bash
+# 1. Telegram eksportini yangilab, Excel tahlilini qayta shakllantiring
+# 2. Normallashtirilgan JSON chiqaring
+python scripts/extract_sources.py "C:/Users/user/Desktop/OTK KPI tizimi"
+
+# 3. Yangi versiya sifatida yuklang (kim yuklagani tarixda qoladi)
+pnpm import:baseline --user jaloldin --note "sentabr eksporti"
+
+# Tarixni ko'rish
+pnpm import:baseline --list
+```
+
+Import har safar `ActivityLog` ga ham yozadi (`/izlar` sahifasi), oldingi versiyaga nisbatan
+o'zgarish (`+`/`−`) avtomatik hisoblanadi.
+
+Davr oxirini qo'lda belgilash kerak bo'lsa:
+
+```bash
+BASELINE_PERIOD_TO=2026-09-30 python scripts/extract_sources.py
 ```
 
 ## Deploy (Vercel + Neon)

@@ -15,6 +15,7 @@ const ALL_ITEMS: Array<NavItem & { roles: Role[] }> = [
   { href: '/yechimlar', label: 'Tizimli yechimlar', icon: 'solution', group: 'Ish', roles: ['CEO', 'HEAD', 'SPECIALIST', 'VIEWER'] },
   { href: '/tekshiruv', label: "Tekshirish ro'yxati", icon: 'review', group: 'Ish', roles: ['CEO', 'HEAD', 'SPECIALIST'] },
   { href: '/quvvat', label: 'Quvvat hisobi', icon: 'capacity', group: 'Tahlil', roles: ['CEO', 'HEAD', 'VIEWER'] },
+  { href: '/baseline', label: 'Telegram baseline', icon: 'baseline', group: 'Tahlil', roles: ['CEO', 'HEAD', 'SPECIALIST', 'VIEWER'] },
   { href: '/taqsimot', label: 'Ish taqsimoti', icon: 'tasks', group: 'Tahlil', roles: ['CEO', 'HEAD', 'SPECIALIST', 'VIEWER'] },
   { href: '/izlar', label: "O'zgarishlar izi", icon: 'log', group: 'Tahlil', roles: ['CEO', 'HEAD'] },
   { href: '/sozlamalar', label: 'Sozlamalar', icon: 'settings', group: 'Tahlil', roles: ['CEO', 'HEAD'] },

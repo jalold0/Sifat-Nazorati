@@ -14,6 +14,7 @@ from __future__ import annotations
 
 import io
 import json
+import os
 import sys
 from datetime import date, datetime
 from pathlib import Path
@@ -21,6 +22,8 @@ from pathlib import Path
 import openpyxl
 
 sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding="utf-8", errors="replace")
+
+PERIOD_TO = os.environ.get("BASELINE_PERIOD_TO", date.today().isoformat())
 
 SRC = Path(sys.argv[1] if len(sys.argv) > 1 else r"C:/Users/user/Desktop/OTK KPI tizimi")
 OUT = Path(__file__).resolve().parent.parent / "data"
@@ -270,72 +273,123 @@ write("goals.json", targets)
 # 8. Telegram baseline -----------------------------------------------------
 tg = openpyxl.load_workbook(F_TG, data_only=True)
 
-monthly = []
-UZ_MONTH = {
-    "Noyabr": 11, "Dekabr": 12, "Yanvar": 1, "Fevral": 2, "Mart": 3, "Aprel": 4,
-    "May": 5, "Iyun": 6, "Iyul": 7, "Avgust": 8, "Sentabr": 9, "Oktabr": 10,
+UZ_MONTH_ALL = {
+    "Yanvar": 1, "Fevral": 2, "Mart": 3, "Aprel": 4, "May": 5, "Iyun": 6,
+    "Iyul": 7, "Avgust": 8, "Sentabr": 9, "Oktabr": 10, "Noyabr": 11, "Dekabr": 12,
 }
+
+
+def pick(sheet, label, default=None):
+    """'Umumiy xulosa' varag'idan ko'rsatkichni nomi bo'yicha olish."""
+    for row in sheet.iter_rows(values_only=True):
+        for i, cell in enumerate(row):
+            if s(cell) == label and i + 1 < len(row):
+                value = num(row[i + 1])
+                if value is not None:
+                    return value
+    if default is None:
+        raise KeyError(f"'{label}' topilmadi — manba fayl tuzilmasi o'zgargan")
+    return default
+
+
+xul = tg["Umumiy xulosa"]
+
+months = []
 for row in rows(tg["Oylik dinamika"], 5):
     label = s(row[1])
     if not label or label == "JAMI":
         continue
     name, year = label.split()
-    monthly.append(
+    months.append(
         {
-            "period": f"{year}-{UZ_MONTH[name]:02d}",
+            "period": f"{year}-{UZ_MONTH_ALL[name]:02d}",
             "label": label,
             "cases": int(num(row[2]) or 0),
             "noTrace": int(num(row[3]) or 0),
-            "noTraceShare": num(row[4]),
             "withTrack": int(num(row[5]) or 0),
-            "medianFirstResponseMin": num(row[6]),
+            "medianFirstResponseMin": num(row[6]) or 0,
         }
     )
-write("baseline-monthly.json", monthly)
-
-summary = {}
-for row in rows(tg["Umumiy xulosa"], 6):
-    k, v = s(row[1]), row[2]
-    if k and v is not None:
-        summary[k] = num(v) if isinstance(v, (int, float)) else s(v)
-write("baseline-summary.json", summary)
 
 accounts = [
-    {"account": s(row[1]), "cases": num(row[2]), "own": num(row[3]), "shared": num(row[4]),
-     "sessions": num(row[5]), "tracks": num(row[6]), "customers": num(row[7]),
-     "unanswered": num(row[8]), "medianMin": num(row[9]), "within1h": num(row[10])}
+    {
+        "account": s(row[1]),
+        "cases": int(num(row[2]) or 0),
+        "ownOnly": int(num(row[3]) or 0),
+        "shared": int(num(row[4]) or 0),
+        "sessions": int(num(row[5]) or 0),
+        "tracks": int(num(row[6]) or 0),
+        "customers": int(num(row[7]) or 0),
+        "unanswered": int(num(row[8]) or 0),
+        "medianMin": num(row[9]),
+        "within1h": num(row[10]),
+    }
     for row in rows(tg["Akkaunt statistikasi"], 6)
-    if s(row[1])
+    # Yig'indi qatori (dedublikatsiyagacha) va varaq oxiridagi izoh tashlab ketiladi —
+    # haqiqiy akkaunt qatorida ish soni albatta bo'ladi
+    if s(row[1]) and not s(row[1]).startswith("YIG") and num(row[2]) is not None
 ]
-write("baseline-accounts.json", accounts)
 
-sys102 = [
-    {"name": s(row[1]), "login": s(row[2]), "role": s(row[3]), "total": num(row[4]),
-     "status": num(row[5]), "archive": num(row[6]), "approved": num(row[7])}
+operators = [
+    {
+        "name": s(row[1]),
+        "login": s(row[2]),
+        "role": s(row[3]),
+        "total": int(num(row[4]) or 0),
+        "status": int(num(row[5]) or 0),
+        "archive": int(num(row[6]) or 0),
+        "approved": int(num(row[7]) or 0),
+    }
     for row in rows(tg["102 tizimi"], 6)
     if s(row[2]).startswith("@")
 ]
-write("baseline-102.json", sys102)
-
-write(
-    "baseline-channels.json",
-    {
-        "telegramCases": 13955,
-        "system102Cases": 6061,
-        "ratio": round(13955 / 6061, 4),
-        "periodFrom": "2026-01-01",
-        "periodTo": "2026-08-10",
-        "note": "Telegram — trek bo'yicha dedublikatsiya qilingan 3 akkaunt; 102 — platformadagi 'Jami'",
-    },
-)
 
 prof = tg["Yuklama profili"]
-profile = {
-    "byHour": [{"hour": s(r[1]), "messages": num(r[2])} for r in rows(prof, 5) if s(r[1]) and ":" in s(r[1])],
-    "byWeekday": [{"day": s(r[4]), "messages": num(r[5])} for r in rows(prof, 5) if s(r[4])],
-    "byTopic": [{"topic": s(r[7]), "cases": num(r[8])} for r in rows(prof, 5) if s(r[7]) and num(r[8])],
+breakdowns = []
+for i, r in enumerate(rows(prof, 5)):
+    if s(r[1]) and ":" in s(r[1]):
+        breakdowns.append({"kind": "HOUR", "label": s(r[1]), "value": int(num(r[2]) or 0), "sortOrder": i})
+    if s(r[4]) and num(r[5]) is not None:
+        breakdowns.append({"kind": "WEEKDAY", "label": s(r[4]), "value": int(num(r[5]) or 0), "sortOrder": i})
+    if s(r[7]) and num(r[8]) is not None:
+        breakdowns.append({"kind": "TOPIC", "label": s(r[7]), "value": int(num(r[8]) or 0), "sortOrder": i})
+
+# Davr: oylik dinamikaning birinchi va oxirgi oyi
+first_period = months[0]["period"] if months else "2025-11"
+last_period = months[-1]["period"] if months else "2026-08"
+
+payload = {
+    "label": f"Telegram eksporti — {UZ_MONTH_ALL and months[-1]['label'] if months else 'noma`lum'}",
+    "sourceFile": F_TG.name,
+    "periodFrom": f"{first_period}-01",
+    "periodTo": PERIOD_TO,
+    "summary": {
+        "totalCases": int(pick(xul, "JAMI ISH (unikal murojaat)")),
+        "withTrack": int(pick(xul, "shundan trek bo'yicha")),
+        "withoutTrack": int(pick(xul, "shundan treksiz")),
+        "uniqueCustomers": int(pick(xul, "Unikal mijoz / manba")),
+        "sharedCases": int(pick(xul, "Ulashilgan ish (2+ akkaunt)")),
+        "accountsSum": int(pick(xul, "Akkauntlar yig'indisi (takror bilan)")),
+        "excludedCases": int(pick(xul, "Shubhali — hisobga olinmadi")),
+        "answeredCases": int(pick(xul, "Javob berilgan")),
+        "lateAnswered": int(pick(xul, "Kech javob berilgan")),
+        "noTraceCases": int(pick(xul, "Telegramda javob izi yo'q")),
+        "otherChannel": int(pick(xul, "Boshqa kanalda ishlangan (trek bo'yicha)")),
+        "noReplyNeeded": int(pick(xul, "Javob talab qilmagan (yopuvchi xabar)")),
+        "medianFirstResponseMin": pick(xul, "Birinchi javob — median"),
+        "within1hShare": pick(xul, "1 soat ichida javob"),
+        "within24hShare": pick(xul, "24 soat ichida javob"),
+        "outsideHoursShare": pick(xul, "Ish vaqtidan tashqari kelgan"),
+        "system102Cases": sum(o["total"] for o in operators),
+        "totalMessages": int(pick(xul, "Jami xabar")),
+        "totalSessions": int(pick(xul, "Jami suhbat (sessiya)")),
+    },
+    "months": months,
+    "accounts": accounts,
+    "operators": operators,
+    "breakdowns": breakdowns,
 }
-write("baseline-profile.json", profile)
+write("baseline-import.json", payload)
 
 # 9. Tekshirish ro'yxati (javob izi yo'q ishlar) ---------------------------
 ck = openpyxl.load_workbook(F_CHECK, data_only=True, read_only=True)

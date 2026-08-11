@@ -7,6 +7,7 @@ import { db } from '@/lib/db';
 import { date, hours, number, percent, score } from '@/lib/format';
 import { periodLabel, periodOf } from '@/lib/period';
 import { coverage } from '@/server/audits';
+import { baselineMonths } from '@/server/baseline';
 import { scorecards } from '@/server/kpi';
 import { byChannel, byOwner, byZone, overdueTickets, summarise } from '@/server/registry';
 import { CHECKLIST_LABEL, PERIOD_STATUS_LABEL, PRIORITY_LABEL } from '@/server/shared';
@@ -40,7 +41,7 @@ export default async function DashboardPage({
       byChannel(period),
       coverage(period),
       overdueTickets(8),
-      db.baselineMonth.findMany({ orderBy: { period: 'asc' } }),
+      baselineMonths(),
       db.goal.findMany({ orderBy: { id: 'asc' } }),
       db.zone.findMany({ select: { code: true, name: true }, orderBy: { code: 'asc' } }),
     ]);

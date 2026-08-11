@@ -1,0 +1,448 @@
+{
+  "label": "Telegram eksporti — Avgust 2026",
+  "sourceFile": "iPOST_Telegram_tahlili_2.xlsx",
+  "periodFrom": "2025-11-01",
+  "periodTo": "2026-08-11",
+  "summary": {
+    "totalCases": 15226,
+    "withTrack": 10908,
+    "withoutTrack": 4318,
+    "uniqueCustomers": 1270,
+    "sharedCases": 1304,
+    "accountsSum": 16688,
+    "excludedCases": 144,
+    "answeredCases": 12685,
+    "lateAnswered": 1239,
+    "noTraceCases": 1029,
+    "otherChannel": 183,
+    "noReplyNeeded": 90,
+    "medianFirstResponseMin": 33.5,
+    "within1hShare": 0.5576,
+    "within24hShare": 0.8669,
+    "outsideHoursShare": 0.2485,
+    "system102Cases": 6061,
+    "totalMessages": 143433,
+    "totalSessions": 7963
+  },
+  "months": [
+    {
+      "period": "2025-11",
+      "label": "Noyabr 2025",
+      "cases": 359,
+      "noTrace": 0,
+      "withTrack": 333,
+      "medianFirstResponseMin": 0.2
+    },
+    {
+      "period": "2025-12",
+      "label": "Dekabr 2025",
+      "cases": 912,
+      "noTrace": 27,
+      "withTrack": 628,
+      "medianFirstResponseMin": 100.7
+    },
+    {
+      "period": "2026-01",
+      "label": "Yanvar 2026",
+      "cases": 2087,
+      "noTrace": 137,
+      "withTrack": 1485,
+      "medianFirstResponseMin": 51.5
+    },
+    {
+      "period": "2026-02",
+      "label": "Fevral 2026",
+      "cases": 1693,
+      "noTrace": 96,
+      "withTrack": 1193,
+      "medianFirstResponseMin": 28.0
+    },
+    {
+      "period": "2026-03",
+      "label": "Mart 2026",
+      "cases": 1981,
+      "noTrace": 127,
+      "withTrack": 1396,
+      "medianFirstResponseMin": 33.5
+    },
+    {
+      "period": "2026-04",
+      "label": "Aprel 2026",
+      "cases": 2180,
+      "noTrace": 190,
+      "withTrack": 1508,
+      "medianFirstResponseMin": 76.4
+    },
+    {
+      "period": "2026-05",
+      "label": "May 2026",
+      "cases": 1519,
+      "noTrace": 151,
+      "withTrack": 984,
+      "medianFirstResponseMin": 103.8
+    },
+    {
+      "period": "2026-06",
+      "label": "Iyun 2026",
+      "cases": 2035,
+      "noTrace": 155,
+      "withTrack": 1489,
+      "medianFirstResponseMin": 32.3
+    },
+    {
+      "period": "2026-07",
+      "label": "Iyul 2026",
+      "cases": 2079,
+      "noTrace": 102,
+      "withTrack": 1656,
+      "medianFirstResponseMin": 4.0
+    },
+    {
+      "period": "2026-08",
+      "label": "Avgust 2026",
+      "cases": 381,
+      "noTrace": 44,
+      "withTrack": 236,
+      "medianFirstResponseMin": 46.7
+    }
+  ],
+  "accounts": [
+    {
+      "account": "iPost | Sifat Nazorati",
+      "cases": 9052,
+      "ownOnly": 8073,
+      "shared": 979,
+      "sessions": 3824,
+      "tracks": 6910,
+      "customers": 521,
+      "unanswered": 310,
+      "medianMin": 73.2,
+      "within1h": 0.4749
+    },
+    {
+      "account": "IPost | Shadiyev Saidali",
+      "cases": 3956,
+      "ownOnly": 3051,
+      "shared": 905,
+      "sessions": 2264,
+      "tracks": 2650,
+      "customers": 580,
+      "unanswered": 427,
+      "medianMin": 19.3,
+      "within1h": 0.6198
+    },
+    {
+      "account": "Jasur Bafaev",
+      "cases": 3680,
+      "ownOnly": 2798,
+      "shared": 882,
+      "sessions": 1875,
+      "tracks": 2696,
+      "customers": 500,
+      "unanswered": 272,
+      "medianMin": 32.2,
+      "within1h": 0.5625
+    }
+  ],
+  "operators": [
+    {
+      "name": "Bafoev Jasur",
+      "login": "@bafoev.jasur",
+      "role": "102 OTK",
+      "total": 2047,
+      "status": 2047,
+      "archive": 1820,
+      "approved": 0
+    },
+    {
+      "name": "Shadiyev Saidali",
+      "login": "@shadiyev.saidali",
+      "role": "102 OTK",
+      "total": 2033,
+      "status": 2033,
+      "archive": 1563,
+      "approved": 0
+    },
+    {
+      "name": "Mirzakbarov Jaloldin",
+      "login": "@mirzakbarov.jaloldin",
+      "role": "102 Rahbar",
+      "total": 1981,
+      "status": 1892,
+      "archive": 1706,
+      "approved": 89
+    }
+  ],
+  "breakdowns": [
+    {
+      "kind": "HOUR",
+      "label": "00:00",
+      "value": 489,
+      "sortOrder": 0
+    },
+    {
+      "kind": "WEEKDAY",
+      "label": "Dushanba",
+      "value": 12960,
+      "sortOrder": 0
+    },
+    {
+      "kind": "TOPIC",
+      "label": "Boshqa / aniqlanmagan",
+      "value": 8305,
+      "sortOrder": 0
+    },
+    {
+      "kind": "HOUR",
+      "label": "01:00",
+      "value": 67,
+      "sortOrder": 1
+    },
+    {
+      "kind": "WEEKDAY",
+      "label": "Seshanba",
+      "value": 12053,
+      "sortOrder": 1
+    },
+    {
+      "kind": "TOPIC",
+      "label": "To'lov / pul",
+      "value": 1942,
+      "sortOrder": 1
+    },
+    {
+      "kind": "HOUR",
+      "label": "02:00",
+      "value": 44,
+      "sortOrder": 2
+    },
+    {
+      "kind": "WEEKDAY",
+      "label": "Chorshanba",
+      "value": 10979,
+      "sortOrder": 2
+    },
+    {
+      "kind": "TOPIC",
+      "label": "Yuk qayerda / status",
+      "value": 1844,
+      "sortOrder": 2
+    },
+    {
+      "kind": "HOUR",
+      "label": "03:00",
+      "value": 20,
+      "sortOrder": 3
+    },
+    {
+      "kind": "WEEKDAY",
+      "label": "Payshanba",
+      "value": 12190,
+      "sortOrder": 3
+    },
+    {
+      "kind": "TOPIC",
+      "label": "Filial / punkt",
+      "value": 1142,
+      "sortOrder": 3
+    },
+    {
+      "kind": "HOUR",
+      "label": "04:00",
+      "value": 15,
+      "sortOrder": 4
+    },
+    {
+      "kind": "WEEKDAY",
+      "label": "Juma",
+      "value": 10115,
+      "sortOrder": 4
+    },
+    {
+      "kind": "TOPIC",
+      "label": "Adashgan / yo'qolgan",
+      "value": 425,
+      "sortOrder": 4
+    },
+    {
+      "kind": "HOUR",
+      "label": "05:00",
+      "value": 137,
+      "sortOrder": 5
+    },
+    {
+      "kind": "WEEKDAY",
+      "label": "Shanba",
+      "value": 9251,
+      "sortOrder": 5
+    },
+    {
+      "kind": "TOPIC",
+      "label": "Vozvrat / qaytarish",
+      "value": 327,
+      "sortOrder": 5
+    },
+    {
+      "kind": "HOUR",
+      "label": "06:00",
+      "value": 157,
+      "sortOrder": 6
+    },
+    {
+      "kind": "WEEKDAY",
+      "label": "Yakshanba",
+      "value": 3786,
+      "sortOrder": 6
+    },
+    {
+      "kind": "TOPIC",
+      "label": "Faqat foto/fayl (matnsiz)",
+      "value": 324,
+      "sortOrder": 6
+    },
+    {
+      "kind": "HOUR",
+      "label": "07:00",
+      "value": 322,
+      "sortOrder": 7
+    },
+    {
+      "kind": "TOPIC",
+      "label": "Kuryer / yetkazish",
+      "value": 305,
+      "sortOrder": 7
+    },
+    {
+      "kind": "HOUR",
+      "label": "08:00",
+      "value": 854,
+      "sortOrder": 8
+    },
+    {
+      "kind": "TOPIC",
+      "label": "Qisqa xabar (aniqlanmagan)",
+      "value": 237,
+      "sortOrder": 8
+    },
+    {
+      "kind": "HOUR",
+      "label": "09:00",
+      "value": 2745,
+      "sortOrder": 9
+    },
+    {
+      "kind": "TOPIC",
+      "label": "Kechikish",
+      "value": 135,
+      "sortOrder": 9
+    },
+    {
+      "kind": "HOUR",
+      "label": "10:00",
+      "value": 5885,
+      "sortOrder": 10
+    },
+    {
+      "kind": "TOPIC",
+      "label": "Faqat trek raqami",
+      "value": 98,
+      "sortOrder": 10
+    },
+    {
+      "kind": "HOUR",
+      "label": "11:00",
+      "value": 7948,
+      "sortOrder": 11
+    },
+    {
+      "kind": "TOPIC",
+      "label": "Tizim / IT",
+      "value": 88,
+      "sortOrder": 11
+    },
+    {
+      "kind": "HOUR",
+      "label": "12:00",
+      "value": 6695,
+      "sortOrder": 12
+    },
+    {
+      "kind": "TOPIC",
+      "label": "Bojxona / musodara",
+      "value": 29,
+      "sortOrder": 12
+    },
+    {
+      "kind": "HOUR",
+      "label": "13:00",
+      "value": 4701,
+      "sortOrder": 13
+    },
+    {
+      "kind": "TOPIC",
+      "label": "Shikastlangan / kam chiqdi",
+      "value": 25,
+      "sortOrder": 13
+    },
+    {
+      "kind": "HOUR",
+      "label": "14:00",
+      "value": 5806,
+      "sortOrder": 14
+    },
+    {
+      "kind": "HOUR",
+      "label": "15:00",
+      "value": 7085,
+      "sortOrder": 15
+    },
+    {
+      "kind": "HOUR",
+      "label": "16:00",
+      "value": 6677,
+      "sortOrder": 16
+    },
+    {
+      "kind": "HOUR",
+      "label": "17:00",
+      "value": 6069,
+      "sortOrder": 17
+    },
+    {
+      "kind": "HOUR",
+      "label": "18:00",
+      "value": 4900,
+      "sortOrder": 18
+    },
+    {
+      "kind": "HOUR",
+      "label": "19:00",
+      "value": 4226,
+      "sortOrder": 19
+    },
+    {
+      "kind": "HOUR",
+      "label": "20:00",
+      "value": 2938,
+      "sortOrder": 20
+    },
+    {
+      "kind": "HOUR",
+      "label": "21:00",
+      "value": 1855,
+      "sortOrder": 21
+    },
+    {
+      "kind": "HOUR",
+      "label": "22:00",
+      "value": 1124,
+      "sortOrder": 22
+    },
+    {
+      "kind": "HOUR",
+      "label": "23:00",
+      "value": 575,
+      "sortOrder": 23
+    }
+  ]
+}

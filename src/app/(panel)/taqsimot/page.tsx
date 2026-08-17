@@ -49,6 +49,23 @@ export default async function DistributionPage() {
         eyebrow="Ish taqsimoti va KPI pasporti"
         title="Kim nima uchun javob beradi"
         lede="Har bir vazifa aniq bitta mas'ulga biriktirilgan, har biriga zaxira xodim belgilangan. Nizo bo'lmasligi uchun taqsimot ochiq turadi."
+        actions={
+          <a href="/api/eksport/taqsimot" className="btn-ghost">
+            <svg
+              viewBox="0 0 24 24"
+              className="h-4 w-4"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth={1.7}
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              aria-hidden
+            >
+              <path d="M12 3v12m0 0 4-4m-4 4-4-4M4 19h16" />
+            </svg>
+            Excel&apos;ga yuklash
+          </a>
+        }
       />
 
       <div className="grid gap-4 lg:grid-cols-2">

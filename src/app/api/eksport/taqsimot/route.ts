@@ -180,6 +180,19 @@ export async function GET() {
     '',
   ]);
 
+  // Ekrandagi xulosa jumlasi — faylni ochgan odam javobni darhol ko'rishi kerak
+  const maxShare =
+    loadRows.length > 0 && activeTasks.length > 0 ? loadRows[0]![1].total / activeTasks.length : 0;
+
+  addFootnote(s2, loadCols.length, [
+    `Eng ko'p yuklangan xodimda vazifalarning ${Math.round(maxShare * 100)}% qismi — ${
+      maxShare > 0.4 ? "40% CHEGARASI BUZILGAN, taqsimotni qayta ko'rish kerak." : 'chegara ichida.'
+    }`,
+    "QOIDA: bitta xodimda vazifalarning 40% dan ortig'i to'planmasligi kerak — aks holda u ta'tilga chiqsa yoki ishdan ketsa bo'lim to'xtaydi.",
+    '"Zaxira sifatida" ustuni — xodim nechta vazifada zaxira etib belgilangani. Zaxira ham bitta odamga to\'planib qolmasligi kerak.',
+    'Arxivlangan vazifalar bu hisobga kirmaydi.',
+  ]);
+
   // ── 3. Zonalar ────────────────────────────────────────────────────────────
   const zoneCols: ColumnSpec[] = [
     { header: 'Zona', width: 6 },

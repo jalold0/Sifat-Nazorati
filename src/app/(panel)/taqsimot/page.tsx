@@ -9,6 +9,8 @@ import { date, dateTime, number, percent } from '@/lib/format';
 import { currentLoad, recentReassignments } from '@/server/assignments';
 import { KIND_LABEL, PRIORITY_LABEL } from '@/server/shared';
 
+import { CreateTaskPanel } from './task-form';
+
 export const metadata = { title: 'Ish taqsimoti' };
 export const dynamic = 'force-dynamic';
 
@@ -38,6 +40,12 @@ export default async function DistributionPage() {
     currentLoad(),
     recentReassignments(12),
   ]);
+
+  const assignableUsers = await db.user.findMany({
+    where: { active: true, role: { in: ['HEAD', 'SPECIALIST'] } },
+    orderBy: { shortName: 'asc' },
+    select: { id: true, shortName: true },
+  });
 
   const activeTasks = tasks.filter((t) => t.active).length;
   const maxShare =
@@ -119,9 +127,26 @@ export default async function DistributionPage() {
         </Card>
       </div>
 
+      {canEdit ? (
+        <Card className="mt-section">
+          <CardHead
+            title="Yangi vazifa"
+            note="Qo'shilgandan keyin u reyestrda tanlanadigan bo'ladi — SLA va mas'ul avtomatik to'ldiriladi"
+          />
+          <CreateTaskPanel
+            users={assignableUsers}
+            defaultOwnerId={assignableUsers.find((u) => u.id === session.sub)?.id ?? assignableUsers[0]?.id ?? ''}
+          />
+        </Card>
+      ) : null}
+
       <Card className="mt-section">
         <CardHead
-          title={`Vazifalar katalogi — ${number(tasks.length)} ta`}
+          title={`Vazifalar katalogi — ${number(tasks.filter((t) => t.active).length)} faol${
+            tasks.length !== tasks.filter((t) => t.active).length
+              ? ` · ${number(tasks.length - tasks.filter((t) => t.active).length)} arxivda`
+              : ''
+          }`}
           note="Kunlik reyestrda murojaat shu katalogga bog'lanadi — shunda SLA va mas'ul avtomatik to'ldiriladi"
         />
         <Table stickyHead maxHeight={640}>
@@ -142,13 +167,18 @@ export default async function DistributionPage() {
           </thead>
           <tbody>
             {tasks.map((t) => (
-              <tr key={t.id}>
+              <tr key={t.id} className={t.active ? undefined : 'opacity-55'}>
                 <td className="td tnum text-muted">{t.no}</td>
                 <td className="td font-semibold">{t.zoneCode}</td>
                 <td className="td max-w-[340px]">
                   <Link href={`/taqsimot/${t.no}`} className="transition hover:text-brand">
                     {t.title}
                   </Link>
+                  {!t.active ? (
+                    <Badge tone="neutral" className="ml-1.5">
+                      arxiv
+                    </Badge>
+                  ) : null}
                 </td>
                 <td className="td text-meta text-ink2">{t.source}</td>
                 <td className="td whitespace-nowrap text-meta">

@@ -15,6 +15,15 @@ import {
   validateReassign,
   type AssignmentWindow,
 } from '@/domain/assignment';
+import {
+  canDeleteTask,
+  nextTaskNo,
+  validateAssignee,
+  validateTaskInput,
+  type Kind,
+  type Priority,
+  type TaskInput,
+} from '@/domain/task';
 import { db } from '@/lib/db';
 
 import { logActivity } from './shared';
@@ -233,12 +242,18 @@ export async function reassignTask(input: {
   return { ok: true, summary };
 }
 
-/** Barcha vazifalar bo'yicha oxirgi qayta biriktirishlar (boshlang'ich taqsimotdan tashqari). */
+/**
+ * Oxirgi QAYTA biriktirishlar.
+ *
+ * Vazifaning birinchi biriktirishi bu ro'yxatga kirmaydi — u boshlang'ich
+ * taqsimot yoki yangi vazifa yaratilishi, "mas'ul almashdi" degani emas.
+ * Shuning uchun har bir vazifaning eng erta oralig'i chiqarib tashlanadi.
+ */
 export async function recentReassignments(limit = 20) {
-  return db.taskAssignment.findMany({
+  const rows = await db.taskAssignment.findMany({
     where: { changedById: { not: null } },
     orderBy: { createdAt: 'desc' },
-    take: limit,
+    take: limit * 2,
     select: {
       id: true,
       from: true,
@@ -247,9 +262,24 @@ export async function recentReassignments(limit = 20) {
       owner: { select: { shortName: true } },
       backup: { select: { shortName: true } },
       changedBy: { select: { shortName: true } },
-      taskDef: { select: { no: true, title: true, zoneCode: true } },
+      taskDef: {
+        select: {
+          no: true,
+          title: true,
+          zoneCode: true,
+          // Vazifaning eng erta oralig'i — solishtirish uchun
+          assignments: { select: { from: true }, orderBy: { from: 'asc' }, take: 1 },
+        },
+      },
     },
   });
+
+  return rows
+    .filter((r) => {
+      const earliest = r.taskDef.assignments[0]?.from;
+      return earliest !== undefined && r.from.getTime() > earliest.getTime();
+    })
+    .slice(0, limit);
 }
 
 /**
@@ -287,4 +317,227 @@ export async function currentLoad() {
   return [...byUser.entries()]
     .map(([ownerId, b]) => ({ ownerId, ...b }))
     .sort((a, b) => b.total - a.total);
+}
+
+// ── Katalogni boshqarish: qo'shish, tahrirlash, arxivlash ───────────────────
+
+export interface TaskMutationResult {
+  ok: boolean;
+  error?: string;
+  taskNo?: number;
+  summary?: string;
+}
+
+/**
+ * Yangi vazifa qo'shadi.
+ *
+ * Raqam avtomatik beriladi (katalogdagi eng katta + 1) — o'chirilgan raqamlar
+ * qayta ishlatilmaydi, aks holda eski hisobotlardagi "№12" boshqa vazifani
+ * ko'rsatib qolardi.
+ *
+ * Bir tranzaksiyada vazifa va uning BOSHLANG'ICH BIRIKTIRISHI yaratiladi —
+ * aks holda vazifa tarixsiz qolib, "kim javob bergan" savoliga javob bo'lmaydi.
+ */
+export async function createTask(input: {
+  data: TaskInput;
+  ownerId: string;
+  backupId: string | null;
+  actorId: string;
+}): Promise<TaskMutationResult> {
+  const problem = validateTaskInput(input.data);
+  if (problem) return { ok: false, error: problem };
+
+  const activeUsers = await db.user.findMany({
+    where: { active: true, role: { in: ['HEAD', 'SPECIALIST'] } },
+    select: { id: true, shortName: true },
+  });
+
+  const assigneeProblem = validateAssignee({
+    ownerId: input.ownerId,
+    backupId: input.backupId,
+    activeUserIds: activeUsers.map((u) => u.id),
+  });
+  if (assigneeProblem) return { ok: false, error: assigneeProblem };
+
+  const zone = await db.zone.findUnique({ where: { code: input.data.zoneCode }, select: { code: true } });
+  if (!zone) return { ok: false, error: 'Bunday zona mavjud emas' };
+
+  const existing = await db.taskDef.findMany({ select: { no: true } });
+  const no = nextTaskNo(existing.map((t) => t.no));
+  const now = new Date();
+
+  const created = await db.taskDef.create({
+    data: {
+      no,
+      zoneCode: input.data.zoneCode,
+      title: input.data.title.trim(),
+      source: input.data.source.trim(),
+      ownerId: input.ownerId,
+      backupId: input.backupId,
+      frequency: input.data.frequency,
+      slaHours: input.data.slaHours,
+      priority: input.data.priority as Priority,
+      kind: input.data.kind as Kind,
+      active: true,
+      assignments: {
+        create: {
+          ownerId: input.ownerId,
+          backupId: input.backupId,
+          from: now,
+          until: null,
+          reason: 'Yangi vazifa qo‘shildi',
+          changedById: input.actorId,
+        },
+      },
+    },
+    select: { id: true, no: true, title: true },
+  });
+
+  const ownerName = activeUsers.find((u) => u.id === input.ownerId)?.shortName ?? '?';
+  const summary = `Yangi vazifa №${created.no} "${created.title.slice(0, 60)}" — zona ${input.data.zoneCode}, mas'ul ${ownerName}`;
+
+  await logActivity({
+    actorId: input.actorId,
+    action: 'task.create',
+    entity: 'TaskDef',
+    entityId: String(created.id),
+    summary,
+  });
+
+  return { ok: true, taskNo: created.no, summary };
+}
+
+/**
+ * Vazifa maydonlarini tahrirlaydi.
+ *
+ * MAS'UL va ZAXIRA bu yerda o'zgarmaydi — ular `reassignTask` orqali,
+ * sanasi va sababi bilan almashtiriladi. Shu chegara tarixni himoyalaydi.
+ */
+export async function updateTask(input: {
+  taskNo: number;
+  data: TaskInput;
+  actorId: string;
+}): Promise<TaskMutationResult> {
+  const problem = validateTaskInput(input.data);
+  if (problem) return { ok: false, error: problem };
+
+  const task = await db.taskDef.findUnique({
+    where: { no: input.taskNo },
+    select: {
+      id: true,
+      no: true,
+      title: true,
+      source: true,
+      zoneCode: true,
+      frequency: true,
+      slaHours: true,
+      priority: true,
+      kind: true,
+    },
+  });
+  if (!task) return { ok: false, error: 'Vazifa topilmadi' };
+
+  const zone = await db.zone.findUnique({ where: { code: input.data.zoneCode }, select: { code: true } });
+  if (!zone) return { ok: false, error: 'Bunday zona mavjud emas' };
+
+  // O'zgargan maydonlarni izga yozamiz — nima o'zgarganini keyin ko'rish mumkin
+  const changes: string[] = [];
+  const title = input.data.title.trim();
+  const source = input.data.source.trim();
+  if (task.title !== title) changes.push('nomi');
+  if (task.source !== source) changes.push('manbasi');
+  if (task.zoneCode !== input.data.zoneCode) changes.push(`zona ${task.zoneCode} → ${input.data.zoneCode}`);
+  if (task.frequency !== input.data.frequency) changes.push(`davriylik ${task.frequency} → ${input.data.frequency}`);
+  if (task.slaHours !== input.data.slaHours) changes.push(`SLA ${task.slaHours ?? '—'} → ${input.data.slaHours ?? '—'}`);
+  if (task.priority !== input.data.priority) changes.push(`ustuvorlik ${task.priority} → ${input.data.priority}`);
+  if (task.kind !== input.data.kind) changes.push(`tur ${task.kind} → ${input.data.kind}`);
+
+  if (changes.length === 0) return { ok: false, error: 'O‘zgarish yo‘q' };
+
+  await db.taskDef.update({
+    where: { id: task.id },
+    data: {
+      title,
+      source,
+      zoneCode: input.data.zoneCode,
+      frequency: input.data.frequency,
+      slaHours: input.data.slaHours,
+      priority: input.data.priority as Priority,
+      kind: input.data.kind as Kind,
+    },
+  });
+
+  const summary = `Vazifa №${task.no} tahrirlandi: ${changes.join(', ')}`;
+  await logActivity({
+    actorId: input.actorId,
+    action: 'task.update',
+    entity: 'TaskDef',
+    entityId: String(task.id),
+    summary,
+  });
+
+  return { ok: true, taskNo: task.no, summary };
+}
+
+/**
+ * Vazifani arxivlaydi yoki qaytaradi.
+ * O'chirish emas: arxivlangan vazifa yuklama hisobiga kirmaydi, lekin
+ * uning o'tgan murojaatlari va hisobotlari joyida qoladi.
+ */
+export async function setTaskActive(input: {
+  taskNo: number;
+  active: boolean;
+  actorId: string;
+}): Promise<TaskMutationResult> {
+  const task = await db.taskDef.findUnique({
+    where: { no: input.taskNo },
+    select: { id: true, no: true, title: true, active: true, _count: { select: { tickets: true } } },
+  });
+  if (!task) return { ok: false, error: 'Vazifa topilmadi' };
+  if (task.active === input.active) {
+    return { ok: false, error: input.active ? 'Vazifa allaqachon faol' : 'Vazifa allaqachon arxivda' };
+  }
+
+  await db.taskDef.update({ where: { id: task.id }, data: { active: input.active } });
+
+  const summary = `Vazifa №${task.no} ${input.active ? 'arxivdan qaytarildi' : 'arxivlandi'}${
+    task._count.tickets > 0 ? ` (${task._count.tickets} ta murojaat tarixda qoladi)` : ''
+  }`;
+  await logActivity({
+    actorId: input.actorId,
+    action: input.active ? 'task.restore' : 'task.archive',
+    entity: 'TaskDef',
+    entityId: String(task.id),
+    summary,
+  });
+
+  return { ok: true, taskNo: task.no, summary };
+}
+
+/** Vazifani butunlay o'chiradi — faqat murojaat va tarixi bo'lmasa. */
+export async function deleteTask(input: { taskNo: number; actorId: string }): Promise<TaskMutationResult> {
+  const task = await db.taskDef.findUnique({
+    where: { no: input.taskNo },
+    select: { id: true, no: true, title: true, _count: { select: { tickets: true, assignments: true } } },
+  });
+  if (!task) return { ok: false, error: 'Vazifa topilmadi' };
+
+  const verdict = canDeleteTask({
+    tickets: task._count.tickets,
+    assignments: task._count.assignments,
+  });
+  if (!verdict.allowed) return { ok: false, error: verdict.reason ?? 'O‘chirib bo‘lmaydi' };
+
+  await db.taskDef.delete({ where: { id: task.id } });
+
+  const summary = `Vazifa №${task.no} "${task.title.slice(0, 60)}" o'chirildi`;
+  await logActivity({
+    actorId: input.actorId,
+    action: 'task.delete',
+    entity: 'TaskDef',
+    entityId: String(task.id),
+    summary,
+  });
+
+  return { ok: true, summary };
 }

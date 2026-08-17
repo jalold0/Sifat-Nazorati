@@ -10,6 +10,8 @@ import { taskWithHistory } from '@/server/assignments';
 import { KIND_LABEL, PRIORITY_LABEL } from '@/server/shared';
 
 import { ReassignForm } from '../reassign-form';
+import { ArchiveButton } from './archive-button';
+import { EditTaskPanel } from '../task-form';
 
 export const dynamic = 'force-dynamic';
 
@@ -47,9 +49,13 @@ export default async function TaskPage({ params }: { params: Promise<{ no: strin
         title={`№${task.no}. ${task.title}`}
         lede={`Manba: ${task.source} · davriylik: ${task.frequency}${task.slaHours ? ` · SLA ${task.slaHours} soat` : ''}`}
         actions={
-          <Link href="/taqsimot" className="btn-ghost">
-            Taqsimotga qaytish
-          </Link>
+          <>
+            {!task.active ? <Badge tone="neutral">Arxivda</Badge> : null}
+            {canEdit ? <ArchiveButton taskNo={task.no} active={task.active} /> : null}
+            <Link href="/taqsimot" className="btn-ghost">
+              Taqsimotga qaytish
+            </Link>
+          </>
         }
       />
 
@@ -116,6 +122,27 @@ export default async function TaskPage({ params }: { params: Promise<{ no: strin
           </Card>
         )}
       </div>
+
+      {canEdit ? (
+        <Card className="mt-section">
+          <CardHead
+            title="Vazifa ma'lumotlarini tahrirlash"
+            note="Nomi, manbasi, zonasi, davriyligi, SLA, ustuvorligi va turi"
+          />
+          <EditTaskPanel
+            taskNo={task.no}
+            initial={{
+              title: task.title,
+              source: task.source,
+              zoneCode: task.zoneCode,
+              frequency: task.frequency,
+              slaHours: task.slaHours,
+              priority: task.priority,
+              kind: task.kind,
+            }}
+          />
+        </Card>
+      ) : null}
 
       <Card className="mt-section">
         <CardHead

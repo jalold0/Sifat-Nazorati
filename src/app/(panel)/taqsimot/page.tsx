@@ -1,8 +1,12 @@
+import Link from 'next/link';
+
 import { BarList } from '@/components/charts';
-import { Badge, Callout, Card, CardHead, PageHead, Table } from '@/components/ui';
-import { requireSession } from '@/lib/auth';
+import { Badge, Callout, Card, CardHead, Empty, PageHead, Table } from '@/components/ui';
+import { SYSTEM_EPOCH } from '@/domain/assignment';
+import { canManageSettings, requireSession } from '@/lib/auth';
 import { db } from '@/lib/db';
-import { number, percent } from '@/lib/format';
+import { date, dateTime, number, percent } from '@/lib/format';
+import { currentLoad, recentReassignments } from '@/server/assignments';
 import { KIND_LABEL, PRIORITY_LABEL } from '@/server/shared';
 
 export const metadata = { title: 'Ish taqsimoti' };
@@ -13,35 +17,31 @@ export const dynamic = 'force-dynamic';
  * Har bir vazifa aniq bitta mas'ulga biriktirilgan, har bir KPI ning formulasi ko'rinadi.
  */
 export default async function DistributionPage() {
-  await requireSession();
+  const session = await requireSession();
+  const canEdit = canManageSettings(session.role);
 
-  const [zones, tasks, indicators] = await Promise.all([
+  const [zones, tasks, indicators, load, changes] = await Promise.all([
     db.zone.findMany({ orderBy: { code: 'asc' }, include: { owner: { select: { shortName: true } } } }),
     db.taskDef.findMany({
       orderBy: { no: 'asc' },
       include: {
         owner: { select: { shortName: true } },
         backup: { select: { shortName: true } },
+        // Joriy biriktirish — "qachondan buyon" ni ko'rsatish uchun
+        assignments: { where: { until: null }, select: { from: true }, take: 1 },
       },
     }),
     db.kpiIndicator.findMany({
       orderBy: { no: 'asc' },
       include: { owner: { select: { shortName: true } } },
     }),
+    currentLoad(),
+    recentReassignments(12),
   ]);
 
-  const byOwner = new Map<string, { total: number; proactive: number; reactive: number }>();
-  for (const t of tasks) {
-    const name = t.owner.shortName;
-    const b = byOwner.get(name) ?? { total: 0, proactive: 0, reactive: 0 };
-    b.total += 1;
-    if (t.kind === 'PROACTIVE') b.proactive += 1;
-    else b.reactive += 1;
-    byOwner.set(name, b);
-  }
-
-  const loadRows = [...byOwner.entries()].sort((a, b) => b[1].total - a[1].total);
-  const maxShare = tasks.length > 0 ? Math.max(...loadRows.map(([, b]) => b.total)) / tasks.length : 0;
+  const activeTasks = tasks.filter((t) => t.active).length;
+  const maxShare =
+    activeTasks > 0 && load.length > 0 ? Math.max(...load.map((l) => l.total)) / activeTasks : 0;
 
   return (
     <>
@@ -85,10 +85,10 @@ export default async function DistributionPage() {
             note="Qoida: bitta xodimda vazifalarning 40% dan ortig'i to'planmasligi kerak"
           />
           <BarList
-            data={loadRows.map(([name, b]) => ({
-              label: `${name} — ${b.total} vazifa (${b.proactive} proaktiv)`,
-              value: b.total,
-              tone: b.total / tasks.length > 0.4 ? 'bad' : 'brand',
+            data={load.map((l) => ({
+              label: `${l.name}${l.active ? '' : ' (faolsiz)'} — ${l.total} vazifa (${l.proactive} proaktiv)`,
+              value: l.total,
+              tone: !l.active ? 'warn' : l.total / activeTasks > 0.4 ? 'bad' : 'brand',
             }))}
           />
           <p className="mt-section text-meta text-ink2">
@@ -120,6 +120,7 @@ export default async function DistributionPage() {
               <th className="th text-right">SLA</th>
               <th className="th">Ustuvorlik</th>
               <th className="th">Tur</th>
+              <th className="th" />
             </tr>
           </thead>
           <tbody>
@@ -127,9 +128,18 @@ export default async function DistributionPage() {
               <tr key={t.id}>
                 <td className="td tnum text-muted">{t.no}</td>
                 <td className="td font-semibold">{t.zoneCode}</td>
-                <td className="td max-w-[340px]">{t.title}</td>
+                <td className="td max-w-[340px]">
+                  <Link href={`/taqsimot/${t.no}`} className="transition hover:text-brand">
+                    {t.title}
+                  </Link>
+                </td>
                 <td className="td text-meta text-ink2">{t.source}</td>
-                <td className="td whitespace-nowrap text-meta">{t.owner.shortName}</td>
+                <td className="td whitespace-nowrap text-meta">
+                  {t.owner.shortName}
+                  {t.assignments[0] && t.assignments[0].from.getTime() !== SYSTEM_EPOCH.getTime() ? (
+                    <p className="tnum text-micro text-muted">{date(t.assignments[0].from)} dan</p>
+                  ) : null}
+                </td>
                 <td className="td whitespace-nowrap text-meta text-muted">{t.backup?.shortName ?? '—'}</td>
                 <td className="td whitespace-nowrap text-meta">{t.frequency}</td>
                 <td className="td tnum text-right text-meta">{t.slaHours ? `${t.slaHours} soat` : '—'}</td>
@@ -141,10 +151,58 @@ export default async function DistributionPage() {
                 <td className="td">
                   <Badge tone={t.kind === 'PROACTIVE' ? 'ok' : 'neutral'}>{KIND_LABEL[t.kind]}</Badge>
                 </td>
+                <td className="td whitespace-nowrap">
+                  <Link href={`/taqsimot/${t.no}`} className="text-micro font-semibold text-brand">
+                    {canEdit ? 'Qayta biriktirish' : 'Tarix'} &rarr;
+                  </Link>
+                </td>
               </tr>
             ))}
           </tbody>
         </Table>
+      </Card>
+
+      <Card className="mt-section">
+        <CardHead
+          title="Qayta biriktirishlar tarixi"
+          note="Boshlang'ich taqsimotdan keyingi barcha o'zgarishlar. O'zgartirishgacha bajarilgan ish eski mas'ul hisobida qoladi."
+        />
+        {changes.length === 0 ? (
+          <Empty>Hali qayta biriktirish bo'lmagan — taqsimot boshlang'ich holatda.</Empty>
+        ) : (
+          <Table>
+            <thead>
+              <tr>
+                <th className="th">Vazifa</th>
+                <th className="th">Yangi mas'ul</th>
+                <th className="th">Zaxira</th>
+                <th className="th">Kuchga kirdi</th>
+                <th className="th">Sabab</th>
+                <th className="th">Kim o'zgartirdi</th>
+              </tr>
+            </thead>
+            <tbody>
+              {changes.map((c) => (
+                <tr key={c.id}>
+                  <td className="td max-w-[280px]">
+                    <Link href={`/taqsimot/${c.taskDef.no}`} className="font-semibold text-brand">
+                      &#8470;{c.taskDef.no}
+                    </Link>{' '}
+                    <span className="text-meta">{c.taskDef.title}</span>
+                  </td>
+                  <td className="td whitespace-nowrap font-semibold">{c.owner.shortName}</td>
+                  <td className="td whitespace-nowrap text-meta text-ink2">{c.backup?.shortName ?? '—'}</td>
+                  <td className="td tnum whitespace-nowrap text-meta">{date(c.from)}</td>
+                  <td className="td text-meta text-ink2">{c.reason ?? '—'}</td>
+                  <td className="td whitespace-nowrap text-micro text-muted">
+                    {c.changedBy?.shortName ?? 'tizim'}
+                    <p className="tnum">{dateTime(c.createdAt)}</p>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </Table>
+        )}
       </Card>
 
       <Card className="mt-section">

@@ -38,6 +38,9 @@ model User {
   ownedZone      Zone?
   ownedTasks     TaskDef[]     @relation("taskOwner")
   backupTasks    TaskDef[]     @relation("taskBackup")
+  ownedAssignments   TaskAssignment[] @relation("assignmentOwner")
+  backupAssignments  TaskAssignment[] @relation("assignmentBackup")
+  changedAssignments TaskAssignment[] @relation("assignmentChangedBy")
   tickets        Ticket[]      @relation("ticketOwner")
   createdTickets Ticket[]      @relation("ticketAuthor")
   indicators     KpiIndicator[]
@@ -96,9 +99,43 @@ model TaskDef {
   kind      TaskKind
   active    Boolean  @default(true)
 
-  tickets Ticket[]
+  tickets     Ticket[]
+  assignments TaskAssignment[]
 
   @@index([zoneCode, kind])
+  @@index([ownerId])
+}
+
+/// Vazifaning vaqtga bog'langan biriktirilishi.
+///
+/// `TaskDef.ownerId` — JORIY mas'ul (tez o'qish uchun nusxa), bu jadval esa TARIX:
+/// kim, qachondan qachongacha javob bergani, nima uchun o'zgargani va kim o'zgartirgani.
+/// Mas'ulni almashtirish o'tgan davr hisobotini o'zgartirmaydi, chunki har bir
+/// murojaat o'z mas'ulini (`Ticket.ownerId`) yaratilgan paytda saqlab qoladi.
+///
+/// Oraliq yarim ochiq: [from, until). `until = null` — joriy biriktirish.
+model TaskAssignment {
+  id        Int      @id @default(autoincrement())
+  taskDefId Int
+  taskDef   TaskDef  @relation(fields: [taskDefId], references: [id], onDelete: Cascade)
+
+  ownerId  String
+  owner    User    @relation("assignmentOwner", fields: [ownerId], references: [id])
+  backupId String?
+  backup   User?   @relation("assignmentBackup", fields: [backupId], references: [id])
+
+  from  DateTime
+  until DateTime?
+
+  /// Nima uchun o'zgartirildi — nizo chiqsa shu yozuv hal qiladi
+  reason      String?
+  changedById String?
+  changedBy   User?   @relation("assignmentChangedBy", fields: [changedById], references: [id])
+  createdAt   DateTime @default(now())
+
+  /// Bitta vazifada bir paytda faqat bitta oraliq boshlanadi
+  @@unique([taskDefId, from])
+  @@index([taskDefId, until])
   @@index([ownerId])
 }
 

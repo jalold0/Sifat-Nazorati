@@ -3,7 +3,7 @@ import { canManageSettings, canSeeSalary, requireSession, ROLE_LABEL } from '@/l
 import { db } from '@/lib/db';
 import { dateTime, money, number } from '@/lib/format';
 
-import { PasswordForm, UserForm } from './forms';
+import { CreateUserForm, PasswordForm, UserForm } from './forms';
 
 export const metadata = { title: 'Sozlamalar' };
 export const dynamic = 'force-dynamic';
@@ -57,6 +57,16 @@ export default async function SettingsPage() {
           </p>
         </Card>
       </div>
+
+      {canEdit ? (
+        <Card className="mt-section">
+          <CardHead
+            title="Yangi xodim"
+            note="Qo'shilgandan keyin unga Ish taqsimoti sahifasida vazifa biriktiriladi"
+          />
+          <CreateUserForm />
+        </Card>
+      ) : null}
 
       <Card className="mt-section">
         <CardHead

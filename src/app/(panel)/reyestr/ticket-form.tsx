@@ -2,7 +2,17 @@
 
 import { useActionState, useState } from 'react';
 
+import { resolveOwnerAt, type AssignmentWindow } from '@/domain/assignment';
+
 import { createTicketAction, type FormState } from './actions';
+
+/** Biriktirish oralig'i — server tomondan ISO satr sifatida keladi */
+export interface AssignmentOption {
+  ownerId: string;
+  backupId: string | null;
+  from: string;
+  until: string | null;
+}
 
 export interface TaskOption {
   id: number;
@@ -14,6 +24,7 @@ export interface TaskOption {
   priority: 'CRITICAL' | 'HIGH' | 'MEDIUM' | 'LOW';
   kind: 'PROACTIVE' | 'REACTIVE';
   source: string;
+  assignments: AssignmentOption[];
 }
 
 export interface UserOption {
@@ -73,17 +84,59 @@ export function TicketForm({
   const [slaHours, setSlaHours] = useState('4');
   const [category, setCategory] = useState('');
   const [status, setStatus] = useState('OPEN');
+  const [reportDate, setReportDate] = useState(today);
+  const [historyNote, setHistoryNote] = useState<string | null>(null);
+
+  const windowsOf = (task: TaskOption): AssignmentWindow[] =>
+    task.assignments.map((a, i) => ({
+      id: i,
+      ownerId: a.ownerId,
+      backupId: a.backupId,
+      from: new Date(a.from),
+      until: a.until === null ? null : new Date(a.until),
+    }));
+
+  /**
+   * Mas'ulni murojaat SANASIGA qarab aniqlaydi.
+   * Vazifa qayta biriktirilgan bo'lsa, orqaga sana bilan kiritilgan murojaat
+   * o'sha paytda javob bergan xodimga tushishi kerak — joriy mas'ulga emas.
+   */
+  function applyOwnerFor(task: TaskOption | undefined, dateValue: string) {
+    if (!task) return;
+    const at = new Date(`${dateValue}T12:00:00.000Z`);
+    const w = resolveOwnerAt(windowsOf(task), at);
+    const resolved = w?.ownerId ?? task.ownerId;
+    setOwnerId(resolved);
+
+    const isHistoric = w !== null && w.ownerId !== task.ownerId;
+    setHistoryNote(
+      isHistoric
+        ? `Bu sanada vazifa boshqa xodimda bo'lgan — mas'ul shu bo'yicha tanlandi. Joriy mas'ul boshqa.`
+        : null,
+    );
+  }
 
   function applyTask(value: string) {
     setTaskId(value);
     const task = tasks.find((t) => String(t.id) === value);
-    if (!task) return;
+    if (!task) {
+      setHistoryNote(null);
+      return;
+    }
     setZoneCode(task.zoneCode);
-    setOwnerId(task.ownerId);
     setPriority(task.priority);
     setKind(task.kind);
     setSlaHours(String(task.slaHours ?? 24));
     setCategory(task.title.length > 60 ? `${task.title.slice(0, 60)}…` : task.title);
+    applyOwnerFor(task, reportDate);
+  }
+
+  function applyDate(value: string) {
+    setReportDate(value);
+    applyOwnerFor(
+      tasks.find((t) => String(t.id) === taskId),
+      value,
+    );
   }
 
   const closed = status === 'CLOSED';
@@ -118,7 +171,15 @@ export function TicketForm({
           <label className="field-label" htmlFor="date">
             Hisobot sanasi
           </label>
-          <input id="date" name="date" type="date" className="field" defaultValue={today} required />
+          <input
+            id="date"
+            name="date"
+            type="date"
+            className="field"
+            value={reportDate}
+            onChange={(e) => applyDate(e.target.value)}
+            required
+          />
         </div>
 
         <div>
@@ -190,6 +251,7 @@ export function TicketForm({
               </option>
             ))}
           </select>
+          {historyNote ? <p className="mt-1 text-micro font-medium text-warn">{historyNote}</p> : null}
         </div>
 
         <div>

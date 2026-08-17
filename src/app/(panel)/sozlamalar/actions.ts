@@ -64,6 +64,93 @@ export async function updateUserAction(_prev: SettingsState, formData: FormData)
   return { ok: `${updated.shortName} ma’lumoti saqlandi` };
 }
 
+const createUserSchema = z.object({
+  fullName: z.string().trim().min(4, "To'liq ism-familiyani kiriting"),
+  shortName: z.string().trim().min(2, 'Qisqa nomni kiriting (hisobotlarda ko‘rinadi)'),
+  login: z
+    .string()
+    .trim()
+    .toLowerCase()
+    .min(3, 'Login kamida 3 belgi')
+    .regex(/^[a-z0-9._-]+$/, 'Loginda faqat lotin harflari, raqam, nuqta va chiziqcha bo‘lishi mumkin'),
+  role: z.enum(['CEO', 'HEAD', 'SPECIALIST', 'VIEWER']),
+  position: z.string().trim().min(3, 'Lavozimni kiriting'),
+  salary: z
+    .string()
+    .trim()
+    .transform((v) => (v.length === 0 ? null : Number(v.replace(/[\s,]/g, ''))))
+    .nullable()
+    .refine((v) => v === null || (Number.isFinite(v) && v >= 0), 'Maosh xato'),
+  password: z.string().min(8, 'Parol kamida 8 belgi bo‘lishi kerak'),
+});
+
+/**
+ * Yangi xodim qo'shish.
+ *
+ * Diqqat: xodim yaratilishi bilan uning KPI kartasi bo'sh bo'ladi —
+ * KPI ko'rsatkichlari alohida biriktiriladi (hozircha pasport seed'da belgilangan).
+ * Shuning uchun javobda bu haqda ogohlantirish qaytariladi.
+ */
+export async function createUserAction(_prev: SettingsState, formData: FormData): Promise<SettingsState> {
+  const session = await requireSession();
+  if (!canManageSettings(session.role)) return { error: 'Xodim qo‘shish huquqingizda emas' };
+
+  const parsed = createUserSchema.safeParse({
+    fullName: formData.get('fullName'),
+    shortName: formData.get('shortName'),
+    login: formData.get('login'),
+    role: formData.get('role'),
+    position: formData.get('position'),
+    salary: formData.get('salary') ?? '',
+    password: formData.get('password'),
+  });
+  if (!parsed.success) return { error: parsed.error.issues[0]?.message ?? 'Ma’lumot xato' };
+
+  const d = parsed.data;
+
+  // `key` — hisobot va seed'da ishlatiladigan barqaror identifikator
+  const key = d.login.replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+
+  const clash = await db.user.findFirst({
+    where: { OR: [{ login: d.login }, { key }] },
+    select: { login: true },
+  });
+  if (clash) return { error: `"${d.login}" logini allaqachon band` };
+
+  const created = await db.user.create({
+    data: {
+      key,
+      fullName: d.fullName,
+      shortName: d.shortName,
+      login: d.login,
+      role: d.role,
+      position: d.position,
+      salary: d.salary,
+      passwordHash: await hashPassword(d.password),
+      active: true,
+    },
+    select: { id: true, shortName: true, login: true },
+  });
+
+  await logActivity({
+    actorId: session.sub,
+    action: 'user.create',
+    entity: 'User',
+    entityId: created.id,
+    summary: `Yangi xodim qo'shildi: ${created.shortName} (${created.login}) — ${d.position}`,
+  });
+
+  revalidatePath('/sozlamalar');
+  revalidatePath('/taqsimot');
+  revalidatePath('/reyestr/yangi');
+
+  return {
+    ok:
+      `${created.shortName} qo'shildi. Endi unga vazifa biriktirish mumkin (Ish taqsimoti sahifasida). ` +
+      `KPI ko'rsatkichlari hali biriktirilmagan — ular alohida sozlanadi.`,
+  };
+}
+
 const passwordSchema = z
   .object({
     id: z.string().min(1),

@@ -27,6 +27,12 @@ export default async function NewTicketPage() {
         priority: true,
         kind: true,
         source: true,
+        // Biriktirish tarixi — murojaat sanasiga qarab TO'G'RI mas'ul tanlanishi uchun.
+        // Orqaga sana bilan kiritilgan murojaat o'sha paytdagi mas'ulga tushishi kerak.
+        assignments: {
+          select: { ownerId: true, backupId: true, from: true, until: true },
+          orderBy: { from: 'asc' },
+        },
       },
     }),
     db.user.findMany({
@@ -53,7 +59,16 @@ export default async function NewTicketPage() {
 
       <Card className="mt-section">
         <TicketForm
-          tasks={tasks}
+          // Sanalar mijoz tomonga ISO satr sifatida uzatiladi (Date serializatsiya qilinmaydi)
+          tasks={tasks.map((t) => ({
+            ...t,
+            assignments: t.assignments.map((a) => ({
+              ownerId: a.ownerId,
+              backupId: a.backupId,
+              from: a.from.toISOString(),
+              until: a.until?.toISOString() ?? null,
+            })),
+          }))}
           users={users}
           defaultOwnerId={users.find((u) => u.id === session.sub)?.id ?? users[0]?.id ?? ''}
           today={dateInputValue(now)}

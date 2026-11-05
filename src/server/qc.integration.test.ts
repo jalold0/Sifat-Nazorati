@@ -9,6 +9,7 @@ import { afterAll, beforeAll, describe, expect, it } from 'vitest';
 
 import { todayTashkent } from '@/qc/calc';
 import type { Actor } from '@/qc/policy';
+import { listUsers, saveUser } from './users';
 
 import {
   closeTask,
@@ -252,6 +253,21 @@ suite('server qatlami (PostgreSQL)', () => {
     expect(await deleteAudit(head, r.data.id, ctx)).toMatchObject({ ok: true });
     expect(await db.qcTask.count({ where: { auditId: r.data.id } })).toBe(0);
     expect(await getAudit(head, r.data.id, ctx)).toMatchObject({ ok: false, status: 404 });
+  });
+
+  it('foydalanuvchi: faqat rahbar boshqaradi; ko‘ruvchiga bo‘lim majburiy; o‘zini pasaytira olmaydi', async () => {
+    const input = { login: 'yangi.k', fullName: 'Yangi Ko‘ruvchi', role: 'VIEWER' as const, active: true, password: 'parol1234' };
+    expect(await saveUser(insp1, { ...input, deptId: d1 }, ctx)).toMatchObject({ ok: false, status: 403 });
+    expect(await listUsers(viewer, ctx)).toMatchObject({ ok: false, status: 403 });
+    expect(await saveUser(head, input, ctx)).toMatchObject({ ok: false, status: 400 }); // bo'limsiz
+    expect(await saveUser(head, { ...input, password: '123' , deptId: d1 }, ctx)).toMatchObject({ ok: false, status: 400 });
+    const created = await saveUser(head, { ...input, deptId: d1 }, ctx);
+    expect(created.ok).toBe(true);
+    expect(await saveUser(head, { ...input, deptId: d1 }, ctx)).toMatchObject({ ok: false, status: 400 }); // login band
+    expect(await saveUser(head, { id: head.id, fullName: 'head', role: 'INSPECTOR', active: true }, ctx)).toMatchObject({ ok: false, status: 400 });
+    const row = await db.user.findUniqueOrThrow({ where: { login: 'yangi.k' } });
+    expect(row).toMatchObject({ role: 'VIEWER', deptId: d1 });
+    expect(row.passwordHash).not.toContain('parol1234');
   });
 
   it('tarix sahifalanadi, yangisi birinchi', async () => {

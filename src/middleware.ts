@@ -18,6 +18,10 @@ export async function middleware(request: NextRequest) {
   }
 
   if (!session) {
+    // API: yo'naltirish emas, 401 va o'zbekcha xato
+    if (pathname.startsWith('/api/')) {
+      return NextResponse.json({ error: 'Kirish talab qilinadi. Tizimga qayta kiring.' }, { status: 401 });
+    }
     const url = new URL('/login', request.url);
     if (pathname !== '/') url.searchParams.set('keyin', pathname);
     return NextResponse.redirect(url);

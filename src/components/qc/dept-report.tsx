@@ -25,7 +25,7 @@ function metricNorm(m: Metric): string | null {
 export function PeriodTabs({ base, period, extra = '' }: { base: string; period: PeriodKey; extra?: string }) {
   return (
     <div role="group" aria-label="Davr" className="flex flex-wrap gap-2">
-      {(Object.keys(PERIOD_LABEL) as PeriodKey[]).map((k) => (
+      {(['today', '7', '30'] as PeriodKey[]).map((k) => (
         <Link
           key={k}
           href={`${base}?p=${k}${extra}`}

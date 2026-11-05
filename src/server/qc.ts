@@ -7,7 +7,7 @@
  * Server actions, route handler'lar va testlar shu qatlamni chaqiradi — framework'ga bog'liq emas.
  */
 
-import { Prisma, type PrismaClient } from '@prisma/client';
+import type { Prisma, PrismaClient } from '@prisma/client';
 
 import { db as defaultDb } from '@/lib/db';
 import {

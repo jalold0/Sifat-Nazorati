@@ -1,169 +1,89 @@
-# iPOST — Sifat nazorati (OTK) bo'limi KPI tizimi
+# iPOST — Sifat nazorati (OTK): 12 bo‘limni tekshirish tizimi
 
-Kichik CRM: kunlik reyestr, avtomatik KPI hisobi, checklist auditlari, quvvat (shtat) hisobi va
-oylik hisobot. Rahbariyat (CEO) bevosita nazoratida — har bir raqamning manbasi va har bir qo'lda
-tuzatishning izi ko'rinadi.
+1-bosqich. Tekshiruvchi bir daqiqada bitta bo‘lim tekshiruvini kiritadi; rahbar panelda qaysi bo‘lim qizil
+ekanini bir qarashda ko‘radi. Ko‘ruvchi faqat o‘z bo‘limini ko‘radi.
 
-Manba: `iPOST_OTK_Ish_tartibi_va_KPI.xlsx`, `iPOST_Telegram_tahlili_2.xlsx`,
-`iPOST_Tekshirish_royxati.xlsx` — barcha formulalar Excel'dan aynan ko'chirilgan va testlar bilan
-qulflangan.
+Texnologiya: Next.js 15 (App Router), Prisma + PostgreSQL, vitest. Tashqi CDN, shrift va rasm yo‘q —
+ofis tarmog‘ida internetsiz ishlaydi (brauzer faqat serverning o‘z manziliga murojaat qiladi).
 
-## Nima uchun bu tizim
+> Taftish (murojaatlar) alohida loyiha. Eski Excel-KPI modeli (KPI, checklist, ish taqsimoti, reyestr)
+> bu loyihadan olib tashlangan; u git tarixida va `pre-qc-rewrite` tegida saqlanadi.
 
-Excel modelida uchta muammo bor edi:
+## Ekranlar va rollar
 
-1. **Faktlar qo'lda kiritilardi** — ya'ni KPI o'z-o'zini tekshirmaydi. Endi 17 ko'rsatkichdan
-   15 tasi kunlik reyestr, auditlar va tizimli yechimlardan avtomatik hisoblanadi.
-2. **Bir necha fayl bir-biriga bog'lanmagan** — Telegram tahlili, 102 statistikasi va KPI alohida
-   yotardi. Endi bitta baza.
-3. **Nazorat izi yo'q edi** — kim qanday raqamni o'zgartirganini bilib bo'lmaydi. Endi har bir
-   tuzatish izohi va muallifi bilan saqlanadi (`/izlar`).
+| Ekran | Manzil | Rahbar | Tekshiruvchi | Ko‘ruvchi |
+|---|---|:-:|:-:|:-:|
+| Tekshiruv (bugungi) | `/tekshiruv` | ha | ha (boshlang‘ich) | — |
+| Topshiriqlar | `/topshiriqlar` | ha | ha | — |
+| Tarix (+ CSV) | `/tarix`, `/tarix/[id]` | ha | ha | — |
+| Panel (svetofor) | `/panel` | ha (boshlang‘ich) | — | — |
+| Sozlamalar, Foydalanuvchilar | `/sozlamalar` | ha | — | — |
+| Bo‘limim | `/bolimim` | — | — | ha (boshlang‘ich) |
+
+Rollar bazada: `HEAD` = Rahbar, `INSPECTOR` = Tekshiruvchi, `VIEWER` = Ko‘ruvchi (unga `deptId` — bo‘lim —
+biriktiriladi: Sozlamalar → Foydalanuvchilar).
+
+Ruxsat **faqat serverda** tekshiriladi (`src/qc/policy.ts` qoidalari, `src/server/qc.ts` har amalda
+chaqiradi). Sahifa manzilini qo‘lda o‘zgartirib ham ruxsatsiz ekranga yoki boshqa bo‘lim ma’lumotiga
+kirib bo‘lmaydi. Xato javoblari o‘zbekcha: 400 tekshiruv, 403 ruxsat, 404 topilmadi; kirishsiz `/api/*` — 401.
 
 ## Ishga tushirish
 
 ```bash
 pnpm install
-cp .env.example .env      # DATABASE_URL va AUTH_SECRET ni to'ldiring
-pnpm db:migrate           # jadvallarni yaratadi
-pnpm db:seed              # zonalar, 43 vazifa, 20 KPI, 3 checklist, 1029 tekshirish yozuvi
+cp .env.example .env      # DATABASE_URL, DIRECT_URL, AUTH_SECRET ni to‘ldiring
+pnpm db:migrate           # yoki produksiyada: pnpm exec prisma migrate deploy
+pnpm db:seed              # xodimlar + 12 bo‘lim (har birida 8 nuqta); qayta ishga tushirish xavfsiz
 pnpm dev                  # http://localhost:3100
 ```
 
-**Docker o'rnatilmagan mashinada** lokal PostgreSQL kerak bo'lsa:
+Docker/Postgres yo‘q mashinada: `pnpm db:local` (alohida terminalda; port 5433), so‘ng `.env` yoki
+`.env.local` ga `postgresql://otk:otk@localhost:5433/otk_crm` ni qo‘ying.
 
-```bash
-pnpm db:local             # alohida terminalda qoldiring (port 5433, UTF-8)
-```
+**Boshlang‘ich ma’lumot.** `prisma/qc-departments.json` — eski sozlamadan tanlangan 12 bo‘lim, har birida
+4 guruhdan navbatma-navbat olingan 8 tagacha nuqta (`scripts/extract-qc-seed.ts`). `pnpm db:seed` mavjud
+bo‘lim va nuqtalarga **tegmaydi** (rahbar tahrir qilgan bo‘lishi mumkin), faqat yo‘q bo‘limlarni qo‘shadi.
+Hamma me’yor 90% va «taxminiy»: rahbar Sozlamalarda nuqtalarni ko‘rib chiqib, «jiddiy» belgisini qo‘yib,
+me’yorni tasdiqlaydi.
 
-Chiqqan `DATABASE_URL` ni `.env` ga qo'ying, so'ng migratsiya va seed'ni bajaring.
+Seed xodimlar (boshlang‘ich parol — `SEED_DEFAULT_PASSWORD`, birinchi kirishdan keyin almashtiring):
+`jaloldin`, `ceo` (Rahbar); `ulugbek`, `jasur`, `saidali` (Tekshiruvchi). `SEED_DEMO=1 pnpm db:seed`
+sinash uchun Call center ko‘ruvchisini (`callcenter`) ham yaratadi.
 
-### Namunaviy ma'lumot (ixtiyoriy)
+## Hisob qoidalari
 
-Tizimni ko'rsatish uchun ikki oylik realistik reyestr, audit va yechimlar:
+Hammasi bitta sof modulda — `src/qc/calc.ts` (DB, DOM va tarmoqsiz; bir xil kirish — bir xil natija).
+Ball, foiz va xulosa **saqlanmaydi**, har safar hisoblanadi.
 
-```bash
-pnpm demo:seed     # yaratadi (har bir yozuv "[demo]" belgisi bilan)
-pnpm demo:clear    # to'liq o'chiradi
-```
-
-### Boshlang'ich loginlar
-
-| Login      | Rol                    | Nimani ko'radi                                        |
-| ---------- | ---------------------- | ----------------------------------------------------- |
-| `ceo`      | Rahbariyat             | Hammasini; KPI davrini tasdiqlaydi. Ma'lumot kiritmaydi |
-| `jaloldin` | Bo'lim boshlig'i       | Hammasini; faktlarni tuzatadi, davrni yuboradi        |
-| `ulugbek`  | Mutaxassis — Zona A    | Reyestr, audit, o'z KPI kartasi                       |
-| `jasur`    | Mutaxassis — Zona B    | —                                                     |
-| `saidali`  | Mutaxassis — Zona C    | —                                                     |
-
-Parol `.env` dagi `SEED_DEFAULT_PASSWORD` (standart `Otk2026!`). **Birinchi kirishdan keyin
-albatta almashtiring** — `/sozlamalar` sahifasida.
-
-## Sahifalar
-
-| Sahifa        | Vazifasi                                                                     |
-| ------------- | ---------------------------------------------------------------------------- |
-| `/dashboard`  | Bo'lim holati bir sahifada: KPI ballari, SLA, kechikkan murojaatlar, audit qamrovi |
-| `/reyestr`    | Kunlik reyestr — tizimning poydevori. SLA holati rang bilan ko'rinadi        |
-| `/kpi`        | Oylik ball va bonus; faktni izoh bilan tuzatish; CEO tasdiqlash oqimi        |
-| `/audit`      | 3 checklist (14 band × 2 ball); 0/1 baholarga dalil majburiy                 |
-| `/yechimlar`  | Root-cause → tizimli yechim → natija. Faqat tasdiqlangani KPI'ga kiradi      |
-| `/tekshiruv`  | Telegramda javob izi qolmagan 1 029 ishni tekshirish                         |
-| `/quvvat`     | Shtat ehtiyoji: yuklama %, FTE taqchilligi. Norma reyestrdan o'lchanadi      |
-| `/baseline`   | Telegram o'lchovi: akkauntlar kesimi, 102 bilan taqqoslash, yuklama profili, mavzular; yangilanish tarixi |
-| `/hisobot`    | Oylik hisobot — avtomatik yig'iladi, chop etishga tayyor                     |
-| `/taqsimot`   | 43 vazifa va 20 KPI pasporti — tizimning "qonuni"                            |
-| `/izlar`      | O'zgarishlar tarixi (CEO va bo'lim boshlig'i uchun)                          |
-| `/sozlamalar` | Xodimlar, maosh, parol                                                       |
-
-## KPI qanday hisoblanadi
-
-Excel formulalari aynan saqlangan (`src/domain/kpi.ts`):
-
-```
-Bajarilish = "Yuqori yaxshi" ? fakt / maqsad : maqsad / fakt      (xato bo'lsa 0)
-Ball       = og'irlik × 100 × min(bajarilish, yuqori chegara 1.2)
-Bonus      = jami < 70 ? 0 : maosh × 0.5 × min(jami / 100, 1.2)
-Baho       = 110+ A'lo · 95+ Yaxshi · 85+ Qoniqarli · 70+ Past · aks holda Qoniqarsiz
-```
-
-Ikki muhim qoida qo'shildi:
-
-- **Ma'lumot yo'q ≠ nol.** Maxraj bo'sh bo'lsa metrika `null` qaytaradi va "kiritilmagan" deb
-  ko'rsatiladi — xodim ma'lumot yo'qligi uchun jazolanmaydi, bo'lim boshlig'i izoh bilan qiymat
-  kiritadi.
-- **Tugamagan oy adolatli sanaladi.** Reyestr intizomi butun oyga emas, o'tgan ish kunlariga
-  bo'linadi.
-
-Qo'lda tuzatish har doim avtomatik qiymatdan ustun turadi, lekin izohsiz qabul qilinmaydi va
-`/izlar` da qoladi. Tasdiqlangan davr muzlatiladi.
-
-## Arxitektura
-
-```
-src/domain/     sof biznes-logika (kpi, sla, capacity, checklist, metrics) — freymvorksiz, 91 test
-src/lib/        db, session (Edge), auth, format, period
-src/server/     ma'lumotlar qatlami (registry, kpi-core, audits, capacity)
-src/app/        Next.js App Router sahifalari va server action'lari
-prisma/         schema va seed
-scripts/        manba eksporti (python), lokal DB, namunaviy ma'lumot, qayta hisoblash
-data/           Excel'dan chiqarilgan JSON (seed shu fayllardan o'qiydi)
-```
-
-`src/server/kpi.ts` — `server-only` fasad; mantiq `kpi-core.ts` da, shuning uchun skriptlar ham
-xuddi shu kodni ishlatadi (ikki xil hisob bo'lishi mumkin emas).
+- Ball = Σ og‘irlik(Ha) / Σ og‘irlik(Ha + Yo‘q) × 100; «Tegishli emas» hisobga olinmaydi; hammasi
+  «Tegishli emas» bo‘lsa — «ma’lumot yo‘q».
+- 5 ko‘rsatkich: umumiy ball (me’yor = bo‘lim me’yori), jiddiy holatlar (0), topshiriqlar muddatida
+  bajarilishi (80%, taxminiy), muddati o‘tgan ochiq topshiriqlar (0), tekshiruvlar soni (faqat ma’lumot).
+- Svetofor: foizda me’yorda — yashil, 10 punktgacha past — sariq, undan past — qizil; sonlida 0/1/2+.
+  Bo‘lim rangi — 1–4 ning eng yomoni; jiddiy holat bo‘lsa — qizil. Ma’lumotsiz — kulrang.
+- Xulosa (3 qator): Yomonlashdi / Yaxshilandi / Birinchi navbatda; davrda 5 tadan kam tekshiruv bo‘lsa —
+  «Namuna kichik…», tekshiruv bo‘lmasa — «Bu davrda tekshiruv yo‘q».
+- Sana/vaqt — Toshkent (UTC+5). Davrlar: Bugun, 7 kun, 30 kun (chegaralar kiritilgan).
 
 ## Testlar
 
 ```bash
-pnpm test        # 91 test: KPI, SLA, quvvat, checklist, metrikalar
+pnpm test        # sof modullar: hisob, ruxsat, tekshirish, CSV, seed tanlash
 pnpm typecheck
-pnpm lint
+pnpm test:db     # server testlari haqiqiy PostgreSQL'da (alohida «otk_test» bazasi; pnpm db:local ishlab turishi kerak)
 ```
 
-KPI testlari Excel'ning haqiqiy raqamlari bilan taqqoslanadi (Ulug'bek 83.22 ball → 2 496 597.74
-so'm bonus va h.k.), shuning uchun formula tasodifan o'zgarib ketmaydi.
+`pnpm test:db` `.env` dagi bazaga tegmaydi: lokal klasterda `otk_test` bazasini yaratib, migratsiyani
+qo‘llaydi va `src/server/qc.integration.test.ts` ni ishga tushiradi (ruxsatlar, 400/403, `by` ni server
+qo‘yishi, tekshiruv + topshiriqlarning bitta tranzaksiyada saqlanishi).
 
-## Ma'lumot manbalarini qayta chiqarish
+## Ochiq qarorlar (kelishilgan)
 
-Manba Excel fayllar yangilansa:
+- Me’yorlar (ball 90%, muddatida bajarilish 80%) — taxminiy, rahbar tasdiqlaydi.
+- Topshiriq mas’uli — erkin matn.
+- Tekshiruv faqat bugungi sana bilan kiritiladi (kechikib kiritish yo‘q; faqat rahbar tuzatganda sanani
+  o‘zgartira oladi).
 
-```bash
-python scripts/extract_sources.py "C:/Users/user/Desktop/OTK KPI tizimi"
-pnpm db:seed
-```
+## Eslatma
 
-## Telegram baseline'ni yangilash
-
-Telegram o'lchovi **versiyalangan**: har bir yangi eksport alohida versiya bo'lib yuklanadi,
-eskisi o'chmaydi — `/baseline` sahifasining "Yangilanish tarixi" bo'limida sanasi va kim
-yuklagani bilan qoladi. Bu to'g'ridan-to'g'ri Telegram → CRM integratsiyasi paydo bo'lguncha
-ishlatiladigan qo'lda tartib.
-
-```bash
-# 1. Telegram eksportini yangilab, Excel tahlilini qayta shakllantiring
-# 2. Normallashtirilgan JSON chiqaring
-python scripts/extract_sources.py "C:/Users/user/Desktop/OTK KPI tizimi"
-
-# 3. Yangi versiya sifatida yuklang (kim yuklagani tarixda qoladi)
-pnpm import:baseline --user jaloldin --note "sentabr eksporti"
-
-# Tarixni ko'rish
-pnpm import:baseline --list
-```
-
-Import har safar `ActivityLog` ga ham yozadi (`/izlar` sahifasi), oldingi versiyaga nisbatan
-o'zgarish (`+`/`−`) avtomatik hisoblanadi.
-
-Davr oxirini qo'lda belgilash kerak bo'lsa:
-
-```bash
-BASELINE_PERIOD_TO=2026-09-30 python scripts/extract_sources.py
-```
-
-## Deploy (Vercel + Neon)
-
-1. Neon'da yangi database yaratib, `DATABASE_URL` va `DIRECT_URL` ni Vercel env'ga qo'shing.
-2. `AUTH_SECRET` — kamida 32 belgi tasodifiy qiymat.
-3. Birinchi deploy'dan keyin: `pnpm db:migrate deploy` va `pnpm db:seed`.
-4. Barcha xodimlar parolini almashtirishini talab qiling.
+Loyihada git remote yo‘q — ishni GitLab’ga push qiling.

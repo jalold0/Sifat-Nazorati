@@ -1,0 +1,854 @@
+[
+  {
+    "slug": "qc",
+    "name": "Call center",
+    "position": 1,
+    "checkpoints": [
+      {
+        "id": "cp1",
+        "text": "Smena almashuvida ochiq murojaatlar nomma-nom o'tkazilgan",
+        "group": "Smena va baza ketma-ketligi",
+        "weight": 1,
+        "critical": false,
+        "active": true
+      },
+      {
+        "id": "cp2",
+        "text": "Sifatli yopilgan va yopilmagan calllar sabablari",
+        "group": "Call sifati va audio",
+        "weight": 1,
+        "critical": false,
+        "active": true
+      },
+      {
+        "id": "cp3",
+        "text": "Past baho qo'ygan mijozga 24 soatda qayta aloqa",
+        "group": "Past baho, qarz, IVR",
+        "weight": 1,
+        "critical": false,
+        "active": true
+      },
+      {
+        "id": "cp4",
+        "text": "Murojaat turlari, Pareto va ildiz sabab",
+        "group": "Analitika va hisobot",
+        "weight": 1,
+        "critical": false,
+        "active": true
+      },
+      {
+        "id": "cp5",
+        "text": "Baza yozuvi 7 qadam bo'yicha yuritilgan",
+        "group": "Smena va baza ketma-ketligi",
+        "weight": 1,
+        "critical": false,
+        "active": true
+      },
+      {
+        "id": "cp6",
+        "text": "Audio 8 mezon bo'yicha baholangan, jiddiy holatlar ajratilgan",
+        "group": "Call sifati va audio",
+        "weight": 1,
+        "critical": false,
+        "active": true
+      },
+      {
+        "id": "cp7",
+        "text": "Kargo qarzdorlariga aloqa muddati va natijasi",
+        "group": "Past baho, qarz, IVR",
+        "weight": 1,
+        "critical": false,
+        "active": true
+      },
+      {
+        "id": "cp8",
+        "text": "Rahbarga bir sahifali hisobot va takliflar",
+        "group": "Analitika va hisobot",
+        "weight": 1,
+        "critical": false,
+        "active": true
+      }
+    ]
+  },
+  {
+    "slug": "kuryerka",
+    "name": "Kuryerka",
+    "position": 2,
+    "checkpoints": [
+      {
+        "id": "cp1",
+        "text": "Marshrut varaqasi bo'yicha jo'natmalar skan qilib qabul qilingan",
+        "group": "Jarayon auditi",
+        "weight": 1,
+        "critical": false,
+        "active": true
+      },
+      {
+        "id": "cp2",
+        "text": "Birinchi urinishda yetkazish (sanoatda 90% va undan yuqori yaxshi hisoblanadi)",
+        "group": "KPI va muddatlar",
+        "weight": 1,
+        "critical": false,
+        "active": true
+      },
+      {
+        "id": "cp3",
+        "text": "Kechikish va kuryer muomalasi bo'yicha shikoyatlar kuryer va zonalar kesimida",
+        "group": "Murojaat / shikoyat bo'yicha",
+        "weight": 1,
+        "critical": false,
+        "active": true
+      },
+      {
+        "id": "cp4",
+        "text": "Marshrut varaqasi va skan hodisalari soni mos",
+        "group": "Hujjat va hisobotlar",
+        "weight": 1,
+        "critical": false,
+        "active": true
+      },
+      {
+        "id": "cp5",
+        "text": "Mijozga yetkazishdan oldin qo'ng'iroq / SMS qilingan",
+        "group": "Jarayon auditi",
+        "weight": 1,
+        "critical": false,
+        "active": true
+      },
+      {
+        "id": "cp6",
+        "text": "Muddatida yetkazish (OTD, yetakchilarda 95%+)",
+        "group": "KPI va muddatlar",
+        "weight": 1,
+        "critical": false,
+        "active": true
+      },
+      {
+        "id": "cp7",
+        "text": "«Mijoz rad etdi» deb qaytarilganlar bo'yicha qayta qo'ng'iroq bilan tasodifiy tekshiruv",
+        "group": "Murojaat / shikoyat bo'yicha",
+        "weight": 1,
+        "critical": false,
+        "active": true
+      },
+      {
+        "id": "cp8",
+        "text": "COD: buyurtma, kuryer holati va kassa hisoboti kunlik uch tomonlama solishtiriladi",
+        "group": "Hujjat va hisobotlar",
+        "weight": 1,
+        "critical": false,
+        "active": true
+      }
+    ]
+  },
+  {
+    "slug": "taftish",
+    "name": "Taftish bo'limi",
+    "position": 3,
+    "checkpoints": [
+      {
+        "id": "cp1",
+        "text": "Call centerdan o'tgan murojaat to'liq ma'lumot bilan qabul qilingan (call tarixi, dalil)",
+        "group": "Jarayon auditi",
+        "weight": 1,
+        "critical": false,
+        "active": true
+      },
+      {
+        "id": "cp2",
+        "text": "Murojaatni hal etish muddati (kun) va muddatdan o'tganlar",
+        "group": "KPI va muddatlar",
+        "weight": 1,
+        "critical": false,
+        "active": true
+      },
+      {
+        "id": "cp3",
+        "text": "Call center nima uchun hal qila olmaganini aniqlash (bilim, tizim, ichki bo'lim)",
+        "group": "Murojaat / shikoyat bo'yicha",
+        "weight": 1,
+        "critical": false,
+        "active": true
+      },
+      {
+        "id": "cp4",
+        "text": "Murojaat yozuvi, dalolatnoma va mijozga javob bir-biriga mos",
+        "group": "Hujjat va hisobotlar",
+        "weight": 1,
+        "critical": false,
+        "active": true
+      },
+      {
+        "id": "cp5",
+        "text": "Murojaat 1 ish kuni ichida ko'rib chiqishga olingan",
+        "group": "Jarayon auditi",
+        "weight": 1,
+        "critical": false,
+        "active": true
+      },
+      {
+        "id": "cp6",
+        "text": "To'liq hal etilganlik ulushi",
+        "group": "KPI va muddatlar",
+        "weight": 1,
+        "critical": false,
+        "active": true
+      },
+      {
+        "id": "cp7",
+        "text": "Aybdor bo'limlar bo'yicha taqsimot: qaysi bo'lim ko'p murojaat keltirib chiqaradi",
+        "group": "Murojaat / shikoyat bo'yicha",
+        "weight": 1,
+        "critical": false,
+        "active": true
+      },
+      {
+        "id": "cp8",
+        "text": "Kompensatsiya/qaytarish hujjatlari to'liq",
+        "group": "Hujjat va hisobotlar",
+        "weight": 1,
+        "critical": false,
+        "active": true
+      }
+    ]
+  },
+  {
+    "slug": "toshkent_ombor",
+    "name": "Toshkent ombori",
+    "position": 4,
+    "checkpoints": [
+      {
+        "id": "cp1",
+        "text": "Qabulda manifest / nakladnoy bilan nomma-nom solishtirilgan",
+        "group": "Jarayon auditi",
+        "weight": 1,
+        "critical": false,
+        "active": true
+      },
+      {
+        "id": "cp2",
+        "text": "Dock-to-stock: qabuldan joylashtirishgacha 24 soatdan oshmasligi",
+        "group": "KPI va muddatlar",
+        "weight": 1,
+        "critical": false,
+        "active": true
+      },
+      {
+        "id": "cp3",
+        "text": "Yo'qolgan va shikastlangan jo'natma shikoyatlari bo'yicha omborning oxirgi skan nuqtasi",
+        "group": "Murojaat / shikoyat bo'yicha",
+        "weight": 1,
+        "critical": false,
+        "active": true
+      },
+      {
+        "id": "cp4",
+        "text": "Qabul dalolatnomasi va manifest bir xil",
+        "group": "Hujjat va hisobotlar",
+        "weight": 1,
+        "critical": false,
+        "active": true
+      },
+      {
+        "id": "cp5",
+        "text": "Har jo'natma skan qilinib tizimga kiritilgan",
+        "group": "Jarayon auditi",
+        "weight": 1,
+        "critical": false,
+        "active": true
+      },
+      {
+        "id": "cp6",
+        "text": "Inventar aniqligi 97% dan past bo'lmasligi (zo'r natija 99%)",
+        "group": "KPI va muddatlar",
+        "weight": 1,
+        "critical": false,
+        "active": true
+      },
+      {
+        "id": "cp7",
+        "text": "Noto'g'ri yo'naltirilgan jo'natmalar manbasi: qaysi saralash liniyasi / smena",
+        "group": "Murojaat / shikoyat bo'yicha",
+        "weight": 1,
+        "critical": false,
+        "active": true
+      },
+      {
+        "id": "cp8",
+        "text": "Kamomad/shikast aktlari 24 soat ichida rasmiylashtirilgan",
+        "group": "Hujjat va hisobotlar",
+        "weight": 1,
+        "critical": false,
+        "active": true
+      }
+    ]
+  },
+  {
+    "slug": "xitoy_avto",
+    "name": "Xitoy avto sklad",
+    "position": 5,
+    "checkpoints": [
+      {
+        "id": "cp1",
+        "text": "Mashina plombasi butun va raqami hujjatga mos",
+        "group": "Jarayon auditi",
+        "weight": 1,
+        "critical": false,
+        "active": true
+      },
+      {
+        "id": "cp2",
+        "text": "Reys kelganidan bojxona ruxsatigacha o'rtacha kun",
+        "group": "KPI va muddatlar",
+        "weight": 1,
+        "critical": false,
+        "active": true
+      },
+      {
+        "id": "cp3",
+        "text": "«Xitoy jo'natmam qayerda» turidagi shikoyatlar: jo'natma qaysi reysda va qaysi bosqichda",
+        "group": "Murojaat / shikoyat bo'yicha",
+        "weight": 1,
+        "critical": false,
+        "active": true
+      },
+      {
+        "id": "cp4",
+        "text": "Pochta va kuryerlik yuklari bojxona nazoratiga tortiladi, pochta operatori taqdim etadi (2025-noyabr tartibi)",
+        "group": "Hujjat va hisobotlar",
+        "weight": 1,
+        "critical": false,
+        "active": true
+      },
+      {
+        "id": "cp5",
+        "text": "CMR / yuk xati va manifest bilan solishtirilgan",
+        "group": "Jarayon auditi",
+        "weight": 1,
+        "critical": false,
+        "active": true
+      },
+      {
+        "id": "cp6",
+        "text": "Ruxsatdan keyin saralashga uzatish muddati",
+        "group": "KPI va muddatlar",
+        "weight": 1,
+        "critical": false,
+        "active": true
+      },
+      {
+        "id": "cp7",
+        "text": "Shikast va yetishmaslik shikoyatlari reys va plomba bilan bog'lanadi",
+        "group": "Murojaat / shikoyat bo'yicha",
+        "weight": 1,
+        "critical": false,
+        "active": true
+      },
+      {
+        "id": "cp8",
+        "text": "Yuk deklaratsiyasi riskni boshqarish tizimi bo'yicha yashil/sariq/qizil koridorga ajratiladi",
+        "group": "Hujjat va hisobotlar",
+        "weight": 1,
+        "critical": false,
+        "active": true
+      }
+    ]
+  },
+  {
+    "slug": "avia",
+    "name": "Avia sklad",
+    "position": 6,
+    "checkpoints": [
+      {
+        "id": "cp1",
+        "text": "AWB va manifest bilan jo'natmalar soni solishtirilgan",
+        "group": "Jarayon auditi",
+        "weight": 1,
+        "critical": false,
+        "active": true
+      },
+      {
+        "id": "cp2",
+        "text": "Reysdan ishlov boshlanishigacha vaqt",
+        "group": "KPI va muddatlar",
+        "weight": 1,
+        "critical": false,
+        "active": true
+      },
+      {
+        "id": "cp3",
+        "text": "Aviajo'natma shikoyatlari: kechikish bosqichi (reys, bojxona, ombor)",
+        "group": "Murojaat / shikoyat bo'yicha",
+        "weight": 1,
+        "critical": false,
+        "active": true
+      },
+      {
+        "id": "cp4",
+        "text": "AWB, manifest va dalolatnoma bir xil",
+        "group": "Hujjat va hisobotlar",
+        "weight": 1,
+        "critical": false,
+        "active": true
+      },
+      {
+        "id": "cp5",
+        "text": "Reys kelgan vaqti qayd etilgan va ishlov boshlangan vaqt belgilangan",
+        "group": "Jarayon auditi",
+        "weight": 1,
+        "critical": false,
+        "active": true
+      },
+      {
+        "id": "cp6",
+        "text": "Manifestga moslik va og'irlik farqi",
+        "group": "KPI va muddatlar",
+        "weight": 1,
+        "critical": false,
+        "active": true
+      },
+      {
+        "id": "cp7",
+        "text": "Og'irlik bo'yicha tarif nizolari: tortish dalili",
+        "group": "Murojaat / shikoyat bo'yicha",
+        "weight": 1,
+        "critical": false,
+        "active": true
+      },
+      {
+        "id": "cp8",
+        "text": "Bojxona koridori va ruxsat sanasi tizimda mos",
+        "group": "Hujjat va hisobotlar",
+        "weight": 1,
+        "critical": false,
+        "active": true
+      }
+    ]
+  },
+  {
+    "slug": "viloyat",
+    "name": "Viloyat taqsimot markazlari",
+    "position": 7,
+    "checkpoints": [
+      {
+        "id": "cp1",
+        "text": "Toshkentdan kelgan reys manifest bilan solishtirilgan",
+        "group": "Jarayon auditi",
+        "weight": 1,
+        "critical": false,
+        "active": true
+      },
+      {
+        "id": "cp2",
+        "text": "Muddatida filiallarga jo'natish (95%+)",
+        "group": "KPI va muddatlar",
+        "weight": 1,
+        "critical": false,
+        "active": true
+      },
+      {
+        "id": "cp3",
+        "text": "Viloyat bo'yicha kechikish shikoyatlari qaysi markaz orqali o'tganini aniqlash",
+        "group": "Murojaat / shikoyat bo'yicha",
+        "weight": 1,
+        "critical": false,
+        "active": true
+      },
+      {
+        "id": "cp4",
+        "text": "Reys manifesti va qabul qilingan jo'natma soni",
+        "group": "Hujjat va hisobotlar",
+        "weight": 1,
+        "critical": false,
+        "active": true
+      },
+      {
+        "id": "cp5",
+        "text": "Har jo'natma skan qilingan",
+        "group": "Jarayon auditi",
+        "weight": 1,
+        "critical": false,
+        "active": true
+      },
+      {
+        "id": "cp6",
+        "text": "Noto'g'ri yo'naltirish ulushi",
+        "group": "KPI va muddatlar",
+        "weight": 1,
+        "critical": false,
+        "active": true
+      },
+      {
+        "id": "cp7",
+        "text": "Noto'g'ri yo'naltirishning ildiz sababi: manzil kodi, saralash xatosi, hujjat",
+        "group": "Murojaat / shikoyat bo'yicha",
+        "weight": 1,
+        "critical": false,
+        "active": true
+      },
+      {
+        "id": "cp8",
+        "text": "Qabul-topshirish dalolatnomalari imzosi",
+        "group": "Hujjat va hisobotlar",
+        "weight": 1,
+        "critical": false,
+        "active": true
+      }
+    ]
+  },
+  {
+    "slug": "filiallar",
+    "name": "Filiallar",
+    "position": 8,
+    "checkpoints": [
+      {
+        "id": "cp1",
+        "text": "Ish vaqti va tarif narxlari ko'rinadigan joyda",
+        "group": "Jarayon auditi",
+        "weight": 1,
+        "critical": false,
+        "active": true
+      },
+      {
+        "id": "cp2",
+        "text": "Tarif/tortish xatosi ulushi",
+        "group": "KPI va muddatlar",
+        "weight": 1,
+        "critical": false,
+        "active": true
+      },
+      {
+        "id": "cp3",
+        "text": "Filial bo'yicha shikoyatlar turi: navbat, muomala, tarif, yo'qolgan jo'natma",
+        "group": "Murojaat / shikoyat bo'yicha",
+        "weight": 1,
+        "critical": false,
+        "active": true
+      },
+      {
+        "id": "cp4",
+        "text": "Qabul kvitansiyasi va tizimdagi jo'natma mos",
+        "group": "Hujjat va hisobotlar",
+        "weight": 1,
+        "critical": false,
+        "active": true
+      },
+      {
+        "id": "cp5",
+        "text": "Jo'natma qabulida tortish va o'lchash to'g'ri",
+        "group": "Jarayon auditi",
+        "weight": 1,
+        "critical": false,
+        "active": true
+      },
+      {
+        "id": "cp6",
+        "text": "Navbat kutish vaqti (daqiqa)",
+        "group": "KPI va muddatlar",
+        "weight": 1,
+        "critical": false,
+        "active": true
+      },
+      {
+        "id": "cp7",
+        "text": "Yashirin xaridor natijalari shikoyat bilan solishtiriladi",
+        "group": "Murojaat / shikoyat bo'yicha",
+        "weight": 1,
+        "critical": false,
+        "active": true
+      },
+      {
+        "id": "cp8",
+        "text": "Kassa hisoboti va chek majmui mos",
+        "group": "Hujjat va hisobotlar",
+        "weight": 1,
+        "critical": false,
+        "active": true
+      }
+    ]
+  },
+  {
+    "slug": "sotuv",
+    "name": "Sotuv (shaxsiy menejerlar)",
+    "position": 9,
+    "checkpoints": [
+      {
+        "id": "cp1",
+        "text": "Mijoz kartasi CRM'da to'liq va dolzarb",
+        "group": "Jarayon auditi",
+        "weight": 1,
+        "critical": false,
+        "active": true
+      },
+      {
+        "id": "cp2",
+        "text": "Mijozni saqlab qolish (retention) va yo'qotish (churn)",
+        "group": "KPI va muddatlar",
+        "weight": 1,
+        "critical": false,
+        "active": true
+      },
+      {
+        "id": "cp3",
+        "text": "Menejer mijozi bo'yicha kelgan shikoyatlarga javobi va muddati",
+        "group": "Murojaat / shikoyat bo'yicha",
+        "weight": 1,
+        "critical": false,
+        "active": true
+      },
+      {
+        "id": "cp4",
+        "text": "Shartnoma/kelishuv va tarif bir xil",
+        "group": "Hujjat va hisobotlar",
+        "weight": 1,
+        "critical": false,
+        "active": true
+      },
+      {
+        "id": "cp5",
+        "text": "Tarif va shartlar mijoz bilan yozma kelishilgan",
+        "group": "Jarayon auditi",
+        "weight": 1,
+        "critical": false,
+        "active": true
+      },
+      {
+        "id": "cp6",
+        "text": "So'rovga javob vaqti: 24 soatdan oshsa mijoz qoniqishi pasayadi",
+        "group": "KPI va muddatlar",
+        "weight": 1,
+        "critical": false,
+        "active": true
+      },
+      {
+        "id": "cp7",
+        "text": "Yo'qotilgan mijozlarning ketish sababi",
+        "group": "Murojaat / shikoyat bo'yicha",
+        "weight": 1,
+        "critical": false,
+        "active": true
+      },
+      {
+        "id": "cp8",
+        "text": "CRM yozuvi va haqiqiy aloqa mos",
+        "group": "Hujjat va hisobotlar",
+        "weight": 1,
+        "critical": false,
+        "active": true
+      }
+    ]
+  },
+  {
+    "slug": "it",
+    "name": "IT",
+    "position": 10,
+    "checkpoints": [
+      {
+        "id": "cp1",
+        "text": "Muhim tizimlar (CRM, IVR, treking) uchun zaxira nusxa (backup) olingan va tiklash sinalgan",
+        "group": "Jarayon auditi",
+        "weight": 1,
+        "critical": false,
+        "active": true
+      },
+      {
+        "id": "cp2",
+        "text": "SLA: jiddiylik bo'yicha hal etish muddati",
+        "group": "KPI va muddatlar",
+        "weight": 1,
+        "critical": false,
+        "active": true
+      },
+      {
+        "id": "cp3",
+        "text": "Call center va filiallardan kelgan «tizim ishlamayapti» murojaatlari",
+        "group": "Murojaat / shikoyat bo'yicha",
+        "weight": 1,
+        "critical": false,
+        "active": true
+      },
+      {
+        "id": "cp4",
+        "text": "Nosozlik jurnali tiketlar bilan mos",
+        "group": "Hujjat va hisobotlar",
+        "weight": 1,
+        "critical": false,
+        "active": true
+      },
+      {
+        "id": "cp5",
+        "text": "Ishdan ketgan xodimlarning kirish huquqlari o'chirilgan",
+        "group": "Jarayon auditi",
+        "weight": 1,
+        "critical": false,
+        "active": true
+      },
+      {
+        "id": "cp6",
+        "text": "Birinchi javob vaqti",
+        "group": "KPI va muddatlar",
+        "weight": 1,
+        "critical": false,
+        "active": true
+      },
+      {
+        "id": "cp7",
+        "text": "IVR yo'naltirish xatolari va noto'g'ri menyu sozlamalari",
+        "group": "Murojaat / shikoyat bo'yicha",
+        "weight": 1,
+        "critical": false,
+        "active": true
+      },
+      {
+        "id": "cp8",
+        "text": "Backup hisoboti va tiklash sinovi",
+        "group": "Hujjat va hisobotlar",
+        "weight": 1,
+        "critical": false,
+        "active": true
+      }
+    ]
+  },
+  {
+    "slug": "moliya",
+    "name": "Moliya",
+    "position": 11,
+    "checkpoints": [
+      {
+        "id": "cp1",
+        "text": "Kassa kun oxirida tizim bo'yicha yopilgan",
+        "group": "Jarayon auditi",
+        "weight": 1,
+        "critical": false,
+        "active": true
+      },
+      {
+        "id": "cp2",
+        "text": "COD topshirish muddati va to'liqligi",
+        "group": "KPI va muddatlar",
+        "weight": 1,
+        "critical": false,
+        "active": true
+      },
+      {
+        "id": "cp3",
+        "text": "Pul bilan bog'liq shikoyatlar (COD, kargo haqi, qaytarilmagan summa)",
+        "group": "Murojaat / shikoyat bo'yicha",
+        "weight": 1,
+        "critical": false,
+        "active": true
+      },
+      {
+        "id": "cp4",
+        "text": "Buyurtma, kuryer holati va kassa hisoboti kunlik solishtirilgan (uch tomonlama)",
+        "group": "Hujjat va hisobotlar",
+        "weight": 1,
+        "critical": false,
+        "active": true
+      },
+      {
+        "id": "cp5",
+        "text": "COD hisob-kitobi kunlik uch tomonlama (buyurtma, kuryer holati, kassa) solishtirilgan",
+        "group": "Jarayon auditi",
+        "weight": 1,
+        "critical": false,
+        "active": true
+      },
+      {
+        "id": "cp6",
+        "text": "Kassa mosligi kunlik nol farq",
+        "group": "KPI va muddatlar",
+        "weight": 1,
+        "critical": false,
+        "active": true
+      },
+      {
+        "id": "cp7",
+        "text": "Mijoz to'lov nizolarini hisob-faktura va kvitansiya bilan solishtirish",
+        "group": "Murojaat / shikoyat bo'yicha",
+        "weight": 1,
+        "critical": false,
+        "active": true
+      },
+      {
+        "id": "cp8",
+        "text": "Hisob-faktura va tarif mos",
+        "group": "Hujjat va hisobotlar",
+        "weight": 1,
+        "critical": false,
+        "active": true
+      }
+    ]
+  },
+  {
+    "slug": "marketing",
+    "name": "Marketing",
+    "position": 12,
+    "checkpoints": [
+      {
+        "id": "cp1",
+        "text": "E'lon qilingan narx va shartlar tizimdagi tarifga mos",
+        "group": "Jarayon auditi",
+        "weight": 1,
+        "critical": false,
+        "active": true
+      },
+      {
+        "id": "cp2",
+        "text": "Ijtimoiy tarmoqda 24 soatda javob ulushi",
+        "group": "KPI va muddatlar",
+        "weight": 1,
+        "critical": false,
+        "active": true
+      },
+      {
+        "id": "cp3",
+        "text": "«Reklamada boshqacha yozilgan edi» turidagi shikoyatlar",
+        "group": "Murojaat / shikoyat bo'yicha",
+        "weight": 1,
+        "critical": false,
+        "active": true
+      },
+      {
+        "id": "cp4",
+        "text": "Aksiya shartlari va tizim sozlamasi bir xil",
+        "group": "Hujjat va hisobotlar",
+        "weight": 1,
+        "critical": false,
+        "active": true
+      },
+      {
+        "id": "cp5",
+        "text": "Aksiya shartlari ommaviy va tushunarli yozilgan",
+        "group": "Jarayon auditi",
+        "weight": 1,
+        "critical": false,
+        "active": true
+      },
+      {
+        "id": "cp6",
+        "text": "E'lon va tizim narxi mosligi",
+        "group": "KPI va muddatlar",
+        "weight": 1,
+        "critical": false,
+        "active": true
+      },
+      {
+        "id": "cp7",
+        "text": "Aksiya boshlanganda call center va filialga kelgan savollar",
+        "group": "Murojaat / shikoyat bo'yicha",
+        "weight": 1,
+        "critical": false,
+        "active": true
+      },
+      {
+        "id": "cp8",
+        "text": "E'lon maketi tasdiqlangan",
+        "group": "Hujjat va hisobotlar",
+        "weight": 1,
+        "critical": false,
+        "active": true
+      }
+    ]
+  }
+]

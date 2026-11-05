@@ -52,6 +52,7 @@ suite('o‘quv moduli va hisobot (PostgreSQL)', () => {
 
   beforeAll(async () => {
     db = new PrismaClient({ datasources: { db: { url } } });
+    await db.qcLog.deleteMany();
     await db.qcReport.deleteMany();
     await db.qcTrainingAttempt.deleteMany();
     await db.qcTrainingTask.deleteMany();

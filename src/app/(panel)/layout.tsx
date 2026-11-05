@@ -21,6 +21,9 @@ export default async function PanelLayout({ children }: { children: React.ReactN
               <p className="text-meta font-semibold">{actor.name}</p>
               <p className="text-micro text-muted">{QC_ROLE_LABEL[actor.role]}</p>
             </div>
+            <Link href="/profil" className="inline-flex min-h-[44px] items-center text-micro text-muted hover:text-ink">
+              Parol
+            </Link>
             <form action={logoutAction}>
               <button type="submit" className="btn-ghost min-h-[44px]">
                 Chiqish

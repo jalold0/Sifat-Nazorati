@@ -25,7 +25,7 @@ export async function verifyPassword(plain: string, hash: string): Promise<boole
   return bcrypt.compare(plain, hash);
 }
 
-export type SessionActor = Actor & { name: string };
+export type SessionActor = Actor & { name: string; mustChange: boolean };
 
 export async function getSession(): Promise<SessionPayload | null> {
   const jar = await cookies();
@@ -81,7 +81,7 @@ export async function authenticate(login: string, password: string): Promise<Log
 
   return {
     ok: true,
-    session: { sub: user.id, key: user.key, name: user.shortName, role: user.role as Role },
+    session: { sub: user.id, key: user.key, name: user.shortName, role: user.role as Role, mc: user.mustChangePassword },
   };
 }
 
@@ -94,15 +94,20 @@ export async function getActor(): Promise<SessionActor | null> {
   if (!session) return null;
   const user = await db.user.findUnique({
     where: { id: session.sub },
-    select: { id: true, role: true, deptId: true, active: true, shortName: true },
+    select: { id: true, role: true, deptId: true, active: true, shortName: true, mustChangePassword: true },
   });
   if (!user || !user.active) return null;
-  return { id: user.id, role: user.role as Role, deptId: user.deptId, name: user.shortName };
+  return { id: user.id, role: user.role as Role, deptId: user.deptId, name: user.shortName, mustChange: user.mustChangePassword };
 }
 
-export async function requireActor(): Promise<SessionActor> {
+/**
+ * Joriy foydalanuvchi. Parolni almashtirishi majburiy bo'lsa faqat /profil sahifasi (allowMustChange)
+ * ochiladi; boshqa hamma sahifa va amal /profil ga yo'naltiradi.
+ */
+export async function requireActor(opts: { allowMustChange?: boolean } = {}): Promise<SessionActor> {
   const actor = await getActor();
   if (!actor) redirect('/login');
+  if (actor.mustChange && !opts.allowMustChange) redirect('/profil');
   return actor;
 }
 

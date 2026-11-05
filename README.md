@@ -20,7 +20,8 @@ ofis tarmog‘ida internetsiz ishlaydi (brauzer faqat serverning o‘z manziliga
 | O‘quv dasturi, Yakuniy test | `/oquv`, `/oquv/test/[bo‘lim]` | ha | ha | — |
 | O‘quv natijalari (+ CSV) | `/natijalar` | ha | — | — |
 | Haftalik hisobot (A4 chop etish) | `/hisobot` | ha (izoh yozadi) | ha (o‘qiydi) | — |
-| Sozlamalar, Foydalanuvchilar | `/sozlamalar` | ha | — | — |
+| Sozlamalar, Foydalanuvchilar, O‘zgarishlar jurnali | `/sozlamalar`, `/sozlamalar/jurnal` | ha | — | — |
+| Parolni almashtirish | `/profil` | ha | ha | ha |
 | Bo‘limim | `/bolimim` | — | — | ha (boshlang‘ich) |
 
 Rollar bazada: `HEAD` = Rahbar, `INSPECTOR` = Tekshiruvchi, `VIEWER` = Ko‘ruvchi (unga `deptId` — bo‘lim —
@@ -84,6 +85,23 @@ Ball, foiz va xulosa **saqlanmaydi**, har safar hisoblanadi.
   `prisma/training/oquv_<bo‘lim>_keys.json` fayllaridan `pnpm db:seed` yuklaydi. Yangi keys-fayl qo‘yilsa (masalan
   `oquv_kuryerka_keys.json`: `{pass, questions:[{id,case,options[4],answer,why}]}`), faqat shu bo‘limda dastur hali
   yuklanmagan bo‘lsa olinadi — mavjud bo‘limga seed tegmaydi.
+
+## Ishonchlilik va xavfsizlik
+
+- **O‘zgarishlar jurnali** (`/sozlamalar/jurnal`, faqat rahbar): bo‘lim/nuqta/me‘yor o‘zgarishi (oldin → keyin),
+  tekshiruvni tuzatish va **o‘chirish** (o‘chirilgan tekshiruvning to‘liq nusxasi jurnalda qoladi), topshiriq tahriri,
+  foydalanuvchi o‘zgarishi, hisobot izohi. Jurnal asosiy amal bilan **bitta tranzaksiyada** yoziladi: izsiz o‘zgarish
+  bo‘lmaydi. Yozuvlar o‘zgartirilmaydi va o‘chirilmaydi.
+- **Og‘irlik muzlatiladi.** Tekshiruv kiritilganda nuqta og‘irliklari tekshiruvning o‘ziga nusxalanadi (`QcAudit.weights`):
+  keyin rahbar og‘irlikni o‘zgartirsa, **o‘tgan tekshiruvlar bali o‘zgarmaydi**. (Me‘yor esa joriy qiymat bo‘yicha
+  qo‘llanadi; uning o‘zgarishi jurnalda ko‘rinadi.)
+- **Parol:** foydalanuvchi o‘zi almashtiradi (`/profil`: joriy parol, kamida 8 belgi, harf+raqam, boshlang‘ich/oddiy
+  parollar rad etiladi). Yangi hisob yoki rahbar parolni qayta o‘rnatganda keyingi kirishda almashtirish **majburiy**
+  (server shuni har amalda tekshiradi). Ishlab chiqarishga o‘tishda hammaga majburlash: `pnpm users:force-password-change`.
+- **Kirishni cheklash:** bir login uchun 5 ta, bir manzil uchun 30 ta noto‘g‘ri urinishdan keyin 15 daqiqa qulf
+  (jarayon xotirasida; server qayta ishga tushsa tozalanadi).
+- **Nuqtalar sifati:** `docs/nuqtalar-tavsiya.md` — rahbar uchun «jiddiy» va og‘irlik bo‘yicha tavsiya. Bazadagi
+  bo‘limlar matnini yangilash: `pnpm exec tsx scripts/update-checkpoint-texts.ts [--apply]`.
 
 ## Testlar
 

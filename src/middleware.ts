@@ -27,6 +27,11 @@ export async function middleware(request: NextRequest) {
     return NextResponse.redirect(url);
   }
 
+  // Parolni almashtirish majburiy: boshqa sahifalar o'rniga /profil (asl tekshiruv serverda ham bor)
+  if (session.mc && !pathname.startsWith('/profil') && !pathname.startsWith('/api/')) {
+    return NextResponse.redirect(new URL('/profil', request.url));
+  }
+
   // Rolga ruxsat etilmagan ekran: qo'lda manzil yozib ham ochib bo'lmaydi (asl tekshiruv serverda ham bor)
   if (!canOpenPath(session.role, pathname)) {
     return NextResponse.redirect(new URL('/ruxsat-yoq', request.url));

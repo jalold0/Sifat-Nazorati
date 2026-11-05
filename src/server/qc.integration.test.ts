@@ -9,6 +9,10 @@ import { afterAll, beforeAll, describe, expect, it } from 'vitest';
 
 import { todayTashkent } from '@/qc/calc';
 import type { Actor } from '@/qc/policy';
+import bcrypt from 'bcryptjs';
+
+import { changePassword } from './account';
+import { listLog } from './log';
 import { listUsers, saveUser } from './users';
 
 import {
@@ -65,6 +69,7 @@ suite('server qatlami (PostgreSQL)', () => {
 
   beforeAll(async () => {
     db = new PrismaClient({ datasources: { db: { url } } });
+    await db.qcLog.deleteMany();
     await db.qcReport.deleteMany();
     await db.qcTask.deleteMany();
     await db.qcAudit.deleteMany();
@@ -269,6 +274,72 @@ suite('server qatlami (PostgreSQL)', () => {
     const row = await db.user.findUniqueOrThrow({ where: { login: 'yangi.k' } });
     expect(row).toMatchObject({ role: 'VIEWER', deptId: d1 });
     expect(row.passwordHash).not.toContain('parol1234');
+  });
+
+  it('og‘irlik muzlatiladi: keyin nuqta og‘irligi o‘zgarsa ham eski tekshiruv bali o‘zgarmaydi', async () => {
+    const created = await createAudit(insp1, await body(d1, 'nyyyyy'), ctx);
+    if (!created.ok) throw new Error('create');
+    const before = await getAudit(head, created.data.id, ctx);
+    if (!before.ok) throw new Error('get');
+    expect(before.data.audit.scorePct).toBeCloseTo(83.33, 1); // 5 / 6
+
+    const dept = (await listDepartments(head, {}, ctx)).find((d) => d.id === d1)!;
+    const edited = dept.checkpoints.map((c) => (c.id === 'cp1' ? { ...c, weight: 3 } : c));
+    expect(await saveDepartment(head, { id: d1, name: dept.name, norm: dept.norm, estimate: dept.estimate, active: true, checkpoints: edited }, ctx)).toMatchObject({ ok: true });
+
+    const row = await db.qcAudit.findUniqueOrThrow({ where: { id: created.data.id } });
+    expect((row.weights as Record<string, number>).cp1).toBe(1); // kiritilgan paytdagi qiymat
+    const after = await getAudit(head, created.data.id, ctx);
+    if (!after.ok) throw new Error('get2');
+    expect(after.data.audit.scorePct).toBeCloseTo(83.33, 1); // 5 / (5 + 3) = 62.5 BO'LMAYDI
+
+    // yangi tekshiruv esa yangi og'irlik bilan hisoblanadi
+    const fresh = await createAudit(insp1, await body(d1, 'nyyyyy'), ctx);
+    if (!fresh.ok) throw new Error('create2');
+    const f = await getAudit(head, fresh.data.id, ctx);
+    if (!f.ok) throw new Error('get3');
+    expect(f.data.audit.scorePct).toBeCloseTo(62.5, 1);
+  });
+
+  it('o‘zgarishlar jurnali: bo‘lim sozlamasi va o‘chirilgan tekshiruv nusxasi izsiz yo‘qolmaydi; jurnalni faqat rahbar ko‘radi', async () => {
+    const log = await listLog(head, {}, ctx);
+    if (!log.ok) throw new Error('log');
+    const dept = log.data.rows.find((r) => r.action === 'dept.save' && r.summary.includes('og‘irlik 1 → 3'));
+    expect(dept).toBeTruthy();
+
+    const created = await createAudit(insp1, await body(d1, 'nnyyyy'), ctx);
+    if (!created.ok) throw new Error('create');
+    expect(await deleteAudit(head, created.data.id, ctx)).toMatchObject({ ok: true });
+    const del = await db.qcLog.findFirstOrThrow({ where: { action: 'audit.delete', entityId: created.data.id } });
+    expect(del.actorId).toBe(head.id);
+    expect((del.details as { answers: Record<string, string> }).answers.cp1).toBe('no');
+    expect((del.details as { tasks: unknown[] }).tasks).toHaveLength(2);
+
+    expect(await listLog(insp1, {}, ctx)).toMatchObject({ ok: false, status: 403 });
+    expect(await listLog(viewer, {}, ctx)).toMatchObject({ ok: false, status: 403 });
+  });
+
+  it('parol: rahbar o‘rnatgan/yangi hisobda almashtirish majburiy; noto‘g‘ri joriy parol va oddiy parol 400', async () => {
+    const made = await saveUser(head, { login: 'parol.sinov', fullName: 'Parol Sinov', role: 'INSPECTOR', active: true, password: 'Boshlangich1' }, ctx);
+    if (!made.ok) throw new Error(JSON.stringify(made));
+    const row = await db.user.findUniqueOrThrow({ where: { id: made.data.id } });
+    expect(row.mustChangePassword).toBe(true);
+
+    expect(await changePassword(row.id, { current: 'Xato-Parol9', next: 'Yangi-Parol7', confirm: 'Yangi-Parol7' }, ctx)).toMatchObject({ ok: false, status: 400 });
+    expect(await changePassword(row.id, { current: 'Boshlangich1', next: 'Otk2026!', confirm: 'Otk2026!' }, ctx)).toMatchObject({ ok: false, status: 400 });
+    expect(await changePassword(row.id, { current: 'Boshlangich1', next: 'Yangi-Parol7', confirm: 'Boshqa-Parol7' }, ctx)).toMatchObject({ ok: false, status: 400 });
+    expect(await changePassword(row.id, { current: 'Boshlangich1', next: 'Yangi-Parol7', confirm: 'Yangi-Parol7' }, ctx)).toMatchObject({ ok: true });
+
+    const after = await db.user.findUniqueOrThrow({ where: { id: row.id } });
+    expect(after.mustChangePassword).toBe(false);
+    expect(await bcrypt.compare('Yangi-Parol7', after.passwordHash)).toBe(true);
+
+    // rahbar parolni qayta o'rnatsa — yana majburiy almashtirish
+    expect(await saveUser(head, { id: row.id, fullName: 'Parol Sinov', role: 'INSPECTOR', active: true, password: 'Tiklangan-12' }, ctx)).toMatchObject({ ok: true });
+    expect((await db.user.findUniqueOrThrow({ where: { id: row.id } })).mustChangePassword).toBe(true);
+    const logged = await db.qcLog.findFirst({ where: { action: 'user.save', entityId: row.id, summary: { contains: 'parol qayta o‘rnatildi' } } });
+    expect(logged).toBeTruthy();
+    expect(JSON.stringify(logged)).not.toContain('Tiklangan-12'); // parol jurnalga tushmaydi
   });
 
   it('tarix sahifalanadi, yangisi birinchi', async () => {

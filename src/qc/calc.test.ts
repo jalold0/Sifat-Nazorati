@@ -333,3 +333,22 @@ describe('openAt — o‘tgan sanaga ochiq topshiriqlar', () => {
     expect(openAt(list, '2026-03-10').map((x) => x.id)).toEqual(['a', 'c']);
   });
 });
+
+describe('og‘irlikni muzlatish — keyin og‘irlik o‘zgarsa eski ball o‘zgarmaydi', () => {
+  it('tekshiruvning o‘z og‘irliklari joriy nuqta og‘irligidan ustun', () => {
+    // Kiritilganda og'irliklar 1,1,3 edi; keyin rahbar 3-nuqtani 1 ga tushirdi
+    const now = cps(3, [1, 1, 1]);
+    expect(scoreAnswers(answersOf('yyn'), now).pct).toBeCloseTo(66.67, 1); // muzlatilmagan: joriy og'irlik
+    expect(scoreAnswers(answersOf('yyn'), now, { cp1: 1, cp2: 1, cp3: 3 }).pct).toBe(40);
+  });
+
+  it('davr bali ham muzlatilgan og‘irlik bilan hisoblanadi; eski yozuv (weights yo‘q) joriy og‘irlikni oladi', () => {
+    const d = dept({ checkpoints: cps(3, [1, 1, 1]) });
+    const frozen = audit('a1', '2026-03-09', 'yyn', { weights: { cp1: 1, cp2: 1, cp3: 3 } });
+    const legacy = audit('a2', '2026-03-09', 'yyn');
+    const range = periodRange('7', TODAY);
+    expect(evaluateDept(d, [frozen], [], range, TODAY).scorePct).toBe(40);
+    expect(evaluateDept(d, [legacy], [], range, TODAY).scorePct).toBeCloseTo(66.67, 1);
+    expect(evaluateDept(d, [frozen, legacy], [], range, TODAY).scorePct).toBe(50); // (2+2) / ((2+3)+(2+1))
+  });
+});

@@ -30,7 +30,10 @@ import {
   deptScope,
   type Actor,
 } from '@/qc/policy';
+import { diffAnswers, diffDept, joinSummary } from '@/qc/changes';
 import { validateAudit, type TaskInput } from '@/qc/validate';
+
+import { logChange } from './log';
 
 export type Res<T> = { ok: true; data: T } | { ok: false; status: 400 | 403 | 404 | 409; error: string };
 
@@ -115,7 +118,7 @@ function toAudit(a: AuditRow, checkpoints: Checkpoint[]): AuditDto {
     createdAt: a.createdAt.toISOString(),
     updatedAt: a.updatedAt.toISOString(),
     noCount: Object.values(answers).filter((v) => v === 'no').length,
-    scorePct: scoreAnswers(answers, checkpoints).pct,
+    scorePct: scoreAnswers(answers, checkpoints, a.weights as Record<string, number> | null).pct,
   };
 }
 
@@ -183,7 +186,7 @@ export async function getSummaryData(
   const [audits, tasks] = await Promise.all([
     client.qcAudit.findMany({
       where: { deptId: { in: ids }, date: { gte: q.from, lte: q.to } },
-      select: { id: true, deptId: true, date: true, answers: true, critical: true },
+      select: { id: true, deptId: true, date: true, answers: true, critical: true, weights: true },
     }),
     client.qcTask.findMany({
       where: { deptId: { in: ids }, OR: [{ due: { gte: q.from } }, { status: 'OPEN' }, { checkedOn: { gte: q.from } }] },
@@ -200,6 +203,7 @@ export async function getSummaryData(
       date: a.date,
       answers: a.answers as Record<string, Answer>,
       critical: a.critical,
+      weights: a.weights as Record<string, number> | null,
     })),
     tasks: tasks.map((t) => ({
       id: t.id,
@@ -357,6 +361,8 @@ export async function createAudit(actor: Actor, body: unknown, ctx?: Ctx): Promi
         notes: d.notes,
         subject: d.subject,
         critical: auditCritical(d.answers, dept.checkpoints),
+        // Kiritilgan paytdagi og'irliklar qotiriladi: keyin sozlama o'zgarsa ham bu tekshiruv bali o'zgarmaydi
+        weights: Object.fromEntries(dept.checkpoints.map((c) => [c.id, c.weight])),
       },
       select: { id: true },
     });
@@ -390,6 +396,8 @@ export async function updateAudit(actor: Actor, id: string, body: unknown, ctx?:
   // Tekshiruvchi sanani o'zgartira olmaydi
   const date = actor.role === 'HEAD' ? d.date : row.date;
 
+  const lines = diffAnswers(row.answers as Record<string, Answer>, d.answers);
+  if (date !== row.date) lines.unshift(`Sana: ${row.date} → ${date}`);
   await client.$transaction(async (tx) => {
     await tx.qcAudit.update({
       where: { id },
@@ -399,7 +407,17 @@ export async function updateAudit(actor: Actor, id: string, body: unknown, ctx?:
         notes: d.notes,
         subject: d.subject,
         critical: auditCritical(d.answers, dept.checkpoints),
+        // Og'irliklar birinchi kiritishdagidek qoladi (eski yozuvda bo'lmasa — hozirgidan qotiriladi)
+        weights: (row.weights as Record<string, number> | null) ?? Object.fromEntries(dept.checkpoints.map((c) => [c.id, c.weight])),
       },
+    });
+    await logChange(tx, {
+      actorId: actor.id,
+      action: 'audit.update',
+      entity: 'QcAudit',
+      entityId: id,
+      summary: `Tekshiruv tuzatildi (${dept.name}, ${row.date}): ${joinSummary(lines)}`,
+      details: { before: { answers: row.answers, notes: row.notes, subject: row.subject } as object },
     });
     await tx.qcTask.deleteMany({ where: { auditId: id, status: 'OPEN' } });
     // Allaqachon yopilgan topshirig'i bor nuqtaga takroran topshiriq ochilmaydi
@@ -412,9 +430,30 @@ export async function updateAudit(actor: Actor, id: string, body: unknown, ctx?:
 export async function deleteAudit(actor: Actor, id: string, ctx?: Ctx): Promise<Res<{ id: string }>> {
   if (!canDeleteAudit(actor)) return forbidden('Tekshiruvni faqat rahbar o‘chira oladi.');
   const client = dbOf(ctx);
-  const row = await client.qcAudit.findUnique({ where: { id }, select: { id: true } });
+  const row = await client.qcAudit.findUnique({ where: { id }, include: { dept: { select: { name: true } }, tasks: true, by: { select: { shortName: true } } } });
   if (!row) return notFound('Tekshiruv topilmadi.');
-  await client.qcAudit.delete({ where: { id } }); // topshiriqlari bilan (cascade)
+  await client.$transaction(async (tx) => {
+    // Jurnalga to'liq nusxa yoziladi: o'chirilgan tekshiruv izsiz yo'qolmasin
+    await logChange(tx, {
+      actorId: actor.id,
+      action: 'audit.delete',
+      entity: 'QcAudit',
+      entityId: id,
+      summary: `Tekshiruv o‘chirildi (${row.dept.name}, ${row.date}, kiritgan: ${row.by.shortName}, topshiriq: ${row.tasks.length} ta)`,
+      details: {
+        dept: row.dept.name,
+        date: row.date,
+        by: row.by.shortName,
+        subject: row.subject,
+        critical: row.critical,
+        answers: row.answers,
+        notes: row.notes,
+        weights: row.weights ?? null,
+        tasks: row.tasks.map((t) => ({ cp: t.cpId, what: t.what, owner: t.owner, due: t.due, status: t.status, checkNote: t.checkNote })),
+      } as object,
+    });
+    await tx.qcAudit.delete({ where: { id } }); // topshiriqlari bilan (cascade)
+  });
   return ok({ id });
 }
 
@@ -452,7 +491,16 @@ export async function updateTask(
   if (!what) return bad('«Nima qilinishi kerak» maydonini to‘ldiring.');
   if (!owner) return bad('Mas‘ul shaxsni yozing.');
   if (!isYmd(due)) return bad('Muddat noto‘g‘ri: sanani tanlang.');
-  await client.qcTask.update({ where: { id }, data: { what, owner, due } });
+  const lines: string[] = [];
+  if (what !== row.what) lines.push(`nima: «${what}»`);
+  if (owner !== row.owner) lines.push(`mas‘ul: ${row.owner} → ${owner}`);
+  if (due !== row.due) lines.push(`muddat: ${row.due} → ${due}`);
+  await client.$transaction(async (tx) => {
+    await tx.qcTask.update({ where: { id }, data: { what, owner, due } });
+    if (lines.length > 0) {
+      await logChange(tx, { actorId: actor.id, action: 'task.update', entity: 'QcTask', entityId: id, summary: `Topshiriq tahrirlandi: ${lines.join('; ')}` });
+    }
+  });
   return ok({ id });
 }
 
@@ -499,6 +547,7 @@ export async function saveDepartment(actor: Actor, input: DeptInput, ctx?: Ctx):
     if (c.id && !known.has(c.id)) return bad('Nuqta topilmadi. Sahifani yangilang.');
   }
 
+  const lines = diffDept(existing ? toDept(existing) : null, { ...input, name, checkpoints: input.checkpoints.map((c) => ({ ...c, text: c.text.trim() })) });
   const id = await client.$transaction(async (tx) => {
     let deptId = existing?.id;
     if (existing) {
@@ -530,6 +579,15 @@ export async function saveDepartment(actor: Actor, input: DeptInput, ctx?: Ctx):
         await tx.qcCheckpoint.create({ data: { ...data, deptId: deptId as string, id: `cp${next}` } });
       }
     }
+    if (lines.length > 0) {
+      await logChange(tx, {
+        actorId: actor.id,
+        action: 'dept.save',
+        entity: 'QcDepartment',
+        entityId: deptId as string,
+        summary: `${name}: ${lines.join('; ')}`,
+      });
+    }
     return deptId as string;
   });
   return ok({ id });
@@ -539,13 +597,16 @@ export async function saveDepartment(actor: Actor, input: DeptInput, ctx?: Ctx):
 export async function moveDepartment(actor: Actor, id: string, dir: -1 | 1, ctx?: Ctx): Promise<Res<{ id: string }>> {
   if (!canManageDepartments(actor)) return forbidden('Bo‘limlarni faqat rahbar o‘zgartira oladi.');
   const client = dbOf(ctx);
-  const all = await client.qcDepartment.findMany({ orderBy: [{ position: 'asc' }, { name: 'asc' }], select: { id: true } });
+  const all = await client.qcDepartment.findMany({ orderBy: [{ position: 'asc' }, { name: 'asc' }], select: { id: true, name: true } });
   const i = all.findIndex((d) => d.id === id);
   if (i < 0) return notFound('Bo‘lim topilmadi.');
   const j = i + dir;
   if (j < 0 || j >= all.length) return ok({ id });
   const order = all.map((d) => d.id);
   [order[i], order[j]] = [order[j] as string, order[i] as string];
-  await client.$transaction(order.map((deptId, idx) => client.qcDepartment.update({ where: { id: deptId }, data: { position: idx + 1 } })));
+  await client.$transaction([
+    ...order.map((deptId, idx) => client.qcDepartment.update({ where: { id: deptId }, data: { position: idx + 1 } })),
+    client.qcLog.create({ data: { actorId: actor.id, action: 'dept.move', entity: 'QcDepartment', entityId: id, summary: `Bo‘lim tartibi o‘zgardi: «${all[i]?.name ?? ''}» ${dir < 0 ? 'yuqoriga' : 'pastga'}` } }),
+  ]);
   return ok({ id });
 }

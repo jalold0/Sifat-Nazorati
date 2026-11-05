@@ -22,6 +22,9 @@ export default async function SozlamalarPage() {
         title="Sozlamalar"
         actions={
           <>
+            <Link href="/sozlamalar/jurnal" className="btn-ghost min-h-[44px]">
+              Jurnal
+            </Link>
             <Link href="/sozlamalar/foydalanuvchilar" className="btn-ghost min-h-[44px]">
               Foydalanuvchilar
             </Link>

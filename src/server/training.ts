@@ -26,6 +26,7 @@ import {
   type TrainingStatus,
 } from '@/qc/training';
 
+import { logChange } from './log';
 import type { Ctx, Res } from './qc';
 import { loadReportForRange, type Report } from './report';
 
@@ -324,10 +325,22 @@ export async function saveReportNote(actor: Actor, week: unknown, note: unknown,
   if (typeof note !== 'string') return fail(400, 'Izoh matn bo‘lishi kerak.');
   const text = note.trim();
   if (text.length > NOTE_MAX) return fail(400, `Izoh ${NOTE_MAX} belgidan oshmasin.`);
-  await dbOf(ctx).qcReport.upsert({
-    where: { week: v.week },
-    create: { week: v.week, note: text, byId: actor.id },
-    update: { note: text, byId: actor.id },
+  const client = dbOf(ctx);
+  await client.$transaction(async (tx) => {
+    const prev = await tx.qcReport.findUnique({ where: { week: v.week }, select: { note: true } });
+    await tx.qcReport.upsert({
+      where: { week: v.week },
+      create: { week: v.week, note: text, byId: actor.id },
+      update: { note: text, byId: actor.id },
+    });
+    await logChange(tx, {
+      actorId: actor.id,
+      action: 'report.note',
+      entity: 'QcReport',
+      entityId: v.week,
+      summary: `Haftalik hisobot izohi (${v.week}) ${prev ? 'o‘zgartirildi' : 'yozildi'}`,
+      details: prev ? { before: prev.note } : undefined,
+    });
   });
   return ok({ week: v.week });
 }

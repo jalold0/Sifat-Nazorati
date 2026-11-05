@@ -34,6 +34,8 @@ export interface AuditRec {
   date: string;
   answers: Record<string, Answer>;
   critical: boolean;
+  /** Kiritilgan paytdagi og'irliklar: keyin nuqta og'irligi o'zgarsa ham shu tekshiruv bali o'zgarmaydi. */
+  weights?: Record<string, number> | null;
 }
 
 export interface TaskRec {
@@ -122,6 +124,14 @@ function weightMap(checkpoints: Checkpoint[]): Map<string, number> {
   return new Map(checkpoints.map((c) => [c.id, c.weight > 0 ? c.weight : 1]));
 }
 
+/** Tekshiruvning o'z (muzlatilgan) og'irliklari bo'lsa ular, bo'lmasa (eski yozuv) joriy nuqta og'irliklari. */
+function weightsFor(base: Map<string, number>, frozen?: Record<string, number> | null): Map<string, number> {
+  if (!frozen) return base;
+  const m = new Map(base);
+  for (const [id, w] of Object.entries(frozen)) if (w > 0) m.set(id, w);
+  return m;
+}
+
 function tally(
   answers: Record<string, Answer>,
   weights: Map<string, number>,
@@ -150,15 +160,19 @@ function finish(r: ScoreResult): ScoreResult {
 }
 
 /** Bitta tekshiruv bali: Ha og'irligi / (Ha + Yo'q og'irligi) × 100. «Tegishli emas» hisobga olinmaydi. */
-export function scoreAnswers(answers: Record<string, Answer>, checkpoints: Checkpoint[]): ScoreResult {
-  return finish(tally(answers, weightMap(checkpoints), { ...EMPTY_SCORE }));
+export function scoreAnswers(
+  answers: Record<string, Answer>,
+  checkpoints: Checkpoint[],
+  frozen?: Record<string, number> | null,
+): ScoreResult {
+  return finish(tally(answers, weightsFor(weightMap(checkpoints), frozen), { ...EMPTY_SCORE }));
 }
 
 /** Davrdagi barcha tekshiruvlar bo'yicha jamlangan ball. */
 export function scoreAudits(audits: AuditRec[], checkpoints: Checkpoint[]): ScoreResult {
-  const weights = weightMap(checkpoints);
+  const base = weightMap(checkpoints);
   const acc: ScoreResult = { ...EMPTY_SCORE };
-  for (const a of audits) tally(a.answers, weights, acc);
+  for (const a of audits) tally(a.answers, weightsFor(base, a.weights), acc);
   return finish(acc);
 }
 

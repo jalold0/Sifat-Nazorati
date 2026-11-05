@@ -20,27 +20,30 @@ enum Role {
 }
 
 model User {
-  id           String        @id @default(cuid())
-  key          String        @unique
-  fullName     String
-  shortName    String
-  login        String        @unique
-  passwordHash String
-  role         Role
-  position     String
+  id                 String        @id @default(cuid())
+  key                String        @unique
+  fullName           String
+  shortName          String
+  login              String        @unique
+  passwordHash       String
+  role               Role
+  position           String
   /// Faqat ko'ruvchi uchun majburiy: u ko'radigan bo'lim
-  deptId       String?
-  dept         QcDepartment? @relation(fields: [deptId], references: [id])
-  active       Boolean       @default(true)
-  lastLoginAt  DateTime?
-  createdAt    DateTime      @default(now())
-  updatedAt    DateTime      @updatedAt
+  deptId             String?
+  dept               QcDepartment? @relation(fields: [deptId], references: [id])
+  active             Boolean       @default(true)
+  /// Keyingi kirishda parolni almashtirish majburiy (yangi hisob yoki rahbar parolni tiklaganda)
+  mustChangePassword Boolean       @default(false)
+  lastLoginAt        DateTime?
+  createdAt          DateTime      @default(now())
+  updatedAt          DateTime      @updatedAt
 
   audits             QcAudit[]
   checkedTasks       QcTask[]
   qcTrainingTasks    QcTrainingTask[]
   qcTrainingAttempts QcTrainingAttempt[]
   qcReports          QcReport[]
+  qcLogs             QcLog[]
 
   @@index([role, active])
 }
@@ -106,6 +109,9 @@ model QcAudit {
   subject   String       @default("")
   /// Jiddiy nuqtada «Yo'q» bo'lsa true
   critical  Boolean      @default(false)
+  /// Kiritilgan paytdagi nuqta og'irliklari { nuqtaId: 1..3 }: keyin og'irlik o'zgarsa ham eski ball o'zgarmaydi.
+  /// null — eski yozuv: joriy og'irliklar ishlatiladi.
+  weights   Json?
   createdAt DateTime     @default(now())
   updatedAt DateTime     @updatedAt
 
@@ -201,4 +207,24 @@ model QcReport {
   byId      String
   by        User     @relation(fields: [byId], references: [id])
   updatedAt DateTime @updatedAt
+}
+
+// ── Ishonchlilik: o'zgarishlar jurnali ───────────────────────────────────────
+
+/// Muhim o'zgarishlar izi: kim, qachon, nima. Faqat qo'shiladi (o'zgartirilmaydi, o'chirilmaydi).
+/// `details` — kerak bo'lsa tiklash uchun ma'lumot (masalan, o'chirilgan tekshiruv nusxasi).
+model QcLog {
+  id       String   @id @default(cuid())
+  at       DateTime @default(now())
+  actorId  String
+  actor    User     @relation(fields: [actorId], references: [id])
+  /// audit.update, audit.delete, dept.save, dept.move, task.update, user.save, report.note
+  action   String
+  entity   String
+  entityId String?
+  summary  String
+  details  Json?
+
+  @@index([at])
+  @@index([entity, entityId])
 }

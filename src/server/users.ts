@@ -8,6 +8,7 @@ import bcrypt from 'bcryptjs';
 import { db as defaultDb } from '@/lib/db';
 import type { Actor, QcRole } from '@/qc/policy';
 
+import { logChange } from './log';
 import type { Ctx, Res } from './qc';
 
 export interface UserDto {
@@ -67,16 +68,27 @@ export async function saveUser(actor: Actor, input: UserInput, ctx?: Ctx): Promi
     if (user.id === actor.id && (input.role !== 'HEAD' || !input.active)) {
       return bad('O‘zingizning rolingizni o‘zgartira yoki hisobingizni o‘chira olmaysiz.');
     }
-    await client.user.update({
-      where: { id: user.id },
-      data: {
-        fullName,
-        shortName: user.shortName,
-        role: input.role,
-        deptId,
-        active: input.active,
-        ...(password ? { passwordHash: await bcrypt.hash(password, 12) } : {}),
-      },
+    const lines: string[] = [];
+    if (user.role !== input.role) lines.push(`rol: ${user.role} → ${input.role}`);
+    if ((user.deptId ?? null) !== deptId) lines.push('bo‘lim o‘zgardi');
+    if (user.active !== input.active) lines.push(input.active ? 'faollashtirildi' : 'o‘chirildi (kira olmaydi)');
+    if (password) lines.push('parol qayta o‘rnatildi (keyingi kirishda almashtirish majburiy)');
+    const hash = password ? await bcrypt.hash(password, 12) : null;
+    await client.$transaction(async (tx) => {
+      await tx.user.update({
+        where: { id: user.id },
+        data: {
+          fullName,
+          shortName: user.shortName,
+          role: input.role,
+          deptId,
+          active: input.active,
+          ...(hash ? { passwordHash: hash, mustChangePassword: true } : {}),
+        },
+      });
+      if (lines.length > 0) {
+        await logChange(tx, { actorId: actor.id, action: 'user.save', entity: 'User', entityId: user.id, summary: `${user.login}: ${lines.join('; ')}` });
+      }
     });
     return { ok: true, data: { id: user.id } };
   }
@@ -87,6 +99,7 @@ export async function saveUser(actor: Actor, input: UserInput, ctx?: Ctx): Promi
   if (await client.user.findUnique({ where: { login }, select: { id: true } })) {
     return bad('Bunday login band. Boshqa login tanlang.');
   }
+  const passwordHash = await bcrypt.hash(password, 12);
   const created = await client.user.create({
     data: {
       key: login,
@@ -97,9 +110,11 @@ export async function saveUser(actor: Actor, input: UserInput, ctx?: Ctx): Promi
       position: input.role === 'VIEWER' ? 'Ko‘ruvchi' : input.role === 'HEAD' ? 'Rahbar' : 'Tekshiruvchi',
       deptId,
       active: input.active,
-      passwordHash: await bcrypt.hash(password, 12),
+      passwordHash,
+      mustChangePassword: true,
     },
     select: { id: true },
   });
+  await logChange(client, { actorId: actor.id, action: 'user.save', entity: 'User', entityId: created.id, summary: `Yangi foydalanuvchi: ${login} (${input.role})` });
   return { ok: true, data: { id: created.id } };
 }

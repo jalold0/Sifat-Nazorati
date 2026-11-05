@@ -78,7 +78,8 @@ async function main() {
   for (const u of USERS) {
     await db.user.upsert({
       where: { key: u.key },
-      create: { ...u, passwordHash },
+      // Yangi hisob: boshlang'ich paroldan birinchi kirishdayoq almashtirish majburiy
+      create: { ...u, passwordHash, mustChangePassword: true },
       update: { fullName: u.fullName, shortName: u.shortName, role: u.role },
     });
   }

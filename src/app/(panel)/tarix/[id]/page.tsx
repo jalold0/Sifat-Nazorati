@@ -34,7 +34,7 @@ export default async function TekshiruvTafsilotPage({ params }: { params: Promis
   return (
     <>
       <p className="mb-3 text-meta">
-        <Link href="/tarix" className="text-brand hover:underline">
+        <Link href="/tarix" className="inline-flex min-h-[44px] items-center text-brand hover:underline">
           ← Tarix
         </Link>
       </p>

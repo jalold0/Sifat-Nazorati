@@ -16,7 +16,7 @@ export default async function TestPage({ params }: { params: Promise<{ dept: str
 
   const back = (
     <p className="mb-3 text-meta">
-      <Link href={`/oquv?d=${dept}`} className="text-brand hover:underline">
+      <Link href={`/oquv?d=${dept}`} className="inline-flex min-h-[44px] items-center text-brand hover:underline">
         ← O‘quv dasturi
       </Link>
     </p>

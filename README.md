@@ -17,6 +17,9 @@ ofis tarmog‘ida internetsiz ishlaydi (brauzer faqat serverning o‘z manziliga
 | Topshiriqlar | `/topshiriqlar` | ha | ha | — |
 | Tarix (+ CSV) | `/tarix`, `/tarix/[id]` | ha | ha | — |
 | Panel (svetofor) | `/panel` | ha (boshlang‘ich) | — | — |
+| O‘quv dasturi, Yakuniy test | `/oquv`, `/oquv/test/[bo‘lim]` | ha | ha | — |
+| O‘quv natijalari (+ CSV) | `/natijalar` | ha | — | — |
+| Haftalik hisobot (A4 chop etish) | `/hisobot` | ha (izoh yozadi) | ha (o‘qiydi) | — |
 | Sozlamalar, Foydalanuvchilar | `/sozlamalar` | ha | — | — |
 | Bo‘limim | `/bolimim` | — | — | ha (boshlang‘ich) |
 
@@ -65,10 +68,27 @@ Ball, foiz va xulosa **saqlanmaydi**, har safar hisoblanadi.
   «Namuna kichik…», tekshiruv bo‘lmasa — «Bu davrda tekshiruv yo‘q».
 - Sana/vaqt — Toshkent (UTC+5). Davrlar: Bugun, 7 kun, 30 kun (chegaralar kiritilgan).
 
+## O‘quv moduli va haftalik hisobot (2-bosqich)
+
+- **O‘quv dasturi** — 12 bo‘lim, har birida 5 kunlik reja (nazariya + topshiriqlar). Xodim topshiriqni belgilaydi
+  (qayta bossa olib tashlanadi). Hamma topshiriq belgilangach «Testni boshlash» yonadi; sababi yozilgan.
+- **Yakuniy test** — Call centerda 10 keysli, qolgan 11 bo‘limda 7 savolli (eski quiz). Savollar va variantlar har
+  ochilganda aralashadi. **To‘g‘ri javob (`answer`, `why`) test topshirilgunga qadar brauzerga yuborilmaydi**:
+  baholashni faqat server bajaradi (`gradeTest` — `src/qc/training.ts`; har to‘g‘ri javob 1 ball, o‘tish ≥ 70%).
+  Topshiriqlar to‘liq bo‘lmasa server 409, javobsiz topshirish 400 qaytaradi. Urinish cheklanmagan.
+- **Natijalar** (rahbar) — xodim × bo‘lim, bajarilgan topshiriq, oxirgi/eng yaxshi foiz, holat, urinishlar va xato
+  qilingan savollar; CSV. Sahifa o‘zi yangilanadi.
+- **Haftalik hisobot** — dushanba–yakshanba, boshlang‘ich: o‘tgan hafta. 12 bo‘lim jadvali, qizil bo‘limlar xulosasi,
+  rahbar izohi; «Chop etish» — A4, ranglar yonida matn («yashil/sariq/qizil/ma’lumot yo‘q»).
+- O‘quv mazmuni ilovadan tahrirlanmaydi: `prisma/training/base.json` (eski sozlamadan ko‘chirilgan) va
+  `prisma/training/oquv_<bo‘lim>_keys.json` fayllaridan `pnpm db:seed` yuklaydi. Yangi keys-fayl qo‘yilsa (masalan
+  `oquv_kuryerka_keys.json`: `{pass, questions:[{id,case,options[4],answer,why}]}`), faqat shu bo‘limda dastur hali
+  yuklanmagan bo‘lsa olinadi — mavjud bo‘limga seed tegmaydi.
+
 ## Testlar
 
 ```bash
-pnpm test        # sof modullar: hisob, ruxsat, tekshirish, CSV, seed tanlash
+pnpm test        # sof modullar: hisob, ruxsat, tekshirish, CSV, seed tanlash, test baholash, hafta
 pnpm typecheck
 pnpm test:db     # server testlari haqiqiy PostgreSQL'da (alohida «otk_test» bazasi; pnpm db:local ishlab turishi kerak)
 ```

@@ -25,7 +25,7 @@ export default async function TahrirPage({ params }: { params: Promise<{ id: str
   return (
     <>
       <p className="mb-3 text-meta">
-        <Link href={`/tarix/${id}`} className="text-brand hover:underline">
+        <Link href={`/tarix/${id}`} className="inline-flex min-h-[44px] items-center text-brand hover:underline">
           ← Tekshiruvga qaytish
         </Link>
       </p>

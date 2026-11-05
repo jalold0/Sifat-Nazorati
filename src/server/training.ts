@@ -6,7 +6,7 @@
  * Foydalanuvchi faqat O'Z yozuviga yozadi: `userId` har doim `actor.id` dan olinadi, so'rovdan emas.
  */
 
-import { Prisma } from '@prisma/client';
+import type { Prisma } from '@prisma/client';
 
 import { db as defaultDb } from '@/lib/db';
 import { todayTashkent } from '@/qc/calc';

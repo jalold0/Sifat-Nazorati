@@ -113,7 +113,7 @@ export default async function HisobotPage({ searchParams }: { searchParams: Prom
         {reds.length > 0 ? (
           <section className="mt-4">
             <h3 className="mb-1.5 text-body font-semibold">Qizil bo‘limlar</h3>
-            <ul className="space-y-2">
+            <ul className="red-list space-y-2">
               {reds.map(({ dept, summary }) => (
                 <li key={dept.id} className="red-block text-meta">
                   <p className="font-semibold">{dept.name}</p>

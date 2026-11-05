@@ -247,6 +247,12 @@ body {
     break-inside: avoid;
   }
 
+  /* Ko'p qizil bo'lim bo'lsa ham bir sahifaga sig'ishi uchun ikki ustun */
+  .report-doc .red-list {
+    columns: 2;
+    column-gap: 14pt;
+  }
+
   .card {
     break-inside: avoid;
     border-color: #d8d7d0;

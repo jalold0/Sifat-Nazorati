@@ -21,7 +21,7 @@ export default async function BolimSozlamasiPage({ params }: { params: Promise<{
   return (
     <>
       <p className="mb-3 text-meta">
-        <Link href="/sozlamalar" className="text-brand hover:underline">
+        <Link href="/sozlamalar" className="inline-flex min-h-[44px] items-center text-brand hover:underline">
           ← Sozlamalar
         </Link>
       </p>

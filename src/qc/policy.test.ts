@@ -3,6 +3,10 @@ import { describe, expect, it } from 'vitest';
 import type { Checkpoint } from './calc';
 import {
   canCreateAudit,
+  canEditReport,
+  canSeeProgress,
+  canSeeReport,
+  canTrain,
   canDeleteAudit,
   canEditAudit,
   canEditTask,
@@ -71,10 +75,41 @@ describe('ruxsatlar', () => {
     expect(canEditTask(viewer)).toBe(false);
   });
 
-  it('navigatsiya: tekshiruvchiga 3, rahbarga 5, ko‘ruvchiga 1 bo‘lim', () => {
-    expect(navFor('INSPECTOR').map((n) => n.label)).toEqual(['Tekshiruv', 'Topshiriqlar', 'Tarix']);
-    expect(navFor('HEAD').map((n) => n.label)).toEqual(['Panel', 'Tekshiruv', 'Topshiriqlar', 'Tarix', 'Sozlamalar']);
+  it('navigatsiya: tekshiruvchiga 5, rahbarga 8, ko‘ruvchiga 1 bo‘lim', () => {
+    expect(navFor('INSPECTOR').map((n) => n.label)).toEqual([
+      'Tekshiruv',
+      'Topshiriqlar',
+      'Tarix',
+      'O‘quv dasturi',
+      'Haftalik hisobot',
+    ]);
+    expect(navFor('HEAD').map((n) => n.label)).toEqual([
+      'Panel',
+      'Tekshiruv',
+      'Topshiriqlar',
+      'Tarix',
+      'O‘quv dasturi',
+      'Natijalar',
+      'Haftalik hisobot',
+      'Sozlamalar',
+    ]);
     expect(navFor('VIEWER').map((n) => n.label)).toEqual(['Bo‘limim']);
+  });
+
+  it('o‘quv va hisobot ruxsatlari: ko‘ruvchiga yo‘q; natijalar va izoh faqat rahbarga', () => {
+    expect(canTrain(head) && canTrain(insp)).toBe(true);
+    expect(canTrain(viewer)).toBe(false);
+    expect(canSeeProgress(head)).toBe(true);
+    expect(canSeeProgress(insp)).toBe(false);
+    expect(canSeeProgress(viewer)).toBe(false);
+    expect(canSeeReport(insp)).toBe(true);
+    expect(canSeeReport(viewer)).toBe(false);
+    expect(canEditReport(head)).toBe(true);
+    expect(canEditReport(insp)).toBe(false);
+    expect(canOpenPath('VIEWER', '/oquv/test/abc')).toBe(false);
+    expect(canOpenPath('VIEWER', '/hisobot')).toBe(false);
+    expect(canOpenPath('INSPECTOR', '/natijalar')).toBe(false);
+    expect(canOpenPath('INSPECTOR', '/oquv/test/abc')).toBe(true);
   });
 
   it('boshlang‘ich ekran: tekshiruvchida Tekshiruv, rahbarda Panel, ko‘ruvchida Bo‘limim', () => {

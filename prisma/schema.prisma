@@ -36,8 +36,11 @@ model User {
   createdAt    DateTime      @default(now())
   updatedAt    DateTime      @updatedAt
 
-  audits       QcAudit[]
-  checkedTasks QcTask[]
+  audits             QcAudit[]
+  checkedTasks       QcTask[]
+  qcTrainingTasks    QcTrainingTask[]
+  qcTrainingAttempts QcTrainingAttempt[]
+  qcReports          QcReport[]
 
   @@index([role, active])
 }
@@ -57,10 +60,13 @@ model QcDepartment {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  checkpoints QcCheckpoint[]
-  audits      QcAudit[]
-  tasks       QcTask[]
-  viewers     User[]
+  checkpoints      QcCheckpoint[]
+  audits           QcAudit[]
+  tasks            QcTask[]
+  viewers          User[]
+  training         QcTraining?
+  trainingTasks    QcTrainingTask[]
+  trainingAttempts QcTrainingAttempt[]
 
   @@index([active, position])
 }
@@ -138,4 +144,61 @@ model QcTask {
 
   @@index([deptId, status, due])
   @@index([auditId])
+}
+
+// ── 2-bosqich: o'quv moduli va haftalik hisobot ──────────────────────────────
+
+/// Bir bo'limning o'quv dasturi va testi (kontent). Ilovadan tahrirlanmaydi — fayldan (seed) yuklanadi.
+/// `questions` ichida to'g'ri javob (answer, why) bor: brauzerga FAQAT test topshirilgandan keyin boradi.
+model QcTraining {
+  deptId    String       @id
+  dept      QcDepartment @relation(fields: [deptId], references: [id], onDelete: Cascade)
+  title     String
+  intro     String       @default("")
+  /// O'tish foizi
+  passPct   Int          @default(70)
+  /// [{ title, theory: [matn], tasks: [matn] }] — 5 ta kun
+  days      Json
+  /// [{ id, case, options: [4 matn], answer: indeks, why }]; bo'sh massiv — test yozilmagan
+  questions Json
+  updatedAt DateTime     @updatedAt
+}
+
+/// Xodim belgilagan o'quv topshirig'i. Kalit: d{kun}t{indeks}. Qayta bosilsa qator o'chadi.
+model QcTrainingTask {
+  userId String
+  user   User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  deptId String
+  dept   QcDepartment @relation(fields: [deptId], references: [id], onDelete: Cascade)
+  key    String
+  at     DateTime     @default(now())
+
+  @@id([userId, deptId, key])
+}
+
+/// Test urinishi (cheklovsiz). Baholash serverda; `answers` = { savolId: tanlangan asl indeks }.
+model QcTrainingAttempt {
+  id      String       @id @default(cuid())
+  userId  String
+  user    User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  deptId  String
+  dept    QcDepartment @relation(fields: [deptId], references: [id], onDelete: Cascade)
+  at      DateTime     @default(now())
+  score   Int
+  total   Int
+  pct     Int
+  passed  Boolean
+  answers Json
+
+  @@index([userId, deptId, at])
+  @@index([at])
+}
+
+/// Haftalik hisobotga rahbar izohi. Kalit — dushanba sanasi (YYYY-MM-DD).
+model QcReport {
+  week      String   @id @db.VarChar(10)
+  note      String   @default("")
+  byId      String
+  by        User     @relation(fields: [byId], references: [id])
+  updatedAt DateTime @updatedAt
 }

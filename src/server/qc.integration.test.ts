@@ -65,6 +65,7 @@ suite('server qatlami (PostgreSQL)', () => {
 
   beforeAll(async () => {
     db = new PrismaClient({ datasources: { db: { url } } });
+    await db.qcReport.deleteMany();
     await db.qcTask.deleteMany();
     await db.qcAudit.deleteMany();
     await db.user.deleteMany();

@@ -24,5 +24,5 @@ const run = (args) => spawnSync('pnpm', args, { stdio: 'inherit', env, shell: tr
 
 let r = run(['exec', 'prisma', 'migrate', 'deploy']);
 if (r.status !== 0) process.exit(r.status ?? 1);
-r = run(['exec', 'vitest', 'run', 'src/server']);
+r = run(['exec', 'vitest', 'run', 'src/server', '--no-file-parallelism']);
 process.exit(r.status ?? 1);

@@ -56,6 +56,23 @@ export function canEditTask(actor: Actor): boolean {
   return actor.role === 'HEAD' || actor.role === 'INSPECTOR';
 }
 
+export function canTrain(actor: Actor): boolean {
+  return actor.role === 'HEAD' || actor.role === 'INSPECTOR';
+}
+
+/** Hamma xodimlarning o'quv natijalari. */
+export function canSeeProgress(actor: Actor): boolean {
+  return actor.role === 'HEAD';
+}
+
+export function canSeeReport(actor: Actor): boolean {
+  return actor.role === 'HEAD' || actor.role === 'INSPECTOR';
+}
+
+export function canEditReport(actor: Actor): boolean {
+  return actor.role === 'HEAD';
+}
+
 export function canExport(actor: Actor): boolean {
   return actor.role === 'HEAD' || actor.role === 'INSPECTOR';
 }
@@ -73,12 +90,15 @@ export interface NavEntry {
   roles: QcRole[];
 }
 
-/** Yuqori navigatsiya: tekshiruvchiga 3 bo'lim, rahbarga yana Panel va Sozlamalar, ko'ruvchiga faqat Bo'limim. */
+/** Yuqori navigatsiya. Ko'ruvchiga faqat Bo'limim (o'quv va hisobot ekranlari unga yo'q). */
 export const QC_NAV: NavEntry[] = [
   { href: '/panel', label: 'Panel', roles: ['HEAD'] },
   { href: '/tekshiruv', label: 'Tekshiruv', roles: ['HEAD', 'INSPECTOR'] },
   { href: '/topshiriqlar', label: 'Topshiriqlar', roles: ['HEAD', 'INSPECTOR'] },
   { href: '/tarix', label: 'Tarix', roles: ['HEAD', 'INSPECTOR'] },
+  { href: '/oquv', label: 'O‘quv dasturi', roles: ['HEAD', 'INSPECTOR'] },
+  { href: '/natijalar', label: 'Natijalar', roles: ['HEAD'] },
+  { href: '/hisobot', label: 'Haftalik hisobot', roles: ['HEAD', 'INSPECTOR'] },
   { href: '/sozlamalar', label: 'Sozlamalar', roles: ['HEAD'] },
   { href: '/bolimim', label: 'Bo‘limim', roles: ['VIEWER'] },
 ];

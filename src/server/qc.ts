@@ -32,7 +32,7 @@ import {
 } from '@/qc/policy';
 import { validateAudit, type TaskInput } from '@/qc/validate';
 
-export type Res<T> = { ok: true; data: T } | { ok: false; status: 400 | 403 | 404; error: string };
+export type Res<T> = { ok: true; data: T } | { ok: false; status: 400 | 403 | 404 | 409; error: string };
 
 const ok = <T>(data: T): Res<T> => ({ ok: true, data });
 const bad = (error: string): Res<never> => ({ ok: false, status: 400, error });
@@ -186,7 +186,7 @@ export async function getSummaryData(
       select: { id: true, deptId: true, date: true, answers: true, critical: true },
     }),
     client.qcTask.findMany({
-      where: { deptId: { in: ids }, OR: [{ due: { gte: q.from } }, { status: 'OPEN' }] },
+      where: { deptId: { in: ids }, OR: [{ due: { gte: q.from } }, { status: 'OPEN' }, { checkedOn: { gte: q.from } }] },
       select: { id: true, auditId: true, deptId: true, cpId: true, what: true, owner: true, due: true, status: true, checkedOn: true },
     }),
   ]);

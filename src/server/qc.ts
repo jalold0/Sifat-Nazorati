@@ -187,7 +187,7 @@ export async function getSummaryData(
     }),
     client.qcTask.findMany({
       where: { deptId: { in: ids }, OR: [{ due: { gte: q.from } }, { status: 'OPEN' }, { checkedOn: { gte: q.from } }] },
-      select: { id: true, auditId: true, deptId: true, cpId: true, what: true, owner: true, due: true, status: true, checkedOn: true },
+      select: { id: true, auditId: true, deptId: true, cpId: true, what: true, owner: true, due: true, status: true, checkedOn: true, createdAt: true },
     }),
   ]);
 
@@ -211,6 +211,7 @@ export async function getSummaryData(
       due: t.due,
       status: t.status === 'OPEN' ? ('open' as const) : ('closed' as const),
       closedAt: t.checkedOn,
+      createdOn: todayTashkent(t.createdAt),
     })),
   });
 }

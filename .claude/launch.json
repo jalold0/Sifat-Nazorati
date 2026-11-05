@@ -4,8 +4,22 @@
     {
       "name": "otk-crm",
       "runtimeExecutable": "pnpm",
-      "runtimeArgs": ["dev"],
+      "runtimeArgs": [
+        "dev"
+      ],
       "port": 3100
+    },
+    {
+      "name": "otk-crm-3101",
+      "runtimeExecutable": "pnpm",
+      "runtimeArgs": [
+        "exec",
+        "next",
+        "dev",
+        "-p",
+        "3101"
+      ],
+      "port": 3101
     }
   ]
 }

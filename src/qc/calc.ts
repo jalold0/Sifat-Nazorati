@@ -48,6 +48,8 @@ export interface TaskRec {
   status: 'open' | 'closed';
   /** Yopilgan sana, YYYY-MM-DD */
   closedAt?: string | null;
+  /** Yaratilgan sana (Toshkent), YYYY-MM-DD — o'tgan sanaga «ochiq» hisoblash uchun. */
+  createdOn?: string | null;
 }
 
 /** Topshiriqlar muddatida bajarilishi me'yori, % (taxminiy). */
@@ -226,6 +228,15 @@ export interface DeptEvaluation {
 export function overdueAt(tasks: TaskRec[], asOf: string): TaskRec[] {
   return tasks.filter((t) => {
     if (t.due >= asOf) return false;
+    const closedBy = t.status === 'closed' && (t.closedAt ?? '') !== '' && (t.closedAt as string) <= asOf;
+    return !closedBy;
+  });
+}
+
+/** asOf kuniga ochiq topshiriqlar: shu kungacha yaratilgan va shu kungacha yopilmagan. */
+export function openAt(tasks: TaskRec[], asOf: string): TaskRec[] {
+  return tasks.filter((t) => {
+    if (t.createdOn && t.createdOn > asOf) return false;
     const closedBy = t.status === 'closed' && (t.closedAt ?? '') !== '' && (t.closedAt as string) <= asOf;
     return !closedBy;
   });

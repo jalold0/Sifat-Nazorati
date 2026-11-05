@@ -5,6 +5,7 @@ import {
   auditCritical,
   buildSummary,
   evaluateDept,
+  openAt,
   periodRange,
   scoreAnswers,
   todayTashkent,
@@ -318,5 +319,17 @@ describe('buildSummary — 3 qatorli xulosa', () => {
     expect(s.lines[2]).toBe(
       'Birinchi navbatda: «Nuqta 1» — 5 marta «Yo‘q»; muddati o‘tgan topshiriqlar: 1 ta.',
     );
+  });
+});
+
+describe('openAt — o‘tgan sanaga ochiq topshiriqlar', () => {
+  it('shu kungacha yopilmagan va shu kungacha yaratilganlar; keyin yaratilgani kirmaydi', () => {
+    const list: TaskRec[] = [
+      { ...task('a', '2026-03-12', 'open'), createdOn: '2026-03-01' },
+      { ...task('b', '2026-03-12', 'closed', '2026-03-09'), createdOn: '2026-03-01' }, // 9-da yopilgan
+      { ...task('c', '2026-03-12', 'closed', '2026-03-11'), createdOn: '2026-03-01' }, // 10-ga hali ochiq edi
+      { ...task('d', '2026-03-20', 'open'), createdOn: '2026-03-11' }, // keyin yaratilgan
+    ];
+    expect(openAt(list, '2026-03-10').map((x) => x.id)).toEqual(['a', 'c']);
   });
 });

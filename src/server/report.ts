@@ -6,6 +6,7 @@
 import {
   buildSummary,
   evaluateDept,
+  openAt,
   overdueAt,
   periodRange,
   STATUS_RANK,
@@ -27,6 +28,8 @@ export interface DeptReportData {
   summary: Summary;
   topNo: TopNo[];
   overdueTaskIds: string[];
+  /** asOf kuniga ochiq topshiriqlar soni. */
+  openCount: number;
 }
 
 export interface Report {
@@ -81,6 +84,10 @@ export async function loadReportForRange(
       summary: buildSummary(dept, audits, tasks, range, now),
       topNo: topNoCheckpoints(periodAudits, dept.checkpoints, 3),
       overdueTaskIds,
+      openCount: openAt(
+        tasks.filter((t) => t.dept === dept.id),
+        now,
+      ).length,
     };
   });
 

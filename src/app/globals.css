@@ -178,6 +178,11 @@ body {
   }
 }
 
+/* Faqat chop etishda ko'rinadi */
+.print-only {
+  display: none;
+}
+
 /*
   Chop etish — CEO hisobotni qog'ozda ham o'qiydi.
   Sidebar, tugmalar va filtrlar chiqmaydi; kartochkalar bo'linmaydi.
@@ -195,6 +200,51 @@ body {
 
   .no-print {
     display: none !important;
+  }
+
+  .print-only {
+    display: block !important;
+  }
+
+  /* Haftalik hisobot: 12 bo'lim bilan bir A4 sahifaga sig'ishi uchun zich */
+  main {
+    max-width: none !important;
+    padding: 0 !important;
+  }
+
+  .report-doc {
+    border: none;
+    padding: 0 !important;
+    font-size: 8.5pt;
+  }
+
+  .report-doc h2 {
+    font-size: 13pt;
+  }
+
+  .report-doc .text-meta,
+  .report-doc .text-body {
+    font-size: 8.5pt;
+    line-height: 1.3;
+  }
+
+  .report-table .th,
+  .report-table .td,
+  .report-table .td-num {
+    padding: 2.5pt 4pt;
+  }
+
+  .report-doc header {
+    margin-bottom: 6pt;
+    padding-bottom: 4pt;
+  }
+
+  .report-doc section {
+    margin-top: 6pt;
+  }
+
+  .report-doc .red-block {
+    break-inside: avoid;
   }
 
   .card {

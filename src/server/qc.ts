@@ -239,7 +239,7 @@ export async function listAudits(
     ...(q.dept ? { deptId: q.dept } : scope ? { deptId: scope } : {}),
     ...(q.from || q.to ? { date: { ...(q.from ? { gte: q.from } : {}), ...(q.to ? { lte: q.to } : {}) } } : {}),
   };
-  const take = Math.min(Math.max(q.limit ?? PAGE_SIZE, 1), 200);
+  const take = Math.min(Math.max(q.limit ?? PAGE_SIZE, 1), 50_000);
   const skip = Math.max(q.offset ?? 0, 0);
   const client = dbOf(ctx);
 
@@ -401,7 +401,9 @@ export async function updateAudit(actor: Actor, id: string, body: unknown, ctx?:
       },
     });
     await tx.qcTask.deleteMany({ where: { auditId: id, status: 'OPEN' } });
-    await tx.qcTask.createMany({ data: taskRows(id, row.deptId, d.tasks) });
+    // Allaqachon yopilgan topshirig'i bor nuqtaga takroran topshiriq ochilmaydi
+    const closed = new Set((await tx.qcTask.findMany({ where: { auditId: id }, select: { cpId: true } })).map((t) => t.cpId));
+    await tx.qcTask.createMany({ data: taskRows(id, row.deptId, d.tasks.filter((t) => !closed.has(t.cp))) });
   });
   return ok({ id });
 }

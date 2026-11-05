@@ -8,11 +8,13 @@
  * SEED_DEMO=1 — sinash uchun «Call center» ko'ruvchisini ham yaratadi.
  */
 
-import { readFileSync } from 'node:fs';
+import { existsSync, readFileSync } from 'node:fs';
 import { join } from 'node:path';
 
 import { PrismaClient, type Role } from '@prisma/client';
 import bcrypt from 'bcryptjs';
+
+import { buildTrainingDoc, validateKeys, type KeysFile, type OldTraining } from '../src/qc/training-seed';
 
 const db = new PrismaClient();
 
@@ -110,6 +112,42 @@ async function main() {
     added++;
   }
   console.log(`  ✔ bo'limlar: ${added} ta qo'shildi, ${depts.length - added} ta mavjud (tegilmadi)`);
+
+  // O'quv dasturi va test: eski sozlamadan ko'chirilgan; bo'limda keys-fayl bo'lsa test shundan.
+  // Bo'limda dastur allaqachon bor bo'lsa TEGILMAYDI (rahbar tahrir qilgan bo'lishi mumkin).
+  const base = JSON.parse(readFileSync(join(process.cwd(), 'prisma', 'training', 'base.json'), 'utf8')) as Record<string, OldTraining>;
+  let trainingAdded = 0;
+  let fromKeys = 0;
+  for (const d of depts) {
+    const dept = await db.qcDepartment.findFirst({ where: { name: d.name }, select: { id: true, training: { select: { deptId: true } } } });
+    if (!dept || dept.training) continue;
+    const old = base[d.slug];
+    if (!old) {
+      console.warn(`  ! ${d.name}: eski o'quv dasturi topilmadi (${d.slug})`);
+      continue;
+    }
+    const keysPath = join(process.cwd(), 'prisma', 'training', `oquv_${d.slug}_keys.json`);
+    let keys: KeysFile | null = null;
+    if (existsSync(keysPath)) {
+      keys = JSON.parse(readFileSync(keysPath, 'utf8')) as KeysFile;
+      const problem = validateKeys(keys, `oquv_${d.slug}_keys.json`);
+      if (problem) throw new Error(problem);
+    }
+    const doc = buildTrainingDoc(old, keys);
+    await db.qcTraining.create({
+      data: {
+        deptId: dept.id,
+        title: doc.title,
+        intro: doc.intro,
+        passPct: doc.passPct,
+        days: doc.days as unknown as object,
+        questions: doc.questions as unknown as object,
+      },
+    });
+    trainingAdded++;
+    if (doc.source === 'keys') fromKeys++;
+  }
+  console.log(`  ✔ o'quv dasturi: ${trainingAdded} ta qo'shildi (${fromKeys} tasida keys-test), qolganlariga tegilmadi`);
 
   if (process.env.SEED_DEMO === '1') {
     const cc = await db.qcDepartment.findFirst({ where: { name: 'Call center' }, select: { id: true } });

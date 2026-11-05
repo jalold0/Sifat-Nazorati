@@ -1,0 +1,125 @@
+{
+ "pass": 70,
+ "questions": [
+  {
+   "id": "k1",
+   "case": "1-keys. Kechki smena operatori Dilnoza ish tugagach, smena oxirida 20 ta ochiq murojaat borligini aytdi. Topshirish jurnalida esa faqat 18 tasi yozilgan, qolgan 2 tasi (ikkalasi ham yetkazib berish kechikishi bo'yicha) ertalabki smenaga aytilmagan. Siz tekshiruvchi sifatida nima deb baholaysiz?",
+   "options": [
+    "O'tkazish to'liqligi 100%: 2 ta murojaat unchalik muhim emas",
+    "O'tkazish to'liqligi 90%, me'yor (95%) dan past: ikkala murojaat nomma-nom «Smena almashuvi» shaklida qayd etiladi",
+    "O'tkazish to'liqligi 80%: operatorga darhol hayfsan beriladi",
+    "Natija keyingi oyga qoldiriladi"
+   ],
+   "answer": 1,
+   "why": "18 / 20 = 90%, me'yor 95% dan past. Nomuvofiqlik nomma-nom, dalil bilan qayd etiladi; jazo emas, tuzatish tashkil qilinadi."
+  },
+  {
+   "id": "k2",
+   "case": "2-keys. Mijoz Xitoydan kelgan jo'natma haqida 3-marta qo'ng'iroq qildi. Bazadagi yozuv tekshirilganda: 7 qadamdan mijoz aniqlangan, murojaat ochilgan, tur to'g'ri tanlangan, holat tizimdan tekshirilgan, mijozga javob berilgan, lekin izoh yozilmagan va keyingi qadam muddati qo'yilmagan. Ketma-ketlik bahosi?",
+   "options": [
+    "100%",
+    "85%",
+    "71% (5 / 7), me'yor 90% dan past",
+    "50%"
+   ],
+   "answer": 2,
+   "why": "5 ta qadam bajarilgan: 5 / 7 ≈ 71%. Izoh va muddat bo'lmagani sababli murojaat «yo'qolib» ketishi xavfi bor."
+  },
+  {
+   "id": "k3",
+   "case": "3-keys. Siz kunlik audioni tingladingiz: operator salomlashdi va ismini aytdi, ohangi do'stona, tez gapirmadi. Biroq mijozga tarifni noto'g'ri aytdi, savolni oxirigacha takrorlab tasdiqlamadi, yechim va muddat aytmadi. Boshqa mezonlar bo'yicha jami 12 ball chiqdi (16 dan). Natija qaysi darajaga mos va nima qilinadi?",
+   "options": [
+    "Qoniqarli (11-13): operatorga tarif bo'yicha bilim va yechim-muddat aytish bo'yicha tavsiya, mezon keyingi haftada qayta tekshiriladi",
+    "Qoniqarsiz: operator darhol ishdan bo'shatiladi",
+    "Baholab bo'lmaydi, chunki audio bitta",
+    "A'lo: ish davom etadi"
+   ],
+   "answer": 0,
+   "why": "12 ball 11-13 oralig'ida: qoniqarli. Noto'g'ri ma'lumot va yechim-muddat aytilmagani aniq tavsiya bilan rahbarga yetkaziladi."
+  },
+  {
+   "id": "k4",
+   "case": "4-keys. Qarzdor mijoz bilan telefon audiosida operator: «Bugun to'lamasangiz, manzilingizga borib, hammaga aytamiz» deb gapirdi. Hisobot kuni juma, hozir payshanba. Nima qilasiz?",
+   "options": [
+    "Mijozga qo'ng'iroq qilib uzr so'rayman",
+    "Jumagacha kutib, haftalik hisobotga yozaman",
+    "Operatorning o'ziga og'zaki ogohlantiraman va unutaman",
+    "Audio vaqti va murojaat raqamini ko'rsatib, bugunning o'zida call center rahbariga yozma xabar beraman"
+   ],
+   "answer": 3,
+   "why": "Bosim va tahdid jiddiy holat: ball kutilmaydi, hisobot kunini kutmasdan, dalil bilan darhol rahbarga xabar beriladi."
+  },
+  {
+   "id": "k5",
+   "case": "5-keys. Oxirgi haftada mijozlar 20 ta murojaatga past baho (1-2) qo'ydi. Ulardan 12 tasida muammo keyinchalik hal bo'lgan, 8 tasida hal bo'lmagan. Rahbar: «Bizda hammasi yaxshi, 12 ta hal bo'ldi-ku», dedi. Siz nima deysiz?",
+   "options": [
+    "Rahbar haq: 12 ta ko'p",
+    "Hal etilganlik 60% (12 / 20), me'yor 70% dan past; hal bo'lmagan 8 ta murojaat ro'yxati va sabablari ilova qilinadi",
+    "Hal etilganlik 12%: juda yomon",
+    "Past baholarni hisobotga kiritmayman"
+   ],
+   "answer": 1,
+   "why": "12 / 20 = 60%, me'yor 70% dan past. Faktlar ro'yxati bilan, jazosiz yetkaziladi."
+  },
+  {
+   "id": "k6",
+   "case": "6-keys. Yangi xodim sifatida siz faqat 5 ta yozuvni tekshirdingiz va ularning hammasida xato topdingiz (operator Aziz). Do'stingiz: «Aziz juda yomon ishlaydi, shunday yoz», deydi. Nima qilasiz?",
+   "options": [
+    "Azizni darhol jazolashni so'rayman",
+    "Hisobotga umuman kiritmayman",
+    "Shunday yozaman: 5 tadan 5 ta xato",
+    "5 ta yozuv — kichik namuna. Aziz bo'yicha kamida bir necha kunlik katta namuna olaman, keyin xulosa yozaman"
+   ],
+   "answer": 3,
+   "why": "Kichik namunadan katta xulosa chiqarilmaydi: avval tekshiruv hajmi oshiriladi, keyin xulosa."
+  },
+  {
+   "id": "k7",
+   "case": "7-keys. IVR menyusida «2-tugma: yetkazib berish holati» bandida bir haftada 40 kishi «qoniqdim», 40 kishi «qoniqmadim» bosdi. Yana 12 ta qo'ng'iroqni eshitdingiz, 5 tasida mijoz bu bo'lim emas, boshqa bo'limga kerak bo'lgan. Xulosa?",
+   "options": [
+    "Qoniqish ulushi 50% (me'yor 80%): past; noto'g'ri yo'naltirish ulushi 5 / 12 ≈ 42% (me'yor ≤ 5%) ham yuqori: menyu matni va yo'naltirishni IT bilan tekshirishni taklif qilaman",
+    "Qoniqish ulushi 80%, hammasi yaxshi",
+    "Faqat «qoniqmadim» ni hisoblayman: 40%",
+    "Menyuni o'zim o'zgartiraman"
+   ],
+   "answer": 0,
+   "why": "40 / (40 + 40) = 50%, me'yor 80% dan past. Noto'g'ri yo'naltirish 5 / 12 ≈ 42% (me'yor ≤ 5%); sifat nazorati menyuni o'zi o'zgartirmaydi, dalil bilan taklif beradi."
+  },
+  {
+   "id": "k8",
+   "case": "8-keys. Haftalik 500 ta murojaat: 210 tasi «yetkazib berish kechikishi», 130 tasi «mijoz topshirilmadi», 90 tasi «holat yangilanmadi», qolgan 70 tasi boshqa turlar. Rahbar vaqti kam, bitta narsaga e'tibor qaratishni so'radi. Nima tanlaysiz?",
+   "options": [
+    "«Holat yangilanmadi» dan boshlayman, chunki qiziq",
+    "Eng kichik turlardan boshlayman: tez tugaydi",
+    "«Yetkazib berish kechikishi» (42%) va «mijoz topshirilmadi» (26%) birga 68%: shu ikki tur ildiz sababi birinchi navbatda tahlil qilinadi (Pareto)",
+    "Hammasiga teng vaqt ajrataman"
+   ],
+   "answer": 2,
+   "why": "Pareto qoidasi: kuch eng katta ulushli turlarga qaratiladi; 210 + 130 = 340 / 500 = 68%."
+  },
+  {
+   "id": "k9",
+   "case": "9-keys. «Yetkazib berish kechikishi» bo'yicha murojaat ko'p. Siz so'raysiz: nima uchun kechikadi? — Chunki viloyat markazida ish kechikadi. Nima uchun? — Chunki skaner 14:00 dan keyin qilinadi. Nima uchun? — Chunki kunning oxirida ishchi yetishmaydi. Nima uchun? — Chunki yuklama ish kuni oxirida to'planadi. Bu usul nima deb ataladi va maqsadi?",
+   "options": [
+    "Smena nazorati: jurnalni tekshirish",
+    "«5 nima uchun»: muammoning ildiz sababini topish (yuklama taqsimoti)",
+    "Pareto tahlili: murojaatlarni sanash",
+    "Audio baholash: operatorni baholash"
+   ],
+   "answer": 1,
+   "why": "Takroriy «nima uchun?» yuzaki emas, ildiz sababga (yuklamaning noto'g'ri taqsimoti) olib boradi."
+  },
+  {
+   "id": "k10",
+   "case": "10-keys. Payshanba kuni bo'lim ko'rsatkichi me'yordan past chiqdi, rahbar esa sizga: «Ayblisini top, jazolaymiz», dedi. Sifat nazorati xodimi sifatida qanday javob berasiz?",
+   "options": [
+    "Sifat nazorati jazolamaydi: yozuv raqamlari va vaqtlari bilan dalil, ildiz sabab va taklif (mas'ul, muddat) tayyorlab yozma yetkazaman",
+    "Hisobotni tashlab yuboraman",
+    "Xodimlar bilan gaplashib, o'zim hal qilaman",
+    "Ayblini ro'yxatga olib, jazoga taklif qilaman"
+   ],
+   "answer": 0,
+   "why": "Sifat nazorati tekshiruvchi: dalil, ildiz sabab va taklifni yetkazadi; tuzatishni bo'lim rahbari tashkil qiladi."
+  }
+ ]
+}

@@ -1,0 +1,1744 @@
+{
+  "kuryerka": {
+    "title": "Kuryerka bo'limini tekshirish: 1 haftalik dastur",
+    "intro": "Siz Kuryerka bo'limi xodimi emassiz: tekshiruvchisiz. Jarayonni kuzatasiz, dalil yig'asiz, KPI hisoblaysiz va topilganini rahbarlarga yetkazasiz.",
+    "pass": 70,
+    "days": [
+      {
+        "title": "1-kun. Bo'lim jarayoni va hujjatlari",
+        "theory": [
+          "Kuryer ish kuni: yuklash, yetkazish, COD, qaytarish",
+          "Asosiy hujjatlar: marshrut varaqasi, ePOD, COD hisoboti",
+          "Sifat nazorati roli: tekshiruvchi, jarayonni kuzatadi, dalil yig'adi va xulosani rahbarga yetkazadi"
+        ],
+        "tasks": [
+          "Bitta kuryer ish kunini boshidan oxirigacha kuzatdim",
+          "Marshrut varaqasi va ePOD namunalarini ko'rdim"
+        ]
+      },
+      {
+        "title": "2-kun. Jarayon auditi (tekshiruv nuqtalari)",
+        "theory": [
+          "Kuryer auditining 8 bandi",
+          "ePOD: foto, GPS, vaqt, imzo",
+          "Ketma-ketlik bahosi = bajarilgan bandlar / tekshirilgan bandlar"
+        ],
+        "tasks": [
+          "5 ta tekshiruvni «Jarayon auditi» shakliga kiritdim",
+          "Natijani mentor bilan solishtirdim"
+        ]
+      },
+      {
+        "title": "3-kun. KPI va muddatlar",
+        "theory": [
+          "Birinchi urinish, OTD, qaytarilish ulushi formulalari",
+          "COD topshirish to'liqligi",
+          "Me'yordan chetlanish: avval hajmni (n), keyin sababni ko'ring"
+        ],
+        "tasks": [
+          "Kunlik/haftalik ko'rsatkichlarni shaklga kiritib, KPI qiymatlarini tekshirdim",
+          "Me'yordan chetlangan 1 ko'rsatkichning sababini yozdim"
+        ]
+      },
+      {
+        "title": "4-kun. Shikoyat, hujjat va hisobotlar",
+        "theory": [
+          "Soxta rad etish va naqd kam topshirish belgilari",
+          "Qaytarilgan jo'natmani tekshirish",
+          "Ildiz sabab: «5 nima uchun» usuli va Pareto qoidasi"
+        ],
+        "tasks": [
+          "3 ta shikoyatni turi va asosliligi bo'yicha ajratdim",
+          "10 ta hujjatni tanlab tekshirib, xato ulushini hisobladim"
+        ]
+      },
+      {
+        "title": "5-kun. Rahbarga hisobot va yakuniy test",
+        "theory": [
+          "COD bo'yicha hisobotni moliya bilan solishtirish",
+          "Bir sahifali hisobot: xulosa, dalil, ildiz sabab, taklif, mas'ul, muddat"
+        ],
+        "tasks": [
+          "Bir sahifali hisobot tayyorladim",
+          "5 daqiqalik og'zaki taqdimot qildim",
+          "Yakuniy testni topshirdim"
+        ]
+      }
+    ],
+    "quiz": [
+      {
+        "q": "Jarayon auditi bahosi me'yordan past chiqdi. Qanday harakat qilinadi?",
+        "o": [
+          "Xodim darhol jazolanadi",
+          "Dalil (hujjat raqami, vaqti) bilan bo'lim rahbariga yozma xabar beriladi",
+          "Hisobotga kiritilmaydi",
+          "Keyingi oyga qoldiriladi"
+        ],
+        "a": 1,
+        "w": "Sifat nazorati jazolamaydi: dalil bilan yozma xabar beradi, tuzatishni bo'lim rahbari tashkil qiladi."
+      },
+      {
+        "q": "KPI me'yordan past, lekin yozuvlar juda kam (masalan, 5 ta). Xulosa nima?",
+        "o": [
+          "Bo'lim yomon ishlayapti",
+          "Namuna kichik: katta xulosa chiqarilmaydi, tekshiruv hajmi oshiriladi",
+          "KPI o'chiriladi",
+          "Natija e'lon qilinadi"
+        ],
+        "a": 1,
+        "w": "Foiz bilan birga yozuvlar soni ham ko'riladi; kichik namunadan qat'iy xulosa chiqarilmaydi."
+      },
+      {
+        "q": "Shikoyatlarning katta qismi bitta turda to'plangan. Keyingi qadam?",
+        "o": [
+          "Shu turni hisobotdan chiqarish",
+          "Mijozlarga SMS yuborish",
+          "Shu tur uchun ildiz sabab («5 nima uchun») aniqlash",
+          "Yangi xodim olish"
+        ],
+        "a": 2,
+        "w": "Eng katta turdan boshlab ildiz sabab aniqlanadi (Pareto qoidasi), keyin taklif beriladi."
+      },
+      {
+        "q": "Hisobotda xodimlar haqida qanday yoziladi?",
+        "o": [
+          "Ismlar ommaviy ro'yxatda",
+          "Jarayon tahlil qilinadi; alohida holatlar yopiq xulosada beriladi",
+          "Umuman yozilmaydi",
+          "Faqat eng yomonlari"
+        ],
+        "a": 1,
+        "w": "Shaxsiy ayblanmaydi: xatoga jarayon nuqtai nazaridan qaraladi."
+      },
+      {
+        "q": "Bitta zonada «mijoz rad etdi» ulushi umumiydan 3 baravar yuqori. Eng to'g'ri tekshiruv?",
+        "o": [
+          "Hech narsa qilmaslik",
+          "Shu zonadagi rad etilganlar bo'yicha ePOD, GPS va mijozga qayta qo'ng'iroq bilan tasodifiy tekshirish",
+          "Barcha kuryerlarni ogohlantirish",
+          "Zonani yopish"
+        ],
+        "a": 1,
+        "w": "Soxta rad etish belgisi: ePOD, GPS va mijoz bilan tasdiqlash orqali tekshiriladi."
+      },
+      {
+        "q": "100 ta yuklangan jo'natmadan 88 tasi birinchi urinishda yetkazildi. Birinchi urinishda yetkazish nechta foiz?",
+        "o": [
+          "80%",
+          "88%",
+          "92%",
+          "100%"
+        ],
+        "a": 1,
+        "w": "88 / 100 = 88%. Sanoat mezoni 90% atrofida, demak biroz past."
+      },
+      {
+        "q": "Kuryer COD summasi ketma-ket kutilganidan 3% past topshirilmoqda. Bu nimani anglatishi mumkin?",
+        "o": [
+          "Hech narsani",
+          "Naqdni kam ko'rsatish belgisi: buyurtma-holat-kassa uch tomonlama solishtiriladi",
+          "Kuryer tez ishlayapti",
+          "Mijozlar ko'p to'lagan"
+        ],
+        "a": 1,
+        "w": "Doimiy 2-5% farq naqd skimming belgisi; per-order solishtirish kerak."
+      }
+    ]
+  },
+  "toshkent_ombor": {
+    "title": "Toshkent ombori bo'limini tekshirish: 1 haftalik dastur",
+    "intro": "Siz Toshkent ombori bo'limi xodimi emassiz: tekshiruvchisiz. Jarayonni kuzatasiz, dalil yig'asiz, KPI hisoblaysiz va topilganini rahbarlarga yetkazasiz.",
+    "pass": 70,
+    "days": [
+      {
+        "title": "1-kun. Bo'lim jarayoni va hujjatlari",
+        "theory": [
+          "Omborning 4 jarayoni: qabul, saqlash, saralash, jo'natish",
+          "Manifest, dalolatnoma va reys varaqasi",
+          "Sifat nazorati roli: tekshiruvchi, jarayonni kuzatadi, dalil yig'adi va xulosani rahbarga yetkazadi"
+        ],
+        "tasks": [
+          "Qabul zonasida bitta reysni boshidan oxirigacha kuzatdim",
+          "Manifest va dalolatnoma namunalarini ko'rdim"
+        ]
+      },
+      {
+        "title": "2-kun. Jarayon auditi (tekshiruv nuqtalari)",
+        "theory": [
+          "Ombor auditining 8 bandi",
+          "Skan va joylashtirish ketma-ketligi",
+          "Ketma-ketlik bahosi = bajarilgan bandlar / tekshirilgan bandlar"
+        ],
+        "tasks": [
+          "5 ta tekshiruvni «Jarayon auditi» shakliga kiritdim",
+          "Natijani mentor bilan solishtirdim"
+        ]
+      },
+      {
+        "title": "3-kun. KPI va muddatlar",
+        "theory": [
+          "Dock-to-stock, inventar aniqligi, noto'g'ri saralash formulalari",
+          "Me'yordan chetlanish: avval hajmni (n), keyin sababni ko'ring"
+        ],
+        "tasks": [
+          "Kunlik/haftalik ko'rsatkichlarni shaklga kiritib, KPI qiymatlarini tekshirdim",
+          "Me'yordan chetlangan 1 ko'rsatkichning sababini yozdim"
+        ]
+      },
+      {
+        "title": "4-kun. Shikoyat, hujjat va hisobotlar",
+        "theory": [
+          "Yo'qolgan/shikast jo'natma tahlili: oxirgi skan nuqtasi",
+          "Ildiz sabab: «5 nima uchun» usuli va Pareto qoidasi"
+        ],
+        "tasks": [
+          "3 ta shikoyatni turi va asosliligi bo'yicha ajratdim",
+          "10 ta hujjatni tanlab tekshirib, xato ulushini hisobladim"
+        ]
+      },
+      {
+        "title": "5-kun. Rahbarga hisobot va yakuniy test",
+        "theory": [
+          "Ombor bo'yicha bir sahifali hisobot",
+          "Bir sahifali hisobot: xulosa, dalil, ildiz sabab, taklif, mas'ul, muddat"
+        ],
+        "tasks": [
+          "Bir sahifali hisobot tayyorladim",
+          "5 daqiqalik og'zaki taqdimot qildim",
+          "Yakuniy testni topshirdim"
+        ]
+      }
+    ],
+    "quiz": [
+      {
+        "q": "Jarayon auditi bahosi me'yordan past chiqdi. Qanday harakat qilinadi?",
+        "o": [
+          "Xodim darhol jazolanadi",
+          "Dalil (hujjat raqami, vaqti) bilan bo'lim rahbariga yozma xabar beriladi",
+          "Hisobotga kiritilmaydi",
+          "Keyingi oyga qoldiriladi"
+        ],
+        "a": 1,
+        "w": "Sifat nazorati jazolamaydi: dalil bilan yozma xabar beradi, tuzatishni bo'lim rahbari tashkil qiladi."
+      },
+      {
+        "q": "KPI me'yordan past, lekin yozuvlar juda kam (masalan, 5 ta). Xulosa nima?",
+        "o": [
+          "Bo'lim yomon ishlayapti",
+          "Namuna kichik: katta xulosa chiqarilmaydi, tekshiruv hajmi oshiriladi",
+          "KPI o'chiriladi",
+          "Natija e'lon qilinadi"
+        ],
+        "a": 1,
+        "w": "Foiz bilan birga yozuvlar soni ham ko'riladi; kichik namunadan qat'iy xulosa chiqarilmaydi."
+      },
+      {
+        "q": "Shikoyatlarning katta qismi bitta turda to'plangan. Keyingi qadam?",
+        "o": [
+          "Shu turni hisobotdan chiqarish",
+          "Mijozlarga SMS yuborish",
+          "Shu tur uchun ildiz sabab («5 nima uchun») aniqlash",
+          "Yangi xodim olish"
+        ],
+        "a": 2,
+        "w": "Eng katta turdan boshlab ildiz sabab aniqlanadi (Pareto qoidasi), keyin taklif beriladi."
+      },
+      {
+        "q": "Hisobotda xodimlar haqida qanday yoziladi?",
+        "o": [
+          "Ismlar ommaviy ro'yxatda",
+          "Jarayon tahlil qilinadi; alohida holatlar yopiq xulosada beriladi",
+          "Umuman yozilmaydi",
+          "Faqat eng yomonlari"
+        ],
+        "a": 1,
+        "w": "Shaxsiy ayblanmaydi: xatoga jarayon nuqtai nazaridan qaraladi."
+      },
+      {
+        "q": "Inventarizatsiyada 200 pozitsiyadan 190 tasi tizimga mos. Inventar aniqligi va xulosa?",
+        "o": [
+          "95%: me'yordan (97%) past, tekshirish kerak",
+          "99%: a'lo",
+          "90%: normal",
+          "105%"
+        ],
+        "a": 0,
+        "w": "190/200 = 95% < 97%: sabablarni (kam/ortiq) tahlil qilish kerak."
+      },
+      {
+        "q": "Shikastlangan jo'natmalar uchun akt qachon tuziladi?",
+        "o": [
+          "Oy oxirida",
+          "Aniqlangan zahoti, foto va 24 soat ichida rasmiylashtirilib",
+          "Mijoz so'ragandagina",
+          "Hech qachon"
+        ],
+        "a": 1,
+        "w": "Dalil yo'qolmasligi uchun akt va foto aniqlangan zahoti rasmiylashtiriladi."
+      },
+      {
+        "q": "Skan hodisasi bor, lekin joy biriktirilmagan jo'natmalar ko'paydi. Bu nimadan dalolat?",
+        "o": [
+          "Ombor to'la",
+          "Joylashtirish (put-away) jarayoni buzilgan, jo'natma «yo'qolish» xavfi oshgan",
+          "Normal holat",
+          "Tizim xatosi, e'tibor kerak emas"
+        ],
+        "a": 1,
+        "w": "Joy biriktirilmasa jo'natmani topish qiyinlashadi: dock-to-stock nazorati kerak."
+      }
+    ]
+  },
+  "xitoy_avto": {
+    "title": "Xitoy avto sklad bo'limini tekshirish: 1 haftalik dastur",
+    "intro": "Siz Xitoy avto sklad bo'limi xodimi emassiz: tekshiruvchisiz. Jarayonni kuzatasiz, dalil yig'asiz, KPI hisoblaysiz va topilganini rahbarlarga yetkazasiz.",
+    "pass": 70,
+    "days": [
+      {
+        "title": "1-kun. Bo'lim jarayoni va hujjatlari",
+        "theory": [
+          "Xitoy avto yo'nalishi: reys, plomba, CMR, tranzit",
+          "Pochta va kuryerlik jo'natmalarining bojxona nazorati",
+          "Sifat nazorati roli: tekshiruvchi, jarayonni kuzatadi, dalil yig'adi va xulosani rahbarga yetkazadi"
+        ],
+        "tasks": [
+          "Bitta reysning qabulini kuzatdim",
+          "CMR, manifest va tranzit hujjatlari namunasini ko'rdim"
+        ]
+      },
+      {
+        "title": "2-kun. Jarayon auditi (tekshiruv nuqtalari)",
+        "theory": [
+          "Reys qabuli auditining 8 bandi",
+          "Plomba va akt qoidalari",
+          "Ketma-ketlik bahosi = bajarilgan bandlar / tekshirilgan bandlar"
+        ],
+        "tasks": [
+          "5 ta tekshiruvni «Jarayon auditi» shakliga kiritdim",
+          "Natijani mentor bilan solishtirdim"
+        ]
+      },
+      {
+        "title": "3-kun. KPI va muddatlar",
+        "theory": [
+          "Bojxonada turish kuni, manifestga moslik, koridor ulushi",
+          "Me'yordan chetlanish: avval hajmni (n), keyin sababni ko'ring"
+        ],
+        "tasks": [
+          "Kunlik/haftalik ko'rsatkichlarni shaklga kiritib, KPI qiymatlarini tekshirdim",
+          "Me'yordan chetlangan 1 ko'rsatkichning sababini yozdim"
+        ]
+      },
+      {
+        "title": "4-kun. Shikoyat, hujjat va hisobotlar",
+        "theory": [
+          "«Xitoy jo'natmam qayerda» shikoyatlarini reys bilan bog'lash",
+          "Ildiz sabab: «5 nima uchun» usuli va Pareto qoidasi"
+        ],
+        "tasks": [
+          "3 ta shikoyatni turi va asosliligi bo'yicha ajratdim",
+          "10 ta hujjatni tanlab tekshirib, xato ulushini hisobladim"
+        ]
+      },
+      {
+        "title": "5-kun. Rahbarga hisobot va yakuniy test",
+        "theory": [
+          "Reyslar bo'yicha haftalik hisobot",
+          "Bir sahifali hisobot: xulosa, dalil, ildiz sabab, taklif, mas'ul, muddat"
+        ],
+        "tasks": [
+          "Bir sahifali hisobot tayyorladim",
+          "5 daqiqalik og'zaki taqdimot qildim",
+          "Yakuniy testni topshirdim"
+        ]
+      }
+    ],
+    "quiz": [
+      {
+        "q": "Jarayon auditi bahosi me'yordan past chiqdi. Qanday harakat qilinadi?",
+        "o": [
+          "Xodim darhol jazolanadi",
+          "Dalil (hujjat raqami, vaqti) bilan bo'lim rahbariga yozma xabar beriladi",
+          "Hisobotga kiritilmaydi",
+          "Keyingi oyga qoldiriladi"
+        ],
+        "a": 1,
+        "w": "Sifat nazorati jazolamaydi: dalil bilan yozma xabar beradi, tuzatishni bo'lim rahbari tashkil qiladi."
+      },
+      {
+        "q": "KPI me'yordan past, lekin yozuvlar juda kam (masalan, 5 ta). Xulosa nima?",
+        "o": [
+          "Bo'lim yomon ishlayapti",
+          "Namuna kichik: katta xulosa chiqarilmaydi, tekshiruv hajmi oshiriladi",
+          "KPI o'chiriladi",
+          "Natija e'lon qilinadi"
+        ],
+        "a": 1,
+        "w": "Foiz bilan birga yozuvlar soni ham ko'riladi; kichik namunadan qat'iy xulosa chiqarilmaydi."
+      },
+      {
+        "q": "Shikoyatlarning katta qismi bitta turda to'plangan. Keyingi qadam?",
+        "o": [
+          "Shu turni hisobotdan chiqarish",
+          "Mijozlarga SMS yuborish",
+          "Shu tur uchun ildiz sabab («5 nima uchun») aniqlash",
+          "Yangi xodim olish"
+        ],
+        "a": 2,
+        "w": "Eng katta turdan boshlab ildiz sabab aniqlanadi (Pareto qoidasi), keyin taklif beriladi."
+      },
+      {
+        "q": "Hisobotda xodimlar haqida qanday yoziladi?",
+        "o": [
+          "Ismlar ommaviy ro'yxatda",
+          "Jarayon tahlil qilinadi; alohida holatlar yopiq xulosada beriladi",
+          "Umuman yozilmaydi",
+          "Faqat eng yomonlari"
+        ],
+        "a": 1,
+        "w": "Shaxsiy ayblanmaydi: xatoga jarayon nuqtai nazaridan qaraladi."
+      },
+      {
+        "q": "Reys plombasi hujjatdagi raqamga mos emas. Birinchi qadam?",
+        "o": [
+          "Tushirishni davom ettirish",
+          "Tushirishni to'xtatish, foto va akt, bo'lim rahbari va xavfsizlik xizmatiga xabar",
+          "Hisobotga yozmaslik",
+          "Haydovchini qo'yib yuborish"
+        ],
+        "a": 1,
+        "w": "Plomba nomuvofiqligi jiddiy xavf belgisi: dalil (foto, akt) bilan darhol xabar beriladi."
+      },
+      {
+        "q": "Reys kelganidan bojxona ruxsatigacha o'rtacha 6 kun o'tmoqda, me'yor 3 kun. Nima qilinadi?",
+        "o": [
+          "Hech narsa",
+          "Sababni (hujjat, koridor, navbat) ajratib, rahbarga dalil bilan xabar beriladi",
+          "Reyslarni to'xtatish",
+          "Mijozlarga SMS"
+        ],
+        "a": 1,
+        "w": "Me'yordan chetlanish sababi dalil bilan tahlil qilinib, mas'ul bo'limga yetkaziladi."
+      },
+      {
+        "q": "Bojxona to'lovisiz limit pochtada qancha (2025-yil 1-maydan)?",
+        "o": [
+          "$100",
+          "$1000",
+          "$50",
+          "Limit yo'q"
+        ],
+        "a": 0,
+        "w": "Xalqaro pochta jo'natmalari uchun $100, kuryerlik uchun oyiga $200 (me'yoriy hujjatlarni joriy holatda tekshiring)."
+      }
+    ]
+  },
+  "avia": {
+    "title": "Avia sklad bo'limini tekshirish: 1 haftalik dastur",
+    "intro": "Siz Avia sklad bo'limi xodimi emassiz: tekshiruvchisiz. Jarayonni kuzatasiz, dalil yig'asiz, KPI hisoblaysiz va topilganini rahbarlarga yetkazasiz.",
+    "pass": 70,
+    "days": [
+      {
+        "title": "1-kun. Bo'lim jarayoni va hujjatlari",
+        "theory": [
+          "Avia yo'nalishi: AWB, manifest, koridor",
+          "Hujjatlar: AWB, dalolatnoma, shikast akti",
+          "Sifat nazorati roli: tekshiruvchi, jarayonni kuzatadi, dalil yig'adi va xulosani rahbarga yetkazadi"
+        ],
+        "tasks": [
+          "Bitta aviareys qabulini kuzatdim",
+          "AWB va manifest namunasini ko'rdim"
+        ]
+      },
+      {
+        "title": "2-kun. Jarayon auditi (tekshiruv nuqtalari)",
+        "theory": [
+          "Avia reys auditining 8 bandi",
+          "Ketma-ketlik bahosi = bajarilgan bandlar / tekshirilgan bandlar"
+        ],
+        "tasks": [
+          "5 ta tekshiruvni «Jarayon auditi» shakliga kiritdim",
+          "Natijani mentor bilan solishtirdim"
+        ]
+      },
+      {
+        "title": "3-kun. KPI va muddatlar",
+        "theory": [
+          "Ishlov boshlash vaqti, og'irlik farqi, manifestga moslik",
+          "Me'yordan chetlanish: avval hajmni (n), keyin sababni ko'ring"
+        ],
+        "tasks": [
+          "Kunlik/haftalik ko'rsatkichlarni shaklga kiritib, KPI qiymatlarini tekshirdim",
+          "Me'yordan chetlangan 1 ko'rsatkichning sababini yozdim"
+        ]
+      },
+      {
+        "title": "4-kun. Shikoyat, hujjat va hisobotlar",
+        "theory": [
+          "Aviajo'natma shikoyatlarini bosqichlarga bog'lash",
+          "Ildiz sabab: «5 nima uchun» usuli va Pareto qoidasi"
+        ],
+        "tasks": [
+          "3 ta shikoyatni turi va asosliligi bo'yicha ajratdim",
+          "10 ta hujjatni tanlab tekshirib, xato ulushini hisobladim"
+        ]
+      },
+      {
+        "title": "5-kun. Rahbarga hisobot va yakuniy test",
+        "theory": [
+          "Avia sklad bo'yicha bir sahifali hisobot",
+          "Bir sahifali hisobot: xulosa, dalil, ildiz sabab, taklif, mas'ul, muddat"
+        ],
+        "tasks": [
+          "Bir sahifali hisobot tayyorladim",
+          "5 daqiqalik og'zaki taqdimot qildim",
+          "Yakuniy testni topshirdim"
+        ]
+      }
+    ],
+    "quiz": [
+      {
+        "q": "Jarayon auditi bahosi me'yordan past chiqdi. Qanday harakat qilinadi?",
+        "o": [
+          "Xodim darhol jazolanadi",
+          "Dalil (hujjat raqami, vaqti) bilan bo'lim rahbariga yozma xabar beriladi",
+          "Hisobotga kiritilmaydi",
+          "Keyingi oyga qoldiriladi"
+        ],
+        "a": 1,
+        "w": "Sifat nazorati jazolamaydi: dalil bilan yozma xabar beradi, tuzatishni bo'lim rahbari tashkil qiladi."
+      },
+      {
+        "q": "KPI me'yordan past, lekin yozuvlar juda kam (masalan, 5 ta). Xulosa nima?",
+        "o": [
+          "Bo'lim yomon ishlayapti",
+          "Namuna kichik: katta xulosa chiqarilmaydi, tekshiruv hajmi oshiriladi",
+          "KPI o'chiriladi",
+          "Natija e'lon qilinadi"
+        ],
+        "a": 1,
+        "w": "Foiz bilan birga yozuvlar soni ham ko'riladi; kichik namunadan qat'iy xulosa chiqarilmaydi."
+      },
+      {
+        "q": "Shikoyatlarning katta qismi bitta turda to'plangan. Keyingi qadam?",
+        "o": [
+          "Shu turni hisobotdan chiqarish",
+          "Mijozlarga SMS yuborish",
+          "Shu tur uchun ildiz sabab («5 nima uchun») aniqlash",
+          "Yangi xodim olish"
+        ],
+        "a": 2,
+        "w": "Eng katta turdan boshlab ildiz sabab aniqlanadi (Pareto qoidasi), keyin taklif beriladi."
+      },
+      {
+        "q": "Hisobotda xodimlar haqida qanday yoziladi?",
+        "o": [
+          "Ismlar ommaviy ro'yxatda",
+          "Jarayon tahlil qilinadi; alohida holatlar yopiq xulosada beriladi",
+          "Umuman yozilmaydi",
+          "Faqat eng yomonlari"
+        ],
+        "a": 1,
+        "w": "Shaxsiy ayblanmaydi: xatoga jarayon nuqtai nazaridan qaraladi."
+      },
+      {
+        "q": "Manifest og'irligi 100 kg, tortilgani 106 kg. Og'irlik farqi va xulosa (me'yor 2%)?",
+        "o": [
+          "6%: me'yordan yuqori, sabab tekshiriladi",
+          "1%",
+          "2%: normal",
+          "106%"
+        ],
+        "a": 0,
+        "w": "|106-100|/100 = 6% > 2%."
+      },
+      {
+        "q": "Reys 14 soat oldin kelgan, ishlov hali boshlanmagan (me'yor 12). Qaysi KPI buziladi?",
+        "o": [
+          "Shikastlanish",
+          "Reysdan ishlov boshlanishigacha vaqt",
+          "Inventar aniqligi",
+          "OTD"
+        ],
+        "a": 1,
+        "w": "Bu «ishlovni boshlash (soat)» ko'rsatkichi."
+      },
+      {
+        "q": "AWB hujjatda bor, tizimda jo'natma yo'q. Bu nima?",
+        "o": [
+          "Normal",
+          "Tizimda ma'lumot kiritish buzilgan: qizil bayroq, rahbarga xabar",
+          "Mijoz xatosi",
+          "Bojxona xatosi"
+        ],
+        "a": 1,
+        "w": "Hujjat va tizim nomuvofiqligi dalil bilan yetkaziladigan qizil bayroq."
+      }
+    ]
+  },
+  "viloyat": {
+    "title": "Viloyat taqsimot markazlari bo'limini tekshirish: 1 haftalik dastur",
+    "intro": "Siz Viloyat taqsimot markazlari bo'limi xodimi emassiz: tekshiruvchisiz. Jarayonni kuzatasiz, dalil yig'asiz, KPI hisoblaysiz va topilganini rahbarlarga yetkazasiz.",
+    "pass": 70,
+    "days": [
+      {
+        "title": "1-kun. Bo'lim jarayoni va hujjatlari",
+        "theory": [
+          "Taqsimot markazining roli: Toshkent - markaz - filial zanjiri",
+          "Reys manifesti va dalolatnoma",
+          "Sifat nazorati roli: tekshiruvchi, jarayonni kuzatadi, dalil yig'adi va xulosani rahbarga yetkazadi"
+        ],
+        "tasks": [
+          "Bitta markaz ish kunini kuzatdim",
+          "Reys manifesti va dalolatnoma namunasini ko'rdim"
+        ]
+      },
+      {
+        "title": "2-kun. Jarayon auditi (tekshiruv nuqtalari)",
+        "theory": [
+          "Markaz auditining 8 bandi",
+          "Ketma-ketlik bahosi = bajarilgan bandlar / tekshirilgan bandlar"
+        ],
+        "tasks": [
+          "5 ta tekshiruvni «Jarayon auditi» shakliga kiritdim",
+          "Natijani mentor bilan solishtirdim"
+        ]
+      },
+      {
+        "title": "3-kun. KPI va muddatlar",
+        "theory": [
+          "Muddatida jo'natish, noto'g'ri yo'naltirish, qoldiq formulalari",
+          "Me'yordan chetlanish: avval hajmni (n), keyin sababni ko'ring"
+        ],
+        "tasks": [
+          "Kunlik/haftalik ko'rsatkichlarni shaklga kiritib, KPI qiymatlarini tekshirdim",
+          "Me'yordan chetlangan 1 ko'rsatkichning sababini yozdim"
+        ]
+      },
+      {
+        "title": "4-kun. Shikoyat, hujjat va hisobotlar",
+        "theory": [
+          "Viloyat bo'yicha kechikish shikoyatini bosqichga bog'lash",
+          "Ildiz sabab: «5 nima uchun» usuli va Pareto qoidasi"
+        ],
+        "tasks": [
+          "3 ta shikoyatni turi va asosliligi bo'yicha ajratdim",
+          "10 ta hujjatni tanlab tekshirib, xato ulushini hisobladim"
+        ]
+      },
+      {
+        "title": "5-kun. Rahbarga hisobot va yakuniy test",
+        "theory": [
+          "Markazlarni taqqoslash: reyting jadvalidan foydalanish",
+          "Bir sahifali hisobot: xulosa, dalil, ildiz sabab, taklif, mas'ul, muddat"
+        ],
+        "tasks": [
+          "Bir sahifali hisobot tayyorladim",
+          "5 daqiqalik og'zaki taqdimot qildim",
+          "Yakuniy testni topshirdim"
+        ]
+      }
+    ],
+    "quiz": [
+      {
+        "q": "Jarayon auditi bahosi me'yordan past chiqdi. Qanday harakat qilinadi?",
+        "o": [
+          "Xodim darhol jazolanadi",
+          "Dalil (hujjat raqami, vaqti) bilan bo'lim rahbariga yozma xabar beriladi",
+          "Hisobotga kiritilmaydi",
+          "Keyingi oyga qoldiriladi"
+        ],
+        "a": 1,
+        "w": "Sifat nazorati jazolamaydi: dalil bilan yozma xabar beradi, tuzatishni bo'lim rahbari tashkil qiladi."
+      },
+      {
+        "q": "KPI me'yordan past, lekin yozuvlar juda kam (masalan, 5 ta). Xulosa nima?",
+        "o": [
+          "Bo'lim yomon ishlayapti",
+          "Namuna kichik: katta xulosa chiqarilmaydi, tekshiruv hajmi oshiriladi",
+          "KPI o'chiriladi",
+          "Natija e'lon qilinadi"
+        ],
+        "a": 1,
+        "w": "Foiz bilan birga yozuvlar soni ham ko'riladi; kichik namunadan qat'iy xulosa chiqarilmaydi."
+      },
+      {
+        "q": "Shikoyatlarning katta qismi bitta turda to'plangan. Keyingi qadam?",
+        "o": [
+          "Shu turni hisobotdan chiqarish",
+          "Mijozlarga SMS yuborish",
+          "Shu tur uchun ildiz sabab («5 nima uchun») aniqlash",
+          "Yangi xodim olish"
+        ],
+        "a": 2,
+        "w": "Eng katta turdan boshlab ildiz sabab aniqlanadi (Pareto qoidasi), keyin taklif beriladi."
+      },
+      {
+        "q": "Hisobotda xodimlar haqida qanday yoziladi?",
+        "o": [
+          "Ismlar ommaviy ro'yxatda",
+          "Jarayon tahlil qilinadi; alohida holatlar yopiq xulosada beriladi",
+          "Umuman yozilmaydi",
+          "Faqat eng yomonlari"
+        ],
+        "a": 1,
+        "w": "Shaxsiy ayblanmaydi: xatoga jarayon nuqtai nazaridan qaraladi."
+      },
+      {
+        "q": "Markazda kun oxirida qoldiq 5% (me'yor 2%) ketma-ket 3 kun. Nima qilinadi?",
+        "o": [
+          "Kutish",
+          "Sabab (kadr, transport, hajm) dalil bilan tahlil qilinib bo'lim rahbariga xabar",
+          "Markazni yopish",
+          "Qoldiqni hisobotdan chiqarish"
+        ],
+        "a": 1,
+        "w": "Takrorlanuvchi chetlanish tizimli sabab bildiradi."
+      },
+      {
+        "q": "100 ta saralangandan 3 tasi noto'g'ri yo'naltirildi. Ulush va xulosa (me'yor 1%)?",
+        "o": [
+          "3%: me'yordan yuqori",
+          "0.3%",
+          "1%",
+          "30%"
+        ],
+        "a": 0,
+        "w": "3/100 = 3% > 1%."
+      },
+      {
+        "q": "Reys manifestida 200 ta, qabul qilingan 196 ta. Reys to'liqligi?",
+        "o": [
+          "98%",
+          "96%",
+          "99%",
+          "100%"
+        ],
+        "a": 0,
+        "w": "196/200 = 98% < 99%: farq tekshiriladi."
+      }
+    ]
+  },
+  "filiallar": {
+    "title": "Filiallar bo'limini tekshirish: 1 haftalik dastur",
+    "intro": "Siz Filiallar bo'limi xodimi emassiz: tekshiruvchisiz. Jarayonni kuzatasiz, dalil yig'asiz, KPI hisoblaysiz va topilganini rahbarlarga yetkazasiz.",
+    "pass": 70,
+    "days": [
+      {
+        "title": "1-kun. Bo'lim jarayoni va hujjatlari",
+        "theory": [
+          "Filial ish tartibi: qabul, tarif, kassa, topshirish",
+          "Hujjatlar: kvitansiya, kassa hisoboti, topshirish daftari",
+          "Sifat nazorati roli: tekshiruvchi, jarayonni kuzatadi, dalil yig'adi va xulosani rahbarga yetkazadi"
+        ],
+        "tasks": [
+          "Bitta filialda ish kunini kuzatdim",
+          "Qabul kvitansiyasi va kassa hisoboti namunasini ko'rdim"
+        ]
+      },
+      {
+        "title": "2-kun. Jarayon auditi (tekshiruv nuqtalari)",
+        "theory": [
+          "Filial auditining 8 bandi",
+          "Yashirin xaridor usuli va etikasi",
+          "Ketma-ketlik bahosi = bajarilgan bandlar / tekshirilgan bandlar"
+        ],
+        "tasks": [
+          "5 ta tekshiruvni «Jarayon auditi» shakliga kiritdim",
+          "Natijani mentor bilan solishtirdim"
+        ]
+      },
+      {
+        "title": "3-kun. KPI va muddatlar",
+        "theory": [
+          "Tarif xatosi, navbat, kassa farqi, saqlash muddati formulalari",
+          "Me'yordan chetlanish: avval hajmni (n), keyin sababni ko'ring"
+        ],
+        "tasks": [
+          "Kunlik/haftalik ko'rsatkichlarni shaklga kiritib, KPI qiymatlarini tekshirdim",
+          "Me'yordan chetlangan 1 ko'rsatkichning sababini yozdim"
+        ]
+      },
+      {
+        "title": "4-kun. Shikoyat, hujjat va hisobotlar",
+        "theory": [
+          "Filial bo'yicha shikoyatlarni tahlil qilish",
+          "Ildiz sabab: «5 nima uchun» usuli va Pareto qoidasi"
+        ],
+        "tasks": [
+          "3 ta shikoyatni turi va asosliligi bo'yicha ajratdim",
+          "10 ta hujjatni tanlab tekshirib, xato ulushini hisobladim"
+        ]
+      },
+      {
+        "title": "5-kun. Rahbarga hisobot va yakuniy test",
+        "theory": [
+          "Filiallar reytingi va hisobot",
+          "Bir sahifali hisobot: xulosa, dalil, ildiz sabab, taklif, mas'ul, muddat"
+        ],
+        "tasks": [
+          "Bir sahifali hisobot tayyorladim",
+          "5 daqiqalik og'zaki taqdimot qildim",
+          "Yakuniy testni topshirdim"
+        ]
+      }
+    ],
+    "quiz": [
+      {
+        "q": "Jarayon auditi bahosi me'yordan past chiqdi. Qanday harakat qilinadi?",
+        "o": [
+          "Xodim darhol jazolanadi",
+          "Dalil (hujjat raqami, vaqti) bilan bo'lim rahbariga yozma xabar beriladi",
+          "Hisobotga kiritilmaydi",
+          "Keyingi oyga qoldiriladi"
+        ],
+        "a": 1,
+        "w": "Sifat nazorati jazolamaydi: dalil bilan yozma xabar beradi, tuzatishni bo'lim rahbari tashkil qiladi."
+      },
+      {
+        "q": "KPI me'yordan past, lekin yozuvlar juda kam (masalan, 5 ta). Xulosa nima?",
+        "o": [
+          "Bo'lim yomon ishlayapti",
+          "Namuna kichik: katta xulosa chiqarilmaydi, tekshiruv hajmi oshiriladi",
+          "KPI o'chiriladi",
+          "Natija e'lon qilinadi"
+        ],
+        "a": 1,
+        "w": "Foiz bilan birga yozuvlar soni ham ko'riladi; kichik namunadan qat'iy xulosa chiqarilmaydi."
+      },
+      {
+        "q": "Shikoyatlarning katta qismi bitta turda to'plangan. Keyingi qadam?",
+        "o": [
+          "Shu turni hisobotdan chiqarish",
+          "Mijozlarga SMS yuborish",
+          "Shu tur uchun ildiz sabab («5 nima uchun») aniqlash",
+          "Yangi xodim olish"
+        ],
+        "a": 2,
+        "w": "Eng katta turdan boshlab ildiz sabab aniqlanadi (Pareto qoidasi), keyin taklif beriladi."
+      },
+      {
+        "q": "Hisobotda xodimlar haqida qanday yoziladi?",
+        "o": [
+          "Ismlar ommaviy ro'yxatda",
+          "Jarayon tahlil qilinadi; alohida holatlar yopiq xulosada beriladi",
+          "Umuman yozilmaydi",
+          "Faqat eng yomonlari"
+        ],
+        "a": 1,
+        "w": "Shaxsiy ayblanmaydi: xatoga jarayon nuqtai nazaridan qaraladi."
+      },
+      {
+        "q": "Yashirin xaridorda kvitansiya berilmadi. Qanday baholanadi?",
+        "o": [
+          "Hech narsa",
+          "Chek mezoni 0 ball, dalil bilan filial rahbariga xabar",
+          "Filial yopiladi",
+          "Mijoz aybdor"
+        ],
+        "a": 1,
+        "w": "Mezon bo'yicha 0 ball va dalil bilan xabar."
+      },
+      {
+        "q": "Filialda kassa farqi 20 000 so'm (me'yor 0). Birinchi qadam?",
+        "o": [
+          "Kassirni ishdan bo'shatish",
+          "Dalil (kassa hisoboti, cheklar) bilan filial va moliya rahbariga xabar",
+          "Hisobotdan chiqarish",
+          "Kutish"
+        ],
+        "a": 1,
+        "w": "Dalil bilan xabar beriladi, tuzatish choralarini rahbar ko'radi."
+      },
+      {
+        "q": "500 ta jo'natmadan 10 tasida tarif xatosi. Xato ulushi?",
+        "o": [
+          "2%",
+          "5%",
+          "0.2%",
+          "10%"
+        ],
+        "a": 0,
+        "w": "10/500 = 2% (me'yor 1%)."
+      }
+    ]
+  },
+  "sotuv": {
+    "title": "Sotuv (shaxsiy menejerlar) bo'limini tekshirish: 1 haftalik dastur",
+    "intro": "Siz Sotuv (shaxsiy menejerlar) bo'limi xodimi emassiz: tekshiruvchisiz. Jarayonni kuzatasiz, dalil yig'asiz, KPI hisoblaysiz va topilganini rahbarlarga yetkazasiz.",
+    "pass": 70,
+    "days": [
+      {
+        "title": "1-kun. Bo'lim jarayoni va hujjatlari",
+        "theory": [
+          "Shaxsiy menejer roli: portfel va mijoz hayotiy sikli",
+          "Hujjatlar: shartnoma, kelishuv, CRM kartasi",
+          "Sifat nazorati roli: tekshiruvchi, jarayonni kuzatadi, dalil yig'adi va xulosani rahbarga yetkazadi"
+        ],
+        "tasks": [
+          "Bitta menejer bilan ish kunini kuzatdim",
+          "5 ta mijoz kartasini ko'rib chiqdim"
+        ]
+      },
+      {
+        "title": "2-kun. Jarayon auditi (tekshiruv nuqtalari)",
+        "theory": [
+          "Menejer auditining 8 bandi",
+          "Ketma-ketlik bahosi = bajarilgan bandlar / tekshirilgan bandlar"
+        ],
+        "tasks": [
+          "5 ta tekshiruvni «Jarayon auditi» shakliga kiritdim",
+          "Natijani mentor bilan solishtirdim"
+        ]
+      },
+      {
+        "title": "3-kun. KPI va muddatlar",
+        "theory": [
+          "Retention, javob vaqti, karta to'liqligi, qarz formulalari",
+          "Me'yordan chetlanish: avval hajmni (n), keyin sababni ko'ring"
+        ],
+        "tasks": [
+          "Kunlik/haftalik ko'rsatkichlarni shaklga kiritib, KPI qiymatlarini tekshirdim",
+          "Me'yordan chetlangan 1 ko'rsatkichning sababini yozdim"
+        ]
+      },
+      {
+        "title": "4-kun. Shikoyat, hujjat va hisobotlar",
+        "theory": [
+          "Mijoz yo'qotish sababi va shikoyat tahlili",
+          "Ildiz sabab: «5 nima uchun» usuli va Pareto qoidasi"
+        ],
+        "tasks": [
+          "3 ta shikoyatni turi va asosliligi bo'yicha ajratdim",
+          "10 ta hujjatni tanlab tekshirib, xato ulushini hisobladim"
+        ]
+      },
+      {
+        "title": "5-kun. Rahbarga hisobot va yakuniy test",
+        "theory": [
+          "Menejerlar reytingi va hisobot",
+          "Bir sahifali hisobot: xulosa, dalil, ildiz sabab, taklif, mas'ul, muddat"
+        ],
+        "tasks": [
+          "Bir sahifali hisobot tayyorladim",
+          "5 daqiqalik og'zaki taqdimot qildim",
+          "Yakuniy testni topshirdim"
+        ]
+      }
+    ],
+    "quiz": [
+      {
+        "q": "Jarayon auditi bahosi me'yordan past chiqdi. Qanday harakat qilinadi?",
+        "o": [
+          "Xodim darhol jazolanadi",
+          "Dalil (hujjat raqami, vaqti) bilan bo'lim rahbariga yozma xabar beriladi",
+          "Hisobotga kiritilmaydi",
+          "Keyingi oyga qoldiriladi"
+        ],
+        "a": 1,
+        "w": "Sifat nazorati jazolamaydi: dalil bilan yozma xabar beradi, tuzatishni bo'lim rahbari tashkil qiladi."
+      },
+      {
+        "q": "KPI me'yordan past, lekin yozuvlar juda kam (masalan, 5 ta). Xulosa nima?",
+        "o": [
+          "Bo'lim yomon ishlayapti",
+          "Namuna kichik: katta xulosa chiqarilmaydi, tekshiruv hajmi oshiriladi",
+          "KPI o'chiriladi",
+          "Natija e'lon qilinadi"
+        ],
+        "a": 1,
+        "w": "Foiz bilan birga yozuvlar soni ham ko'riladi; kichik namunadan qat'iy xulosa chiqarilmaydi."
+      },
+      {
+        "q": "Shikoyatlarning katta qismi bitta turda to'plangan. Keyingi qadam?",
+        "o": [
+          "Shu turni hisobotdan chiqarish",
+          "Mijozlarga SMS yuborish",
+          "Shu tur uchun ildiz sabab («5 nima uchun») aniqlash",
+          "Yangi xodim olish"
+        ],
+        "a": 2,
+        "w": "Eng katta turdan boshlab ildiz sabab aniqlanadi (Pareto qoidasi), keyin taklif beriladi."
+      },
+      {
+        "q": "Hisobotda xodimlar haqida qanday yoziladi?",
+        "o": [
+          "Ismlar ommaviy ro'yxatda",
+          "Jarayon tahlil qilinadi; alohida holatlar yopiq xulosada beriladi",
+          "Umuman yozilmaydi",
+          "Faqat eng yomonlari"
+        ],
+        "a": 1,
+        "w": "Shaxsiy ayblanmaydi: xatoga jarayon nuqtai nazaridan qaraladi."
+      },
+      {
+        "q": "Portfelda 50 mijoz, 45 tasi saqlab qolindi. Saqlab qolish?",
+        "o": [
+          "90%",
+          "10%",
+          "45%",
+          "95%"
+        ],
+        "a": 0,
+        "w": "45/50 = 90%."
+      },
+      {
+        "q": "Menejer so'rovlarga o'rtacha 2 kunda javob beryapti. Bu nimani anglatadi?",
+        "o": [
+          "Normal",
+          "24 soatlik me'yordan past, mijoz qoniqishi pasayishi xavfi",
+          "Menejer a'lo ishlayapti",
+          "Hech narsa"
+        ],
+        "a": 1,
+        "w": "24 soatdan ortiq javob vaqti qoniqishni pasaytiradi."
+      },
+      {
+        "q": "CRM kartalarining 30% da telefon raqami yo'q. Qaysi KPI buziladi?",
+        "o": [
+          "Retention",
+          "CRM karta to'liqligi",
+          "Qarz ulushi",
+          "Shikoyat"
+        ],
+        "a": 1,
+        "w": "Karta to'liqligi ko'rsatkichi."
+      }
+    ]
+  },
+  "it": {
+    "title": "IT bo'limini tekshirish: 1 haftalik dastur",
+    "intro": "Siz IT bo'limi xodimi emassiz: tekshiruvchisiz. Jarayonni kuzatasiz, dalil yig'asiz, KPI hisoblaysiz va topilganini rahbarlarga yetkazasiz.",
+    "pass": 70,
+    "days": [
+      {
+        "title": "1-kun. Bo'lim jarayoni va hujjatlari",
+        "theory": [
+          "IT tizimlari xaritasi: CRM, IVR, treking, kassa",
+          "Hujjatlar: nosozlik jurnali, o'zgarish yozuvi",
+          "Sifat nazorati roli: tekshiruvchi, jarayonni kuzatadi, dalil yig'adi va xulosani rahbarga yetkazadi"
+        ],
+        "tasks": [
+          "IT xizmati bilan tanishdim, tiket tizimini ko'rdim",
+          "Tizimlar xaritasini chizdim"
+        ]
+      },
+      {
+        "title": "2-kun. Jarayon auditi (tekshiruv nuqtalari)",
+        "theory": [
+          "IT auditining 8 bandi",
+          "Ketma-ketlik bahosi = bajarilgan bandlar / tekshirilgan bandlar"
+        ],
+        "tasks": [
+          "5 ta tekshiruvni «Jarayon auditi» shakliga kiritdim",
+          "Natijani mentor bilan solishtirdim"
+        ]
+      },
+      {
+        "title": "3-kun. KPI va muddatlar",
+        "theory": [
+          "SLA, birinchi javob, uptime, treking to'liqligi formulalari",
+          "Me'yordan chetlanish: avval hajmni (n), keyin sababni ko'ring"
+        ],
+        "tasks": [
+          "Kunlik/haftalik ko'rsatkichlarni shaklga kiritib, KPI qiymatlarini tekshirdim",
+          "Me'yordan chetlangan 1 ko'rsatkichning sababini yozdim"
+        ]
+      },
+      {
+        "title": "4-kun. Shikoyat, hujjat va hisobotlar",
+        "theory": [
+          "Tizim muammolari mijoz shikoyatiga qanday ta'sir qiladi",
+          "Ildiz sabab: «5 nima uchun» usuli va Pareto qoidasi"
+        ],
+        "tasks": [
+          "3 ta shikoyatni turi va asosliligi bo'yicha ajratdim",
+          "10 ta hujjatni tanlab tekshirib, xato ulushini hisobladim"
+        ]
+      },
+      {
+        "title": "5-kun. Rahbarga hisobot va yakuniy test",
+        "theory": [
+          "IT bo'yicha bir sahifali hisobot",
+          "Bir sahifali hisobot: xulosa, dalil, ildiz sabab, taklif, mas'ul, muddat"
+        ],
+        "tasks": [
+          "Bir sahifali hisobot tayyorladim",
+          "5 daqiqalik og'zaki taqdimot qildim",
+          "Yakuniy testni topshirdim"
+        ]
+      }
+    ],
+    "quiz": [
+      {
+        "q": "Jarayon auditi bahosi me'yordan past chiqdi. Qanday harakat qilinadi?",
+        "o": [
+          "Xodim darhol jazolanadi",
+          "Dalil (hujjat raqami, vaqti) bilan bo'lim rahbariga yozma xabar beriladi",
+          "Hisobotga kiritilmaydi",
+          "Keyingi oyga qoldiriladi"
+        ],
+        "a": 1,
+        "w": "Sifat nazorati jazolamaydi: dalil bilan yozma xabar beradi, tuzatishni bo'lim rahbari tashkil qiladi."
+      },
+      {
+        "q": "KPI me'yordan past, lekin yozuvlar juda kam (masalan, 5 ta). Xulosa nima?",
+        "o": [
+          "Bo'lim yomon ishlayapti",
+          "Namuna kichik: katta xulosa chiqarilmaydi, tekshiruv hajmi oshiriladi",
+          "KPI o'chiriladi",
+          "Natija e'lon qilinadi"
+        ],
+        "a": 1,
+        "w": "Foiz bilan birga yozuvlar soni ham ko'riladi; kichik namunadan qat'iy xulosa chiqarilmaydi."
+      },
+      {
+        "q": "Shikoyatlarning katta qismi bitta turda to'plangan. Keyingi qadam?",
+        "o": [
+          "Shu turni hisobotdan chiqarish",
+          "Mijozlarga SMS yuborish",
+          "Shu tur uchun ildiz sabab («5 nima uchun») aniqlash",
+          "Yangi xodim olish"
+        ],
+        "a": 2,
+        "w": "Eng katta turdan boshlab ildiz sabab aniqlanadi (Pareto qoidasi), keyin taklif beriladi."
+      },
+      {
+        "q": "Hisobotda xodimlar haqida qanday yoziladi?",
+        "o": [
+          "Ismlar ommaviy ro'yxatda",
+          "Jarayon tahlil qilinadi; alohida holatlar yopiq xulosada beriladi",
+          "Umuman yozilmaydi",
+          "Faqat eng yomonlari"
+        ],
+        "a": 1,
+        "w": "Shaxsiy ayblanmaydi: xatoga jarayon nuqtai nazaridan qaraladi."
+      },
+      {
+        "q": "Yuqori jiddiylikdagi tiket 7 soatda hal bo'ldi (SLA 4 soat). Holat?",
+        "o": [
+          "Me'yorda",
+          "SLA buzilgan: tekshirish",
+          "Past",
+          "Aniqlab bo'lmaydi"
+        ],
+        "a": 1,
+        "w": "7 > 4: SLA buzilgan."
+      },
+      {
+        "q": "Rejadagi 1000 daqiqadan tizim 980 daqiqa ishladi. Uptime?",
+        "o": [
+          "98%",
+          "99%",
+          "2%",
+          "100%"
+        ],
+        "a": 0,
+        "w": "980/1000 = 98% (me'yor 99%)."
+      },
+      {
+        "q": "Ishdan ketgan xodimning akkaunti hali faol. Nima qilinadi?",
+        "o": [
+          "Hech narsa",
+          "Dalil bilan IT va xavfsizlik rahbariga yozma xabar",
+          "Akkauntni o'zi o'chiradi",
+          "Keyinroq ko'riladi"
+        ],
+        "a": 1,
+        "w": "Sifat nazorati tekshiradi va xabar beradi; huquqlarni IT o'zgartiradi."
+      }
+    ]
+  },
+  "moliya": {
+    "title": "Moliya bo'limini tekshirish: 1 haftalik dastur",
+    "intro": "Siz Moliya bo'limi xodimi emassiz: tekshiruvchisiz. Jarayonni kuzatasiz, dalil yig'asiz, KPI hisoblaysiz va topilganini rahbarlarga yetkazasiz.",
+    "pass": 70,
+    "days": [
+      {
+        "title": "1-kun. Bo'lim jarayoni va hujjatlari",
+        "theory": [
+          "Moliya oqimi: kargo haqi, COD, hisob-kitob",
+          "Hujjatlar: hisob-faktura, solishtirma akt, kassa order",
+          "Sifat nazorati roli: tekshiruvchi, jarayonni kuzatadi, dalil yig'adi va xulosani rahbarga yetkazadi"
+        ],
+        "tasks": [
+          "Kassa yopilishini kuzatdim",
+          "COD solishtirish jarayonini ko'rdim"
+        ]
+      },
+      {
+        "title": "2-kun. Jarayon auditi (tekshiruv nuqtalari)",
+        "theory": [
+          "Moliya auditining 8 bandi",
+          "Uch tomonlama solishtirish",
+          "Ketma-ketlik bahosi = bajarilgan bandlar / tekshirilgan bandlar"
+        ],
+        "tasks": [
+          "5 ta tekshiruvni «Jarayon auditi» shakliga kiritdim",
+          "Natijani mentor bilan solishtirdim"
+        ]
+      },
+      {
+        "title": "3-kun. KPI va muddatlar",
+        "theory": [
+          "COD to'liqligi, kechikish, kassa mosligi, undirish formulalari",
+          "Me'yordan chetlanish: avval hajmni (n), keyin sababni ko'ring"
+        ],
+        "tasks": [
+          "Kunlik/haftalik ko'rsatkichlarni shaklga kiritib, KPI qiymatlarini tekshirdim",
+          "Me'yordan chetlangan 1 ko'rsatkichning sababini yozdim"
+        ]
+      },
+      {
+        "title": "4-kun. Shikoyat, hujjat va hisobotlar",
+        "theory": [
+          "Pul nizolari bo'yicha shikoyatlar va hujjatlar",
+          "Ildiz sabab: «5 nima uchun» usuli va Pareto qoidasi"
+        ],
+        "tasks": [
+          "3 ta shikoyatni turi va asosliligi bo'yicha ajratdim",
+          "10 ta hujjatni tanlab tekshirib, xato ulushini hisobladim"
+        ]
+      },
+      {
+        "title": "5-kun. Rahbarga hisobot va yakuniy test",
+        "theory": [
+          "Moliya bo'yicha hisobot",
+          "Bir sahifali hisobot: xulosa, dalil, ildiz sabab, taklif, mas'ul, muddat"
+        ],
+        "tasks": [
+          "Bir sahifali hisobot tayyorladim",
+          "5 daqiqalik og'zaki taqdimot qildim",
+          "Yakuniy testni topshirdim"
+        ]
+      }
+    ],
+    "quiz": [
+      {
+        "q": "Jarayon auditi bahosi me'yordan past chiqdi. Qanday harakat qilinadi?",
+        "o": [
+          "Xodim darhol jazolanadi",
+          "Dalil (hujjat raqami, vaqti) bilan bo'lim rahbariga yozma xabar beriladi",
+          "Hisobotga kiritilmaydi",
+          "Keyingi oyga qoldiriladi"
+        ],
+        "a": 1,
+        "w": "Sifat nazorati jazolamaydi: dalil bilan yozma xabar beradi, tuzatishni bo'lim rahbari tashkil qiladi."
+      },
+      {
+        "q": "KPI me'yordan past, lekin yozuvlar juda kam (masalan, 5 ta). Xulosa nima?",
+        "o": [
+          "Bo'lim yomon ishlayapti",
+          "Namuna kichik: katta xulosa chiqarilmaydi, tekshiruv hajmi oshiriladi",
+          "KPI o'chiriladi",
+          "Natija e'lon qilinadi"
+        ],
+        "a": 1,
+        "w": "Foiz bilan birga yozuvlar soni ham ko'riladi; kichik namunadan qat'iy xulosa chiqarilmaydi."
+      },
+      {
+        "q": "Shikoyatlarning katta qismi bitta turda to'plangan. Keyingi qadam?",
+        "o": [
+          "Shu turni hisobotdan chiqarish",
+          "Mijozlarga SMS yuborish",
+          "Shu tur uchun ildiz sabab («5 nima uchun») aniqlash",
+          "Yangi xodim olish"
+        ],
+        "a": 2,
+        "w": "Eng katta turdan boshlab ildiz sabab aniqlanadi (Pareto qoidasi), keyin taklif beriladi."
+      },
+      {
+        "q": "Hisobotda xodimlar haqida qanday yoziladi?",
+        "o": [
+          "Ismlar ommaviy ro'yxatda",
+          "Jarayon tahlil qilinadi; alohida holatlar yopiq xulosada beriladi",
+          "Umuman yozilmaydi",
+          "Faqat eng yomonlari"
+        ],
+        "a": 1,
+        "w": "Shaxsiy ayblanmaydi: xatoga jarayon nuqtai nazaridan qaraladi."
+      },
+      {
+        "q": "COD kutilgan 1 000 000, topshirilgan 970 000. Topshirish to'liqligi?",
+        "o": [
+          "97%",
+          "3%",
+          "99.7%",
+          "103%"
+        ],
+        "a": 0,
+        "w": "970/1000 = 97% < 99.5%: farq tekshiriladi."
+      },
+      {
+        "q": "Uch tomonlama kunlik solishtirish nimalarni taqqoslaydi?",
+        "o": [
+          "Buyurtma, kuryer holati va kassa hisoboti",
+          "Faqat bank ko'chirmasi",
+          "Faqat hisob-faktura",
+          "Mijoz ismlari"
+        ],
+        "a": 0,
+        "w": "Buyurtma ma'lumoti, kuryer holati va kassaga topshirilgan naqd."
+      },
+      {
+        "q": "Qarz 45 kun, muddat limiti 30 kun. Holat?",
+        "o": [
+          "Jarayonda",
+          "Muddati o'tgan: tekshirish",
+          "To'langan",
+          "Aniqlab bo'lmaydi"
+        ],
+        "a": 1,
+        "w": "45 > 30."
+      }
+    ]
+  },
+  "marketing": {
+    "title": "Marketing bo'limini tekshirish: 1 haftalik dastur",
+    "intro": "Siz Marketing bo'limi xodimi emassiz: tekshiruvchisiz. Jarayonni kuzatasiz, dalil yig'asiz, KPI hisoblaysiz va topilganini rahbarlarga yetkazasiz.",
+    "pass": 70,
+    "days": [
+      {
+        "title": "1-kun. Bo'lim jarayoni va hujjatlari",
+        "theory": [
+          "Marketing kanallari va aksiyalar",
+          "Hujjatlar: aksiya shartlari, e'lon maketi",
+          "Sifat nazorati roli: tekshiruvchi, jarayonni kuzatadi, dalil yig'adi va xulosani rahbarga yetkazadi"
+        ],
+        "tasks": [
+          "Faol aksiyalar ro'yxatini ko'rdim",
+          "Ijtimoiy tarmoq murojaatlari jarayonini kuzatdim"
+        ]
+      },
+      {
+        "title": "2-kun. Jarayon auditi (tekshiruv nuqtalari)",
+        "theory": [
+          "Marketing auditining 8 bandi",
+          "Ketma-ketlik bahosi = bajarilgan bandlar / tekshirilgan bandlar"
+        ],
+        "tasks": [
+          "5 ta tekshiruvni «Jarayon auditi» shakliga kiritdim",
+          "Natijani mentor bilan solishtirdim"
+        ]
+      },
+      {
+        "title": "3-kun. KPI va muddatlar",
+        "theory": [
+          "24 soat javob, e'lon-tizim mosligi, CSAT formulalari",
+          "Me'yordan chetlanish: avval hajmni (n), keyin sababni ko'ring"
+        ],
+        "tasks": [
+          "Kunlik/haftalik ko'rsatkichlarni shaklga kiritib, KPI qiymatlarini tekshirdim",
+          "Me'yordan chetlangan 1 ko'rsatkichning sababini yozdim"
+        ]
+      },
+      {
+        "title": "4-kun. Shikoyat, hujjat va hisobotlar",
+        "theory": [
+          "Aksiya paytidagi shikoyatlar tahlili",
+          "Ildiz sabab: «5 nima uchun» usuli va Pareto qoidasi"
+        ],
+        "tasks": [
+          "3 ta shikoyatni turi va asosliligi bo'yicha ajratdim",
+          "10 ta hujjatni tanlab tekshirib, xato ulushini hisobladim"
+        ]
+      },
+      {
+        "title": "5-kun. Rahbarga hisobot va yakuniy test",
+        "theory": [
+          "Marketing bo'yicha hisobot",
+          "Bir sahifali hisobot: xulosa, dalil, ildiz sabab, taklif, mas'ul, muddat"
+        ],
+        "tasks": [
+          "Bir sahifali hisobot tayyorladim",
+          "5 daqiqalik og'zaki taqdimot qildim",
+          "Yakuniy testni topshirdim"
+        ]
+      }
+    ],
+    "quiz": [
+      {
+        "q": "Jarayon auditi bahosi me'yordan past chiqdi. Qanday harakat qilinadi?",
+        "o": [
+          "Xodim darhol jazolanadi",
+          "Dalil (hujjat raqami, vaqti) bilan bo'lim rahbariga yozma xabar beriladi",
+          "Hisobotga kiritilmaydi",
+          "Keyingi oyga qoldiriladi"
+        ],
+        "a": 1,
+        "w": "Sifat nazorati jazolamaydi: dalil bilan yozma xabar beradi, tuzatishni bo'lim rahbari tashkil qiladi."
+      },
+      {
+        "q": "KPI me'yordan past, lekin yozuvlar juda kam (masalan, 5 ta). Xulosa nima?",
+        "o": [
+          "Bo'lim yomon ishlayapti",
+          "Namuna kichik: katta xulosa chiqarilmaydi, tekshiruv hajmi oshiriladi",
+          "KPI o'chiriladi",
+          "Natija e'lon qilinadi"
+        ],
+        "a": 1,
+        "w": "Foiz bilan birga yozuvlar soni ham ko'riladi; kichik namunadan qat'iy xulosa chiqarilmaydi."
+      },
+      {
+        "q": "Shikoyatlarning katta qismi bitta turda to'plangan. Keyingi qadam?",
+        "o": [
+          "Shu turni hisobotdan chiqarish",
+          "Mijozlarga SMS yuborish",
+          "Shu tur uchun ildiz sabab («5 nima uchun») aniqlash",
+          "Yangi xodim olish"
+        ],
+        "a": 2,
+        "w": "Eng katta turdan boshlab ildiz sabab aniqlanadi (Pareto qoidasi), keyin taklif beriladi."
+      },
+      {
+        "q": "Hisobotda xodimlar haqida qanday yoziladi?",
+        "o": [
+          "Ismlar ommaviy ro'yxatda",
+          "Jarayon tahlil qilinadi; alohida holatlar yopiq xulosada beriladi",
+          "Umuman yozilmaydi",
+          "Faqat eng yomonlari"
+        ],
+        "a": 1,
+        "w": "Shaxsiy ayblanmaydi: xatoga jarayon nuqtai nazaridan qaraladi."
+      },
+      {
+        "q": "Reklamada narx 20 000, tizimda 25 000. Nima qilinadi?",
+        "o": [
+          "Hech narsa",
+          "Dalil bilan marketing va savdo/IT rahbariga xabar beriladi",
+          "Reklama o'chiriladi",
+          "Mijozdan so'raladi"
+        ],
+        "a": 1,
+        "w": "E'lon va tizim nomuvofiqligi shikoyat xavfi: dalil bilan xabar."
+      },
+      {
+        "q": "100 ta javobdan 84 tasi mamnun. CSAT?",
+        "o": [
+          "84%",
+          "16%",
+          "100%",
+          "80%"
+        ],
+        "a": 0,
+        "w": "84% (me'yor 80%)."
+      },
+      {
+        "q": "Aksiya e'lon qilindi, call center bilmaydi. Bu qaysi tekshiruv nuqtasi?",
+        "o": [
+          "Hujjat",
+          "Aksiya haqida xabardorlik",
+          "Uptime",
+          "Qarz"
+        ],
+        "a": 1,
+        "w": "«Call center xabardor» bandi."
+      }
+    ]
+  },
+  "qc": {
+    "title": "Yangi xodim uchun 1 haftalik dastur",
+    "intro": "Sifat nazorati xodimi call center operatori emas, tekshiruvchi: jarayonni kuzatadi, tekshiradi, tahlil qiladi va topilganini rahbarlarga yetkazadi.",
+    "pass": 70,
+    "days": [
+      {
+        "title": "1-kun. Kirish va smena nazorati",
+        "theory": [
+          "Call center jarayoni, tizimlar va sifat nazorati roli",
+          "Smena almashuvida ochiq murojaatlar nomma-nom o'tkazilishi",
+          "O'tkazish to'liqligi = to'liq o'tkazilgan / ochiq murojaatlar"
+        ],
+        "tasks": [
+          "Call center jarayoni va tizimlar bilan tanishdim",
+          "Bitta smenaning topshirish jurnali va baza hisobotini solishtirdim",
+          "Nomuvofiqliklarni «Smena almashuvi» shaklida qayd etdim"
+        ]
+      },
+      {
+        "title": "2-kun. Baza ketma-ketligi va call sifati",
+        "theory": [
+          "Baza bilan ishlashning 7 qadami; ketma-ketlik bahosi",
+          "Sifatli va yopilmagan calllar; yopilmaslik sabablari klassifikatori",
+          "Audio baholash: 8 mezon, har biri 0-2 ball, jami 16"
+        ],
+        "tasks": [
+          "5 ta murojaat yozuvini 7 qadam bo'yicha baholadim",
+          "3 ta audioni baholab, xulosa shablonini to'ldirdim",
+          "Baholarimni mentor bilan solishtirdim"
+        ]
+      },
+      {
+        "title": "3-kun. Past baholar va kargo qarzi",
+        "theory": [
+          "Past baho sabablari va hal etilganlik darajasi",
+          "Qarzdor mijozlar bilan aloqa nazorati: muddat, uslub, natija",
+          "Bosim va tahdid kabi holatlar darhol rahbarga yetkaziladi"
+        ],
+        "tasks": [
+          "Past baho qo'ygan 10 ta mijozni tahlil qildim",
+          "10 ta qarzdor bo'yicha aloqa tarixini tekshirdim",
+          "Aloqa bo'lmagan yoki muddati o'tganlarni ajratdim"
+        ]
+      },
+      {
+        "title": "4-kun. IVR va murojaatlar analitikasi",
+        "theory": [
+          "Auto call menyusi: yo'naltirish to'g'riligi va qoniqish tugmalari",
+          "Murojaat turlari, foiz va Pareto qoidasi",
+          "Ildiz sabab: «5 nima uchun» usuli"
+        ],
+        "tasks": [
+          "Eng ko'p «qoniqmadim» olgan 2 menyu bandini tanladim va 10 tadan callni eshitdim",
+          "Bir haftalik murojaatlarni turlarga ajratib, foizini hisobladim",
+          "Eng katta 2 tur uchun «5 nima uchun» kartochkasini to'ldirdim"
+        ]
+      },
+      {
+        "title": "5-kun. Rahbarga hisobot va yakuniy test",
+        "theory": [
+          "Bir sahifali haftalik hisobot tuzilmasi",
+          "Taklif formati: muammo, dalil, ildiz sabab, taklif, mas'ul, muddat, natija ko'rsatkichi",
+          "Yakuniy test va o'tish mezoni: kamida 70 ball"
+        ],
+        "tasks": [
+          "Bir sahifali hisobot tayyorladim",
+          "5 daqiqalik og'zaki taqdimot qildim",
+          "Yakuniy testni topshirdim"
+        ]
+      }
+    ],
+    "quiz": [
+      {
+        "q": "Smena almashuvida ochiq murojaat to'liq o'tganini qaysi belgilar tasdiqlaydi?",
+        "o": [
+          "Mas'ul almashgan, izoh va keyingi qadam yozilgan, muddat belgilangan",
+          "Murojaat ro'yxatda turibdi",
+          "Eski operator ogohlantirgan",
+          "Mijoz qayta qo'ng'iroq qilmagan"
+        ],
+        "a": 0,
+        "w": "Baza yozuvida mas'ul almashgan, izoh va keyingi qadam muddati bilan yozilgan bo'lishi kerak."
+      },
+      {
+        "q": "Ketma-ketlik bahosi 78% chiqdi. Keyingi qadam nima?",
+        "o": [
+          "Hech narsa qilinmaydi",
+          "Shu kun ichida call center rahbariga yozma xabar beriladi",
+          "Operator ishdan bo'shatiladi",
+          "Hisobotga kiritilmaydi"
+        ],
+        "a": 1,
+        "w": "80% dan past natija: sifat nazorati o'zi jazolamaydi, call center rahbariga yozma xabar beradi."
+      },
+      {
+        "q": "Audio baholashda mijozga qo'pol gapirilgan, lekin umumiy ball 13. Nima qilinadi?",
+        "o": [
+          "13 ball qoniqarli, e'tibor berilmaydi",
+          "Keyingi oyda ko'riladi",
+          "Umumiy ballga qaramay darhol rahbarga xabar beriladi",
+          "Audio o'chiriladi"
+        ],
+        "a": 2,
+        "w": "Jiddiy holat (qo'pollik, noto'g'ri ma'lumot) ballga bog'liq bo'lmay, darhol xabar qilinadi."
+      },
+      {
+        "q": "IVR da qoniqmadim ulushi 40%, lekin tugma bosganlar bor-yo'g'i 8 kishi. Xulosa nima?",
+        "o": [
+          "IVR yaroqsiz",
+          "Namuna kichik: katta xulosa chiqarilmaydi, kuzatuv davom etadi",
+          "Barcha menyu o'zgartiriladi",
+          "Operatorlar jazolanadi"
+        ],
+        "a": 1,
+        "w": "Ulush bilan birga bosganlar soni ham ko'riladi; kichik namunadan katta xulosa chiqarilmaydi."
+      },
+      {
+        "q": "Murojaatlarning 45% i «jo'natma holati» turida. Keyingi ish nima?",
+        "o": [
+          "Operatorlar sonini oshirish",
+          "Ildiz sabab tahlili: «5 nima uchun»",
+          "Shu turni hisobotdan chiqarish",
+          "Mijozlarga SMS yuborish"
+        ],
+        "a": 1,
+        "w": "Eng katta tur uchun avval ildiz sabab aniqlanadi, keyin yechim taklif qilinadi."
+      },
+      {
+        "q": "O'tkazish to'liqligi qanday hisoblanadi?",
+        "o": [
+          "Yopilgan murojaatlar / jami calllar",
+          "To'liq o'tkazilgan / smena oxiridagi ochiq murojaatlar",
+          "Operatorlar soni / smena soni",
+          "Qoniqdim / qoniqmadim"
+        ],
+        "a": 1,
+        "w": "O'tkazish to'liqligi = to'liq o'tkazilgan ochiq murojaatlar / smena oxiridagi ochiq murojaatlar."
+      },
+      {
+        "q": "Pareto qoidasiga ko'ra ildiz sabab qaysi turlardan boshlanadi?",
+        "o": [
+          "Eng kam uchraydigan turlardan",
+          "Alifbo bo'yicha birinchilaridan",
+          "Murojaatlarning katta qismini beradigan 2-3 turdan",
+          "Tasodifiy tanlangan turdan"
+        ],
+        "a": 2,
+        "w": "Odatda 2-3 tur murojaatlarning 70-80% ini beradi; ildiz sabab shulardan boshlanadi."
+      },
+      {
+        "q": "Hisobotda xodimlar haqida qanday yoziladi?",
+        "o": [
+          "Shaxsiy ayblash bilan",
+          "Xatoga jarayon nuqtai nazaridan qaraladi; alohida xodim holatlari alohida yopiq xulosada",
+          "Umuman yozilmaydi",
+          "Hamma ismlar ommaviy ro'yxatda"
+        ],
+        "a": 1,
+        "w": "Xodimlar shaxsiy ayblanmaydi: jarayon tahlil qilinadi, alohida holatlar yopiq xulosada beriladi."
+      }
+    ]
+  },
+  "taftish": {
+    "title": "Taftish bo'limi bo'limini tekshirish: 1 haftalik dastur",
+    "intro": "Siz Taftish bo'limi bo'limi xodimi emassiz: tekshiruvchisiz. Jarayonni kuzatasiz, dalil yig'asiz, KPI hisoblaysiz va topilganini rahbarlarga yetkazasiz.",
+    "pass": 70,
+    "days": [
+      {
+        "title": "1-kun. Bo'lim jarayoni va hujjatlari",
+        "theory": [
+          "Taftishning roli: call center hal qila olmagan murojaatlar",
+          "Murojaat yo'li: call center, Taftish, mijoz",
+          "Sifat nazorati roli: tekshiruvchi, jarayonni kuzatadi, dalil yig'adi va xulosani rahbarga yetkazadi"
+        ],
+        "tasks": [
+          "Taftishga kelgan 3 ta murojaatning yo'lini boshidan oxirigacha kuzatdim",
+          "Call center tarixi bilan Taftish xulosasini solishtirdim"
+        ]
+      },
+      {
+        "title": "2-kun. Jarayon auditi (tekshiruv nuqtalari)",
+        "theory": [
+          "Taftish auditining 8 bandi",
+          "Ketma-ketlik bahosi = bajarilgan bandlar / tekshirilgan bandlar"
+        ],
+        "tasks": [
+          "5 ta tekshiruvni «Jarayon auditi» shakliga kiritdim",
+          "Natijani mentor bilan solishtirdim"
+        ]
+      },
+      {
+        "title": "3-kun. KPI va muddatlar",
+        "theory": [
+          "Hal etish muddati, hal etilganlik, qayta murojaat formulalari",
+          "Me'yordan chetlanish: avval hajmni (n), keyin sababni ko'ring"
+        ],
+        "tasks": [
+          "Kunlik/haftalik ko'rsatkichlarni shaklga kiritib, KPI qiymatlarini tekshirdim",
+          "Me'yordan chetlangan 1 ko'rsatkichning sababini yozdim"
+        ]
+      },
+      {
+        "title": "4-kun. Shikoyat, hujjat va hisobotlar",
+        "theory": [
+          "Aybdor bo'limlar tahlili va ildiz sabab",
+          "Ildiz sabab: «5 nima uchun» usuli va Pareto qoidasi"
+        ],
+        "tasks": [
+          "3 ta shikoyatni turi va asosliligi bo'yicha ajratdim",
+          "10 ta hujjatni tanlab tekshirib, xato ulushini hisobladim"
+        ]
+      },
+      {
+        "title": "5-kun. Rahbarga hisobot va yakuniy test",
+        "theory": [
+          "Taftish va call center o'rtasidagi qayta aloqa",
+          "Bir sahifali hisobot: xulosa, dalil, ildiz sabab, taklif, mas'ul, muddat"
+        ],
+        "tasks": [
+          "Bir sahifali hisobot tayyorladim",
+          "5 daqiqalik og'zaki taqdimot qildim",
+          "Yakuniy testni topshirdim"
+        ]
+      }
+    ],
+    "quiz": [
+      {
+        "q": "Jarayon auditi bahosi me'yordan past chiqdi. Qanday harakat qilinadi?",
+        "o": [
+          "Xodim darhol jazolanadi",
+          "Dalil (hujjat raqami, vaqti) bilan bo'lim rahbariga yozma xabar beriladi",
+          "Hisobotga kiritilmaydi",
+          "Keyingi oyga qoldiriladi"
+        ],
+        "a": 1,
+        "w": "Sifat nazorati jazolamaydi: dalil bilan yozma xabar beradi, tuzatishni bo'lim rahbari tashkil qiladi."
+      },
+      {
+        "q": "KPI me'yordan past, lekin yozuvlar juda kam (masalan, 5 ta). Xulosa nima?",
+        "o": [
+          "Bo'lim yomon ishlayapti",
+          "Namuna kichik: katta xulosa chiqarilmaydi, tekshiruv hajmi oshiriladi",
+          "KPI o'chiriladi",
+          "Natija e'lon qilinadi"
+        ],
+        "a": 1,
+        "w": "Foiz bilan birga yozuvlar soni ham ko'riladi; kichik namunadan qat'iy xulosa chiqarilmaydi."
+      },
+      {
+        "q": "Shikoyatlarning katta qismi bitta turda to'plangan. Keyingi qadam?",
+        "o": [
+          "Shu turni hisobotdan chiqarish",
+          "Mijozlarga SMS yuborish",
+          "Shu tur uchun ildiz sabab («5 nima uchun») aniqlash",
+          "Yangi xodim olish"
+        ],
+        "a": 2,
+        "w": "Eng katta turdan boshlab ildiz sabab aniqlanadi (Pareto qoidasi), keyin taklif beriladi."
+      },
+      {
+        "q": "Hisobotda xodimlar haqida qanday yoziladi?",
+        "o": [
+          "Ismlar ommaviy ro'yxatda",
+          "Jarayon tahlil qilinadi; alohida holatlar yopiq xulosada beriladi",
+          "Umuman yozilmaydi",
+          "Faqat eng yomonlari"
+        ],
+        "a": 1,
+        "w": "Shaxsiy ayblanmaydi: xatoga jarayon nuqtai nazaridan qaraladi."
+      },
+      {
+        "q": "Murojaat 5 kunda hal bo'ldi, me'yor 3 kun. Holat?",
+        "o": [
+          "Me'yorda",
+          "Muddati o'tgan: tekshirish",
+          "Jarayonda",
+          "Hal bo'lmagan"
+        ],
+        "a": 1,
+        "w": "5 > 3 kun: muddat buzilgan."
+      },
+      {
+        "q": "Mijoz bir xil masala bo'yicha 3-marta murojaat qildi. Bu nimani anglatadi?",
+        "o": [
+          "Normal",
+          "Avvalgi hal sifatsiz bo'lgan ehtimoli: qayta murojaat ulushi oshadi, ildiz sabab tekshiriladi",
+          "Mijoz aybdor",
+          "Hisobotga kiritilmaydi"
+        ],
+        "a": 1,
+        "w": "Qayta murojaat sifatsiz hal etish belgisi."
+      },
+      {
+        "q": "Taftish call center hal qila olmagan sababni qanday ishlatadi?",
+        "o": [
+          "Qayd etmaydi",
+          "Sabab bo'yicha taqsimotni call center va ichki bo'limlarga qayta aloqa sifatida beradi",
+          "Operatorni jazolaydi",
+          "Mijozga aytadi"
+        ],
+        "a": 1,
+        "w": "Sabab tahlili call center jarayonini yaxshilash uchun qayta aloqa bo'ladi."
+      }
+    ]
+  }
+}

@@ -41,7 +41,7 @@ console.log('postgres ishga tushdi');
 
 // Bazani ATAYIN UTF8 kodlashida yaratamiz.
 // Windows'da initdb standart locale'ni (WIN1251) oladi — unda "≥" va "—" kabi
-// belgilar saqlanmaydi, KPI maqsad matnlari buziladi.
+// belgilar saqlanmaydi, o'zbekcha matnlar buziladi.
 const client = pg.getPgClient('postgres');
 await client.connect();
 try {

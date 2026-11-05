@@ -3,8 +3,7 @@
 @tailwind utilities;
 
 /*
-  Dizayn tili — mavjud CEO hisobotlari bilan bir xil:
-  neytral fon, oq kartochkalar, tabular raqamlar, ko'k (Telegram) va to'q sariq (102) urg'ular.
+  Dizayn tili: neytral fon, oq kartochkalar, tabular raqamlar, ko'k va to'q sariq urg'ular.
 
   Ranglar IKKI shaklda saqlanadi:
     --*-rgb  → kanal qiymatlari, Tailwind shaffoflik modifikatori uchun (bg-brand/12)

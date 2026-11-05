@@ -4,11 +4,11 @@ import './globals.css';
 
 export const metadata: Metadata = {
   title: {
-    default: 'iPOST — Sifat nazorati KPI tizimi',
+    default: 'iPOST — Sifat nazorati',
     template: '%s · iPOST OTK',
   },
   description:
-    "iPOST Sifat nazorati (OTK) bo'limining kunlik reyestri, KPI hisobi, audit va quvvat tahlili — rahbariyat nazoratida.",
+    "iPOST Sifat nazorati bo'limi: bo'limlar tekshiruvi, topshiriqlar va svetofor paneli.",
   robots: { index: false, follow: false },
 };
 

@@ -6,7 +6,7 @@
     "checkpoints": [
       {
         "id": "cp1",
-        "text": "Smena almashuvida ochiq murojaatlar nomma-nom o'tkazilgan",
+        "text": "Smena almashuvida ochiq murojaatlar nomma-nom, jurnal bilan mos o‘tkazilganmi?",
         "group": "Smena va baza ketma-ketligi",
         "weight": 1,
         "critical": false,
@@ -14,7 +14,7 @@
       },
       {
         "id": "cp2",
-        "text": "Sifatli yopilgan va yopilmagan calllar sabablari",
+        "text": "Hal bo‘lmagan (yopilmagan) calllarning sabablari yozib qo‘yilganmi?",
         "group": "Call sifati va audio",
         "weight": 1,
         "critical": false,
@@ -22,7 +22,7 @@
       },
       {
         "id": "cp3",
-        "text": "Past baho qo'ygan mijozga 24 soatda qayta aloqa",
+        "text": "Past baho qo‘ygan mijozga 24 soat ichida qayta aloqa qilinganmi?",
         "group": "Past baho, qarz, IVR",
         "weight": 1,
         "critical": false,
@@ -30,7 +30,7 @@
       },
       {
         "id": "cp4",
-        "text": "Murojaat turlari, Pareto va ildiz sabab",
+        "text": "Murojaat turlari bo‘yicha Pareto tahlili qilinib, ildiz sabab belgilanganmi?",
         "group": "Analitika va hisobot",
         "weight": 1,
         "critical": false,
@@ -38,7 +38,7 @@
       },
       {
         "id": "cp5",
-        "text": "Baza yozuvi 7 qadam bo'yicha yuritilgan",
+        "text": "Baza yozuvi 7 qadam bo‘yicha to‘liq yuritilganmi?",
         "group": "Smena va baza ketma-ketligi",
         "weight": 1,
         "critical": false,
@@ -46,7 +46,7 @@
       },
       {
         "id": "cp6",
-        "text": "Audio 8 mezon bo'yicha baholangan, jiddiy holatlar ajratilgan",
+        "text": "Audio 8 mezon bo‘yicha baholanib, jiddiy holatlar ajratilganmi?",
         "group": "Call sifati va audio",
         "weight": 1,
         "critical": false,
@@ -54,7 +54,7 @@
       },
       {
         "id": "cp7",
-        "text": "Kargo qarzdorlariga aloqa muddati va natijasi",
+        "text": "Kargo qarzdorlariga belgilangan muddatda aloqa qilinib, natijasi yozilganmi?",
         "group": "Past baho, qarz, IVR",
         "weight": 1,
         "critical": false,
@@ -62,7 +62,7 @@
       },
       {
         "id": "cp8",
-        "text": "Rahbarga bir sahifali hisobot va takliflar",
+        "text": "Rahbarga bir sahifali hisobot va takliflar topshirilganmi?",
         "group": "Analitika va hisobot",
         "weight": 1,
         "critical": false,
@@ -77,7 +77,7 @@
     "checkpoints": [
       {
         "id": "cp1",
-        "text": "Marshrut varaqasi bo'yicha jo'natmalar skan qilib qabul qilingan",
+        "text": "Marshrut varaqasi bo‘yicha jo‘natmalar skan qilib qabul qilinganmi?",
         "group": "Jarayon auditi",
         "weight": 1,
         "critical": false,
@@ -85,7 +85,7 @@
       },
       {
         "id": "cp2",
-        "text": "Birinchi urinishda yetkazish (sanoatda 90% va undan yuqori yaxshi hisoblanadi)",
+        "text": "Birinchi urinishda yetkazish ulushi me‘yorda ekani tizim ma‘lumoti bilan tasdiqlanganmi?",
         "group": "KPI va muddatlar",
         "weight": 1,
         "critical": false,
@@ -93,7 +93,7 @@
       },
       {
         "id": "cp3",
-        "text": "Kechikish va kuryer muomalasi bo'yicha shikoyatlar kuryer va zonalar kesimida",
+        "text": "Kechikish va kuryer muomalasi bo‘yicha shikoyatlar kuryer va zonalar kesimida ko‘rib chiqilganmi?",
         "group": "Murojaat / shikoyat bo'yicha",
         "weight": 1,
         "critical": false,
@@ -101,7 +101,7 @@
       },
       {
         "id": "cp4",
-        "text": "Marshrut varaqasi va skan hodisalari soni mos",
+        "text": "Marshrut varaqasi va skan hodisalari soni mosmi?",
         "group": "Hujjat va hisobotlar",
         "weight": 1,
         "critical": false,
@@ -109,7 +109,7 @@
       },
       {
         "id": "cp5",
-        "text": "Mijozga yetkazishdan oldin qo'ng'iroq / SMS qilingan",
+        "text": "Mijozga yetkazishdan oldin qo‘ng‘iroq yoki SMS qilinganmi?",
         "group": "Jarayon auditi",
         "weight": 1,
         "critical": false,
@@ -117,7 +117,7 @@
       },
       {
         "id": "cp6",
-        "text": "Muddatida yetkazish (OTD, yetakchilarda 95%+)",
+        "text": "Muddatida yetkazish (OTD) ulushi me‘yorda ekani tasdiqlanganmi?",
         "group": "KPI va muddatlar",
         "weight": 1,
         "critical": false,
@@ -125,7 +125,7 @@
       },
       {
         "id": "cp7",
-        "text": "«Mijoz rad etdi» deb qaytarilganlar bo'yicha qayta qo'ng'iroq bilan tasodifiy tekshiruv",
+        "text": "«Mijoz rad etdi» deb qaytarilgan jo‘natmalar qayta qo‘ng‘iroq bilan tasodifiy tekshirilganmi?",
         "group": "Murojaat / shikoyat bo'yicha",
         "weight": 1,
         "critical": false,
@@ -133,7 +133,7 @@
       },
       {
         "id": "cp8",
-        "text": "COD: buyurtma, kuryer holati va kassa hisoboti kunlik uch tomonlama solishtiriladi",
+        "text": "COD bo‘yicha buyurtma, kuryer holati va kassa hisoboti kunlik solishtirilib, farq yo‘qmi?",
         "group": "Hujjat va hisobotlar",
         "weight": 1,
         "critical": false,
@@ -148,7 +148,7 @@
     "checkpoints": [
       {
         "id": "cp1",
-        "text": "Call centerdan o'tgan murojaat to'liq ma'lumot bilan qabul qilingan (call tarixi, dalil)",
+        "text": "Call centerdan o‘tgan murojaat to‘liq ma‘lumot (call tarixi, dalil) bilan qabul qilinganmi?",
         "group": "Jarayon auditi",
         "weight": 1,
         "critical": false,
@@ -156,7 +156,7 @@
       },
       {
         "id": "cp2",
-        "text": "Murojaatni hal etish muddati (kun) va muddatdan o'tganlar",
+        "text": "Murojaatlar belgilangan hal etish muddatida yopilganmi (muddatdan o‘tganlar yo‘qmi)?",
         "group": "KPI va muddatlar",
         "weight": 1,
         "critical": false,
@@ -164,7 +164,7 @@
       },
       {
         "id": "cp3",
-        "text": "Call center nima uchun hal qila olmaganini aniqlash (bilim, tizim, ichki bo'lim)",
+        "text": "Call center nima uchun hal qila olmagani (bilim, tizim, ichki bo‘lim) aniqlanganmi?",
         "group": "Murojaat / shikoyat bo'yicha",
         "weight": 1,
         "critical": false,
@@ -172,7 +172,7 @@
       },
       {
         "id": "cp4",
-        "text": "Murojaat yozuvi, dalolatnoma va mijozga javob bir-biriga mos",
+        "text": "Murojaat yozuvi, dalolatnoma va mijozga javob bir-biriga mosmi?",
         "group": "Hujjat va hisobotlar",
         "weight": 1,
         "critical": false,
@@ -180,7 +180,7 @@
       },
       {
         "id": "cp5",
-        "text": "Murojaat 1 ish kuni ichida ko'rib chiqishga olingan",
+        "text": "Murojaat 1 ish kuni ichida ko‘rib chiqishga olinganmi?",
         "group": "Jarayon auditi",
         "weight": 1,
         "critical": false,
@@ -188,7 +188,7 @@
       },
       {
         "id": "cp6",
-        "text": "To'liq hal etilganlik ulushi",
+        "text": "Murojaat to‘liq hal etilgani mijoz bilan tasdiqlanganmi?",
         "group": "KPI va muddatlar",
         "weight": 1,
         "critical": false,
@@ -196,7 +196,7 @@
       },
       {
         "id": "cp7",
-        "text": "Aybdor bo'limlar bo'yicha taqsimot: qaysi bo'lim ko'p murojaat keltirib chiqaradi",
+        "text": "Aybdor bo‘limlar bo‘yicha taqsimot tayyorlanib, rahbarga yetkazilganmi?",
         "group": "Murojaat / shikoyat bo'yicha",
         "weight": 1,
         "critical": false,
@@ -204,7 +204,7 @@
       },
       {
         "id": "cp8",
-        "text": "Kompensatsiya/qaytarish hujjatlari to'liq",
+        "text": "Kompensatsiya yoki qaytarish hujjatlari to‘liq rasmiylashtirilganmi?",
         "group": "Hujjat va hisobotlar",
         "weight": 1,
         "critical": false,
@@ -219,7 +219,7 @@
     "checkpoints": [
       {
         "id": "cp1",
-        "text": "Qabulda manifest / nakladnoy bilan nomma-nom solishtirilgan",
+        "text": "Qabulda yuk manifest/nakladnoy bilan nomma-nom solishtirilganmi?",
         "group": "Jarayon auditi",
         "weight": 1,
         "critical": false,
@@ -227,7 +227,7 @@
       },
       {
         "id": "cp2",
-        "text": "Dock-to-stock: qabuldan joylashtirishgacha 24 soatdan oshmasligi",
+        "text": "Qabuldan joylashtirishgacha 24 soatdan oshmaganmi (dock-to-stock)?",
         "group": "KPI va muddatlar",
         "weight": 1,
         "critical": false,
@@ -235,7 +235,7 @@
       },
       {
         "id": "cp3",
-        "text": "Yo'qolgan va shikastlangan jo'natma shikoyatlari bo'yicha omborning oxirgi skan nuqtasi",
+        "text": "Yo‘qolgan yoki shikastlangan jo‘natma shikoyatida omborning oxirgi skan nuqtasi aniqlanganmi?",
         "group": "Murojaat / shikoyat bo'yicha",
         "weight": 1,
         "critical": false,
@@ -243,7 +243,7 @@
       },
       {
         "id": "cp4",
-        "text": "Qabul dalolatnomasi va manifest bir xil",
+        "text": "Qabul dalolatnomasi va manifest bir xilmi?",
         "group": "Hujjat va hisobotlar",
         "weight": 1,
         "critical": false,
@@ -251,7 +251,7 @@
       },
       {
         "id": "cp5",
-        "text": "Har jo'natma skan qilinib tizimga kiritilgan",
+        "text": "Har bir jo‘natma skan qilinib, tizimga kiritilganmi?",
         "group": "Jarayon auditi",
         "weight": 1,
         "critical": false,
@@ -259,7 +259,7 @@
       },
       {
         "id": "cp6",
-        "text": "Inventar aniqligi 97% dan past bo'lmasligi (zo'r natija 99%)",
+        "text": "Inventar aniqligi me‘yordan (97%) past emasmi?",
         "group": "KPI va muddatlar",
         "weight": 1,
         "critical": false,
@@ -267,7 +267,7 @@
       },
       {
         "id": "cp7",
-        "text": "Noto'g'ri yo'naltirilgan jo'natmalar manbasi: qaysi saralash liniyasi / smena",
+        "text": "Noto‘g‘ri yo‘naltirilgan jo‘natma manbasi (saralash liniyasi, smena) aniqlanganmi?",
         "group": "Murojaat / shikoyat bo'yicha",
         "weight": 1,
         "critical": false,
@@ -275,7 +275,7 @@
       },
       {
         "id": "cp8",
-        "text": "Kamomad/shikast aktlari 24 soat ichida rasmiylashtirilgan",
+        "text": "Kamomad va shikast aktlari 24 soat ichida rasmiylashtirilganmi?",
         "group": "Hujjat va hisobotlar",
         "weight": 1,
         "critical": false,
@@ -290,7 +290,7 @@
     "checkpoints": [
       {
         "id": "cp1",
-        "text": "Mashina plombasi butun va raqami hujjatga mos",
+        "text": "Mashina plombasi butun va raqami hujjatga mosmi?",
         "group": "Jarayon auditi",
         "weight": 1,
         "critical": false,
@@ -298,7 +298,7 @@
       },
       {
         "id": "cp2",
-        "text": "Reys kelganidan bojxona ruxsatigacha o'rtacha kun",
+        "text": "Reys kelganidan bojxona ruxsatigacha o‘tgan vaqt belgilangan muddatdan oshmaganmi?",
         "group": "KPI va muddatlar",
         "weight": 1,
         "critical": false,
@@ -306,7 +306,7 @@
       },
       {
         "id": "cp3",
-        "text": "«Xitoy jo'natmam qayerda» turidagi shikoyatlar: jo'natma qaysi reysda va qaysi bosqichda",
+        "text": "«Xitoy jo‘natmam qayerda» shikoyatida jo‘natma qaysi reys va bosqichda ekani aniqlanganmi?",
         "group": "Murojaat / shikoyat bo'yicha",
         "weight": 1,
         "critical": false,
@@ -314,7 +314,7 @@
       },
       {
         "id": "cp4",
-        "text": "Pochta va kuryerlik yuklari bojxona nazoratiga tortiladi, pochta operatori taqdim etadi (2025-noyabr tartibi)",
+        "text": "Pochta va kuryerlik yuklari bojxona nazoratiga tortilib, pochta operatori taqdim etganmi?",
         "group": "Hujjat va hisobotlar",
         "weight": 1,
         "critical": false,
@@ -322,7 +322,7 @@
       },
       {
         "id": "cp5",
-        "text": "CMR / yuk xati va manifest bilan solishtirilgan",
+        "text": "CMR / yuk xati manifest bilan solishtirilganmi?",
         "group": "Jarayon auditi",
         "weight": 1,
         "critical": false,
@@ -330,7 +330,7 @@
       },
       {
         "id": "cp6",
-        "text": "Ruxsatdan keyin saralashga uzatish muddati",
+        "text": "Ruxsatdan keyin saralashga uzatish belgilangan muddatda bajarilganmi?",
         "group": "KPI va muddatlar",
         "weight": 1,
         "critical": false,
@@ -338,7 +338,7 @@
       },
       {
         "id": "cp7",
-        "text": "Shikast va yetishmaslik shikoyatlari reys va plomba bilan bog'lanadi",
+        "text": "Shikast va yetishmaslik shikoyatlari reys va plomba bilan bog‘langanmi?",
         "group": "Murojaat / shikoyat bo'yicha",
         "weight": 1,
         "critical": false,
@@ -346,7 +346,7 @@
       },
       {
         "id": "cp8",
-        "text": "Yuk deklaratsiyasi riskni boshqarish tizimi bo'yicha yashil/sariq/qizil koridorga ajratiladi",
+        "text": "Yuk deklaratsiyasi xavf koridori (yashil/sariq/qizil) bo‘yicha to‘g‘ri ajratilganmi?",
         "group": "Hujjat va hisobotlar",
         "weight": 1,
         "critical": false,
@@ -361,7 +361,7 @@
     "checkpoints": [
       {
         "id": "cp1",
-        "text": "AWB va manifest bilan jo'natmalar soni solishtirilgan",
+        "text": "AWB va manifest bilan jo‘natmalar soni solishtirilganmi?",
         "group": "Jarayon auditi",
         "weight": 1,
         "critical": false,
@@ -369,7 +369,7 @@
       },
       {
         "id": "cp2",
-        "text": "Reysdan ishlov boshlanishigacha vaqt",
+        "text": "Reysdan ishlov boshlanishigacha vaqt belgilangan muddatda bo‘lganmi?",
         "group": "KPI va muddatlar",
         "weight": 1,
         "critical": false,
@@ -377,7 +377,7 @@
       },
       {
         "id": "cp3",
-        "text": "Aviajo'natma shikoyatlari: kechikish bosqichi (reys, bojxona, ombor)",
+        "text": "Aviajo‘natma kechikishida bosqich (reys, bojxona, ombor) aniqlanganmi?",
         "group": "Murojaat / shikoyat bo'yicha",
         "weight": 1,
         "critical": false,
@@ -385,7 +385,7 @@
       },
       {
         "id": "cp4",
-        "text": "AWB, manifest va dalolatnoma bir xil",
+        "text": "AWB, manifest va dalolatnoma bir xilmi?",
         "group": "Hujjat va hisobotlar",
         "weight": 1,
         "critical": false,
@@ -393,7 +393,7 @@
       },
       {
         "id": "cp5",
-        "text": "Reys kelgan vaqti qayd etilgan va ishlov boshlangan vaqt belgilangan",
+        "text": "Reys kelgan va ishlov boshlangan vaqt qayd etilganmi?",
         "group": "Jarayon auditi",
         "weight": 1,
         "critical": false,
@@ -401,7 +401,7 @@
       },
       {
         "id": "cp6",
-        "text": "Manifestga moslik va og'irlik farqi",
+        "text": "Manifestga moslik va og‘irlik farqi ruxsat etilgan chegarada ekani tekshirilganmi?",
         "group": "KPI va muddatlar",
         "weight": 1,
         "critical": false,
@@ -409,7 +409,7 @@
       },
       {
         "id": "cp7",
-        "text": "Og'irlik bo'yicha tarif nizolari: tortish dalili",
+        "text": "Og‘irlik bo‘yicha tarif nizolarida tortish dalili saqlanganmi?",
         "group": "Murojaat / shikoyat bo'yicha",
         "weight": 1,
         "critical": false,
@@ -417,7 +417,7 @@
       },
       {
         "id": "cp8",
-        "text": "Bojxona koridori va ruxsat sanasi tizimda mos",
+        "text": "Bojxona koridori va ruxsat sanasi tizimda to‘g‘ri ko‘rsatilganmi?",
         "group": "Hujjat va hisobotlar",
         "weight": 1,
         "critical": false,
@@ -432,7 +432,7 @@
     "checkpoints": [
       {
         "id": "cp1",
-        "text": "Toshkentdan kelgan reys manifest bilan solishtirilgan",
+        "text": "Toshkentdan kelgan reys manifest bilan solishtirilganmi?",
         "group": "Jarayon auditi",
         "weight": 1,
         "critical": false,
@@ -440,7 +440,7 @@
       },
       {
         "id": "cp2",
-        "text": "Muddatida filiallarga jo'natish (95%+)",
+        "text": "Jo‘natmalar filiallarga belgilangan muddatda jo‘natilganmi?",
         "group": "KPI va muddatlar",
         "weight": 1,
         "critical": false,
@@ -448,7 +448,7 @@
       },
       {
         "id": "cp3",
-        "text": "Viloyat bo'yicha kechikish shikoyatlari qaysi markaz orqali o'tganini aniqlash",
+        "text": "Viloyat kechikish shikoyatida jo‘natma o‘tgan markaz aniqlanganmi?",
         "group": "Murojaat / shikoyat bo'yicha",
         "weight": 1,
         "critical": false,
@@ -456,7 +456,7 @@
       },
       {
         "id": "cp4",
-        "text": "Reys manifesti va qabul qilingan jo'natma soni",
+        "text": "Reys manifesti va qabul qilingan jo‘natma soni mosmi?",
         "group": "Hujjat va hisobotlar",
         "weight": 1,
         "critical": false,
@@ -464,7 +464,7 @@
       },
       {
         "id": "cp5",
-        "text": "Har jo'natma skan qilingan",
+        "text": "Har bir jo‘natma skan qilinganmi?",
         "group": "Jarayon auditi",
         "weight": 1,
         "critical": false,
@@ -472,7 +472,7 @@
       },
       {
         "id": "cp6",
-        "text": "Noto'g'ri yo'naltirish ulushi",
+        "text": "Noto‘g‘ri yo‘naltirilgan jo‘natma ulushi ruxsat etilgan darajadan oshmaganmi?",
         "group": "KPI va muddatlar",
         "weight": 1,
         "critical": false,
@@ -480,7 +480,7 @@
       },
       {
         "id": "cp7",
-        "text": "Noto'g'ri yo'naltirishning ildiz sababi: manzil kodi, saralash xatosi, hujjat",
+        "text": "Noto‘g‘ri yo‘naltirish ildiz sababi (manzil kodi, saralash xatosi, hujjat) aniqlanganmi?",
         "group": "Murojaat / shikoyat bo'yicha",
         "weight": 1,
         "critical": false,
@@ -488,7 +488,7 @@
       },
       {
         "id": "cp8",
-        "text": "Qabul-topshirish dalolatnomalari imzosi",
+        "text": "Qabul-topshirish dalolatnomalari imzolanganmi?",
         "group": "Hujjat va hisobotlar",
         "weight": 1,
         "critical": false,
@@ -503,7 +503,7 @@
     "checkpoints": [
       {
         "id": "cp1",
-        "text": "Ish vaqti va tarif narxlari ko'rinadigan joyda",
+        "text": "Ish vaqti va tarif narxlari ko‘rinadigan joyga osilganmi?",
         "group": "Jarayon auditi",
         "weight": 1,
         "critical": false,
@@ -511,7 +511,7 @@
       },
       {
         "id": "cp2",
-        "text": "Tarif/tortish xatosi ulushi",
+        "text": "Tarif yoki tortish xatolari ulushi ruxsat etilgan darajadan oshmaganmi?",
         "group": "KPI va muddatlar",
         "weight": 1,
         "critical": false,
@@ -519,7 +519,7 @@
       },
       {
         "id": "cp3",
-        "text": "Filial bo'yicha shikoyatlar turi: navbat, muomala, tarif, yo'qolgan jo'natma",
+        "text": "Filial shikoyatlari turi (navbat, muomala, tarif, yo‘qolgan jo‘natma) bo‘yicha tahlil qilinganmi?",
         "group": "Murojaat / shikoyat bo'yicha",
         "weight": 1,
         "critical": false,
@@ -527,7 +527,7 @@
       },
       {
         "id": "cp4",
-        "text": "Qabul kvitansiyasi va tizimdagi jo'natma mos",
+        "text": "Qabul kvitansiyasi va tizimdagi jo‘natma mosmi?",
         "group": "Hujjat va hisobotlar",
         "weight": 1,
         "critical": false,
@@ -535,7 +535,7 @@
       },
       {
         "id": "cp5",
-        "text": "Jo'natma qabulida tortish va o'lchash to'g'ri",
+        "text": "Jo‘natma qabulida tortish va o‘lchash to‘g‘ri bajarilganmi?",
         "group": "Jarayon auditi",
         "weight": 1,
         "critical": false,
@@ -543,7 +543,7 @@
       },
       {
         "id": "cp6",
-        "text": "Navbat kutish vaqti (daqiqa)",
+        "text": "Navbat kutish vaqti belgilangan me‘yordan oshmaganmi?",
         "group": "KPI va muddatlar",
         "weight": 1,
         "critical": false,
@@ -551,7 +551,7 @@
       },
       {
         "id": "cp7",
-        "text": "Yashirin xaridor natijalari shikoyat bilan solishtiriladi",
+        "text": "Yashirin xaridor natijalari shikoyatlar bilan solishtirilganmi?",
         "group": "Murojaat / shikoyat bo'yicha",
         "weight": 1,
         "critical": false,
@@ -559,7 +559,7 @@
       },
       {
         "id": "cp8",
-        "text": "Kassa hisoboti va chek majmui mos",
+        "text": "Kassa hisoboti va chek majmui mosmi?",
         "group": "Hujjat va hisobotlar",
         "weight": 1,
         "critical": false,
@@ -574,7 +574,7 @@
     "checkpoints": [
       {
         "id": "cp1",
-        "text": "Mijoz kartasi CRM'da to'liq va dolzarb",
+        "text": "Mijoz kartasi CRM‘da to‘liq va dolzarbmi?",
         "group": "Jarayon auditi",
         "weight": 1,
         "critical": false,
@@ -582,7 +582,7 @@
       },
       {
         "id": "cp2",
-        "text": "Mijozni saqlab qolish (retention) va yo'qotish (churn)",
+        "text": "Mijozni saqlab qolish (retention) ko‘rsatkichi me‘yordan past emasmi?",
         "group": "KPI va muddatlar",
         "weight": 1,
         "critical": false,
@@ -590,7 +590,7 @@
       },
       {
         "id": "cp3",
-        "text": "Menejer mijozi bo'yicha kelgan shikoyatlarga javobi va muddati",
+        "text": "Menejer mijozining shikoyatiga belgilangan muddatda javob berilganmi?",
         "group": "Murojaat / shikoyat bo'yicha",
         "weight": 1,
         "critical": false,
@@ -598,7 +598,7 @@
       },
       {
         "id": "cp4",
-        "text": "Shartnoma/kelishuv va tarif bir xil",
+        "text": "Shartnoma/kelishuv va tarif bir xilmi?",
         "group": "Hujjat va hisobotlar",
         "weight": 1,
         "critical": false,
@@ -606,7 +606,7 @@
       },
       {
         "id": "cp5",
-        "text": "Tarif va shartlar mijoz bilan yozma kelishilgan",
+        "text": "Tarif va shartlar mijoz bilan yozma kelishilganmi?",
         "group": "Jarayon auditi",
         "weight": 1,
         "critical": false,
@@ -614,7 +614,7 @@
       },
       {
         "id": "cp6",
-        "text": "So'rovga javob vaqti: 24 soatdan oshsa mijoz qoniqishi pasayadi",
+        "text": "So‘rovga 24 soat ichida javob berilganmi?",
         "group": "KPI va muddatlar",
         "weight": 1,
         "critical": false,
@@ -622,7 +622,7 @@
       },
       {
         "id": "cp7",
-        "text": "Yo'qotilgan mijozlarning ketish sababi",
+        "text": "Yo‘qotilgan mijozning ketish sababi aniqlanib yozilganmi?",
         "group": "Murojaat / shikoyat bo'yicha",
         "weight": 1,
         "critical": false,
@@ -630,7 +630,7 @@
       },
       {
         "id": "cp8",
-        "text": "CRM yozuvi va haqiqiy aloqa mos",
+        "text": "CRM yozuvi haqiqiy aloqaga mosmi?",
         "group": "Hujjat va hisobotlar",
         "weight": 1,
         "critical": false,
@@ -645,7 +645,7 @@
     "checkpoints": [
       {
         "id": "cp1",
-        "text": "Muhim tizimlar (CRM, IVR, treking) uchun zaxira nusxa (backup) olingan va tiklash sinalgan",
+        "text": "Muhim tizimlar (CRM, IVR, treking) zaxira nusxasi olinib, tiklash sinalganmi?",
         "group": "Jarayon auditi",
         "weight": 1,
         "critical": false,
@@ -653,7 +653,7 @@
       },
       {
         "id": "cp2",
-        "text": "SLA: jiddiylik bo'yicha hal etish muddati",
+        "text": "Nosozliklar jiddiylik bo‘yicha SLA muddatida hal etilganmi?",
         "group": "KPI va muddatlar",
         "weight": 1,
         "critical": false,
@@ -661,7 +661,7 @@
       },
       {
         "id": "cp3",
-        "text": "Call center va filiallardan kelgan «tizim ishlamayapti» murojaatlari",
+        "text": "Call center va filiallardan kelgan «tizim ishlamayapti» murojaatlari ko‘rib chiqilib yopilganmi?",
         "group": "Murojaat / shikoyat bo'yicha",
         "weight": 1,
         "critical": false,
@@ -669,7 +669,7 @@
       },
       {
         "id": "cp4",
-        "text": "Nosozlik jurnali tiketlar bilan mos",
+        "text": "Nosozlik jurnali tiketlar bilan mosmi?",
         "group": "Hujjat va hisobotlar",
         "weight": 1,
         "critical": false,
@@ -677,7 +677,7 @@
       },
       {
         "id": "cp5",
-        "text": "Ishdan ketgan xodimlarning kirish huquqlari o'chirilgan",
+        "text": "Ishdan ketgan xodimlarning kirish huquqlari o‘chirilganmi?",
         "group": "Jarayon auditi",
         "weight": 1,
         "critical": false,
@@ -685,7 +685,7 @@
       },
       {
         "id": "cp6",
-        "text": "Birinchi javob vaqti",
+        "text": "Birinchi javob belgilangan muddatda berilganmi?",
         "group": "KPI va muddatlar",
         "weight": 1,
         "critical": false,
@@ -693,7 +693,7 @@
       },
       {
         "id": "cp7",
-        "text": "IVR yo'naltirish xatolari va noto'g'ri menyu sozlamalari",
+        "text": "IVR yo‘naltirish xatolari va noto‘g‘ri menyu sozlamalari tuzatilganmi?",
         "group": "Murojaat / shikoyat bo'yicha",
         "weight": 1,
         "critical": false,
@@ -701,7 +701,7 @@
       },
       {
         "id": "cp8",
-        "text": "Backup hisoboti va tiklash sinovi",
+        "text": "Backup hisoboti va tiklash sinovi hujjatlashtirilganmi?",
         "group": "Hujjat va hisobotlar",
         "weight": 1,
         "critical": false,
@@ -716,7 +716,7 @@
     "checkpoints": [
       {
         "id": "cp1",
-        "text": "Kassa kun oxirida tizim bo'yicha yopilgan",
+        "text": "Kassa kun oxirida tizim bo‘yicha yopilganmi?",
         "group": "Jarayon auditi",
         "weight": 1,
         "critical": false,
@@ -724,7 +724,7 @@
       },
       {
         "id": "cp2",
-        "text": "COD topshirish muddati va to'liqligi",
+        "text": "COD to‘liq va belgilangan muddatda topshirilganmi?",
         "group": "KPI va muddatlar",
         "weight": 1,
         "critical": false,
@@ -732,7 +732,7 @@
       },
       {
         "id": "cp3",
-        "text": "Pul bilan bog'liq shikoyatlar (COD, kargo haqi, qaytarilmagan summa)",
+        "text": "Pul bilan bog‘liq shikoyatlar (COD, kargo haqi, qaytarilmagan summa) ko‘rib chiqilib hal etilganmi?",
         "group": "Murojaat / shikoyat bo'yicha",
         "weight": 1,
         "critical": false,
@@ -740,7 +740,7 @@
       },
       {
         "id": "cp4",
-        "text": "Buyurtma, kuryer holati va kassa hisoboti kunlik solishtirilgan (uch tomonlama)",
+        "text": "Buyurtma, kuryer holati va kassa hisoboti kunlik uch tomonlama solishtirilganmi?",
         "group": "Hujjat va hisobotlar",
         "weight": 1,
         "critical": false,
@@ -748,7 +748,7 @@
       },
       {
         "id": "cp5",
-        "text": "COD hisob-kitobi kunlik uch tomonlama (buyurtma, kuryer holati, kassa) solishtirilgan",
+        "text": "Hisob-kitobdagi farqlar sababi bilan yozib qo‘yilganmi?",
         "group": "Jarayon auditi",
         "weight": 1,
         "critical": false,
@@ -756,7 +756,7 @@
       },
       {
         "id": "cp6",
-        "text": "Kassa mosligi kunlik nol farq",
+        "text": "Kassa kunlik hisobida farq nolmi?",
         "group": "KPI va muddatlar",
         "weight": 1,
         "critical": false,
@@ -764,7 +764,7 @@
       },
       {
         "id": "cp7",
-        "text": "Mijoz to'lov nizolarini hisob-faktura va kvitansiya bilan solishtirish",
+        "text": "Mijoz to‘lov nizolari hisob-faktura va kvitansiya bilan solishtirilganmi?",
         "group": "Murojaat / shikoyat bo'yicha",
         "weight": 1,
         "critical": false,
@@ -772,7 +772,7 @@
       },
       {
         "id": "cp8",
-        "text": "Hisob-faktura va tarif mos",
+        "text": "Hisob-faktura va tarif mosmi?",
         "group": "Hujjat va hisobotlar",
         "weight": 1,
         "critical": false,
@@ -787,7 +787,7 @@
     "checkpoints": [
       {
         "id": "cp1",
-        "text": "E'lon qilingan narx va shartlar tizimdagi tarifga mos",
+        "text": "E‘lon qilingan narx va shartlar tizimdagi tarifga mosmi?",
         "group": "Jarayon auditi",
         "weight": 1,
         "critical": false,
@@ -795,7 +795,7 @@
       },
       {
         "id": "cp2",
-        "text": "Ijtimoiy tarmoqda 24 soatda javob ulushi",
+        "text": "Ijtimoiy tarmoqdagi murojaatlarga 24 soat ichida javob berilganmi?",
         "group": "KPI va muddatlar",
         "weight": 1,
         "critical": false,
@@ -803,7 +803,7 @@
       },
       {
         "id": "cp3",
-        "text": "«Reklamada boshqacha yozilgan edi» turidagi shikoyatlar",
+        "text": "«Reklamada boshqacha yozilgan edi» shikoyatlari ko‘rib chiqilib, sabab aniqlanganmi?",
         "group": "Murojaat / shikoyat bo'yicha",
         "weight": 1,
         "critical": false,
@@ -811,7 +811,7 @@
       },
       {
         "id": "cp4",
-        "text": "Aksiya shartlari va tizim sozlamasi bir xil",
+        "text": "Aksiya shartlari va tizim sozlamasi bir xilmi?",
         "group": "Hujjat va hisobotlar",
         "weight": 1,
         "critical": false,
@@ -819,7 +819,7 @@
       },
       {
         "id": "cp5",
-        "text": "Aksiya shartlari ommaviy va tushunarli yozilgan",
+        "text": "Aksiya shartlari ommaviy va tushunarli yozilganmi?",
         "group": "Jarayon auditi",
         "weight": 1,
         "critical": false,
@@ -827,7 +827,7 @@
       },
       {
         "id": "cp6",
-        "text": "E'lon va tizim narxi mosligi",
+        "text": "Aksiya boshlanishidan oldin e‘londagi va tizimdagi narx solishtirilganmi?",
         "group": "KPI va muddatlar",
         "weight": 1,
         "critical": false,
@@ -835,7 +835,7 @@
       },
       {
         "id": "cp7",
-        "text": "Aksiya boshlanganda call center va filialga kelgan savollar",
+        "text": "Aksiya boshlanishidan oldin call center va filiallarga axborot berilganmi?",
         "group": "Murojaat / shikoyat bo'yicha",
         "weight": 1,
         "critical": false,
@@ -843,7 +843,7 @@
       },
       {
         "id": "cp8",
-        "text": "E'lon maketi tasdiqlangan",
+        "text": "E‘lon maketi tasdiqlanganmi?",
         "group": "Hujjat va hisobotlar",
         "weight": 1,
         "critical": false,

@@ -15,12 +15,10 @@ export default async function LoginPage({
     <main className="flex min-h-screen items-center justify-center px-5 py-12">
       <div className="w-full max-w-[380px]">
         <div className="mb-7">
-          <p className="eyebrow mb-2">iPOST · Sifat nazorati bo'limi</p>
-          <h1 className="text-stat leading-tight tracking-[-0.022em]">
-            KPI va nazorat tizimi
-          </h1>
+          <p className="eyebrow mb-2">iPOST · Sifat nazorati</p>
+          <h1 className="text-stat leading-tight tracking-[-0.022em]">Bo‘limlarni tekshirish</h1>
           <p className="mt-2 text-body leading-relaxed text-ink2">
-            Kunlik reyestr, KPI hisobi va audit natijalari — rahbariyat nazoratida.
+            Tekshiruvni bir daqiqada kiriting, holatni panelda bir qarashda ko‘ring.
           </p>
         </div>
 

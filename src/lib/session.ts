@@ -8,7 +8,7 @@ import { jwtVerify, SignJWT } from 'jose';
 export const SESSION_COOKIE = 'otk_session';
 const SESSION_TTL_SECONDS = 60 * 60 * 12; // 12 soat — ish smenasi
 
-export type Role = 'CEO' | 'HEAD' | 'SPECIALIST' | 'VIEWER';
+export type Role = 'HEAD' | 'INSPECTOR' | 'VIEWER';
 
 export interface SessionPayload {
   sub: string;

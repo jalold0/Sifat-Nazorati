@@ -1,6 +1,7 @@
 import { NextResponse, type NextRequest } from 'next/server';
 
 import { SESSION_COOKIE, verifySession } from '@/lib/session';
+import { canOpenPath, homePath } from '@/qc/policy';
 
 const PUBLIC_PATHS = ['/login', '/ruxsat-yoq'];
 
@@ -11,7 +12,7 @@ export async function middleware(request: NextRequest) {
   if (PUBLIC_PATHS.some((p) => pathname.startsWith(p))) {
     // Kirgan foydalanuvchini login sahifasida ushlab turmaymiz
     if (session && pathname.startsWith('/login')) {
-      return NextResponse.redirect(new URL('/dashboard', request.url));
+      return NextResponse.redirect(new URL(homePath(session.role), request.url));
     }
     return NextResponse.next();
   }
@@ -20,6 +21,11 @@ export async function middleware(request: NextRequest) {
     const url = new URL('/login', request.url);
     if (pathname !== '/') url.searchParams.set('keyin', pathname);
     return NextResponse.redirect(url);
+  }
+
+  // Rolga ruxsat etilmagan ekran: qo'lda manzil yozib ham ochib bo'lmaydi (asl tekshiruv serverda ham bor)
+  if (!canOpenPath(session.role, pathname)) {
+    return NextResponse.redirect(new URL('/ruxsat-yoq', request.url));
   }
 
   return NextResponse.next();

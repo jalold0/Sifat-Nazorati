@@ -4,7 +4,7 @@ import { redirect } from 'next/navigation';
 import { z } from 'zod';
 
 import { authenticate, createSessionCookie, destroySessionCookie } from '@/lib/auth';
-import { logActivity } from '@/server/shared';
+import { homePath } from '@/qc/policy';
 
 const schema = z.object({
   login: z.string().min(2, 'Login kiritilmadi'),
@@ -33,15 +33,9 @@ export async function loginAction(_prev: LoginState, formData: FormData): Promis
   }
 
   await createSessionCookie(result.session);
-  await logActivity({
-    actorId: result.session.sub,
-    action: 'auth.login',
-    entity: 'User',
-    entityId: result.session.sub,
-    summary: `${result.session.name} tizimga kirdi`,
-  });
 
-  const target = parsed.data.next && parsed.data.next.startsWith('/') ? parsed.data.next : '/dashboard';
+  const next = parsed.data.next;
+  const target = next && next.startsWith('/') && !next.startsWith('//') ? next : homePath(result.session.role);
   redirect(target);
 }
 

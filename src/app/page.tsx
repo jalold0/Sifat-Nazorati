@@ -1,5 +1,9 @@
 import { redirect } from 'next/navigation';
 
-export default function Home() {
-  redirect('/dashboard');
+import { requireActor } from '@/lib/auth';
+import { homePath } from '@/qc/policy';
+
+export default async function Home() {
+  const actor = await requireActor();
+  redirect(homePath(actor.role));
 }

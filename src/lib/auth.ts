@@ -1,11 +1,8 @@
 /**
- * Autentifikatsiya va ruxsatlar (server-only).
+ * Autentifikatsiya (server-only).
  *
- * Rollar:
- *   CEO        — hamma narsani ko'radi, KPI davrini tasdiqlaydi. Ma'lumot kiritmaydi.
- *   HEAD       — bo'lim boshlig'i: reyestr, audit, KPI faktlari, tizimli yechimlar.
- *   SPECIALIST — o'z murojaatlari va auditlari.
- *   VIEWER     — faqat o'qish (HR, moliya).
+ * Rollar (src/qc/policy.ts da ruxsat qoidalari):
+ *   HEAD — Rahbar, INSPECTOR — Tekshiruvchi, VIEWER — Ko'ruvchi (faqat o'z bo'limi).
  */
 
 import 'server-only';
@@ -15,6 +12,7 @@ import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
 
 import { db } from './db';
+import type { Actor } from '@/qc/policy';
 import { SESSION_COOKIE, SESSION_MAX_AGE, signSession, verifySession, type Role, type SessionPayload } from './session';
 
 const BCRYPT_ROUNDS = 12;
@@ -26,6 +24,8 @@ export async function hashPassword(plain: string): Promise<string> {
 export async function verifyPassword(plain: string, hash: string): Promise<boolean> {
   return bcrypt.compare(plain, hash);
 }
+
+export type SessionActor = Actor & { name: string };
 
 export async function getSession(): Promise<SessionPayload | null> {
   const jar = await cookies();
@@ -85,36 +85,30 @@ export async function authenticate(login: string, password: string): Promise<Log
   };
 }
 
-// ── Ruxsat qoidalari ─────────────────────────────────────────────────────────
-
-/** Ma'lumot kiritish/o'zgartirish huquqi. CEO faqat kuzatadi va tasdiqlaydi. */
-export function canWrite(role: Role): boolean {
-  return role === 'HEAD' || role === 'SPECIALIST';
+/**
+ * Joriy foydalanuvchi — HAR SO'ROVDA bazadan o'qiladi: rol, bo'lim va faollik JWT ga emas,
+ * bazaga ishonadi (rahbar rolni o'zgartirsa yoki hisobni o'chirsa, darhol kuchga kiradi).
+ */
+export async function getActor(): Promise<SessionActor | null> {
+  const session = await getSession();
+  if (!session) return null;
+  const user = await db.user.findUnique({
+    where: { id: session.sub },
+    select: { id: true, role: true, deptId: true, active: true, shortName: true },
+  });
+  if (!user || !user.active) return null;
+  return { id: user.id, role: user.role as Role, deptId: user.deptId, name: user.shortName };
 }
 
-/** KPI faktini qo'lda o'zgartirish (override) — faqat bo'lim boshlig'i. */
-export function canOverrideKpi(role: Role): boolean {
-  return role === 'HEAD';
+export async function requireActor(): Promise<SessionActor> {
+  const actor = await getActor();
+  if (!actor) redirect('/login');
+  return actor;
 }
 
-/** KPI davrini tasdiqlash — faqat CEO. */
-export function canApprovePeriod(role: Role): boolean {
-  return role === 'CEO';
+/** Sahifa uchun: rol ruxsat etilmagan bo'lsa /ruxsat-yoq ga yuboradi. */
+export async function requireActorFor(...roles: Role[]): Promise<SessionActor> {
+  const actor = await requireActor();
+  if (!roles.includes(actor.role)) redirect('/ruxsat-yoq');
+  return actor;
 }
-
-/** Xodimlar, maosh va KPI pasportini boshqarish. */
-export function canManageSettings(role: Role): boolean {
-  return role === 'HEAD' || role === 'CEO';
-}
-
-/** Maoshni va bonus summasini ko'rish. */
-export function canSeeSalary(role: Role): boolean {
-  return role === 'CEO' || role === 'HEAD' || role === 'VIEWER';
-}
-
-export const ROLE_LABEL: Record<Role, string> = {
-  CEO: 'Rahbariyat (CEO)',
-  HEAD: "Bo'lim boshlig'i",
-  SPECIALIST: 'Sifat nazorati mutaxassisi',
-  VIEWER: 'Kuzatuvchi',
-};

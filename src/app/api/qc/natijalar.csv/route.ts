@@ -1,6 +1,7 @@
 import { NextResponse, type NextRequest } from 'next/server';
 
 import { getActor } from '@/lib/auth';
+import { dateTime } from '@/lib/format';
 import { toCsv } from '@/qc/csv';
 import { listProgress } from '@/server/training';
 
@@ -29,7 +30,7 @@ export async function GET(request: NextRequest) {
       r.lastPct ?? '',
       r.bestPct ?? '',
       STATUS[r.status],
-      r.lastAt ?? '',
+      r.lastAt ? dateTime(r.lastAt) : '',
       r.attempts.length,
     ]),
   );

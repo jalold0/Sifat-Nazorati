@@ -2,7 +2,7 @@
 
 import clsx from 'clsx';
 import Link from 'next/link';
-import { useState, useTransition } from 'react';
+import { useRef, useState, useTransition } from 'react';
 
 import { ProgressBar } from '@/components/ui';
 import { programProgress, taskKey } from '@/qc/training';
@@ -12,6 +12,14 @@ import { setTaskAction } from './actions';
 
 export function Program({ training }: { training: TrainingDto }) {
   const [done, setDone] = useState<Set<string>>(() => new Set(training.done));
+  // Tez-tez bosilganda yangilanish yo'qolmasligi uchun joriy holat ref'da ham turadi
+  const live = useRef(done);
+  const apply = (fn: (s: Set<string>) => void) => {
+    const next = new Set(live.current);
+    fn(next);
+    live.current = next;
+    setDone(next);
+  };
   const [error, setError] = useState<string | null>(null);
   const [, start] = useTransition();
 
@@ -19,11 +27,8 @@ export function Program({ training }: { training: TrainingDto }) {
   const hasTest = training.questionCount > 0;
 
   function toggle(key: string) {
-    const next = new Set(done);
-    const value = !next.has(key);
-    if (value) next.add(key);
-    else next.delete(key);
-    setDone(next);
+    const value = !live.current.has(key);
+    apply((s) => (value ? s.add(key) : s.delete(key)));
     setError(null);
     start(async () => {
       try {
@@ -31,12 +36,7 @@ export function Program({ training }: { training: TrainingDto }) {
         if (!r.ok) throw new Error(r.error);
       } catch (e) {
         // Saqlanmadi — belgini qaytaramiz
-        setDone((cur) => {
-          const back = new Set(cur);
-          if (value) back.delete(key);
-          else back.add(key);
-          return back;
-        });
+        apply((s) => (value ? s.delete(key) : s.add(key)));
         setError(e instanceof Error && e.message ? e.message : 'Aloqa yo‘q, saqlanmadi. Qayta urinib ko‘ring.');
       }
     });

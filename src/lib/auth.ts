@@ -25,6 +25,23 @@ export async function verifyPassword(plain: string, hash: string): Promise<boole
   return bcrypt.compare(plain, hash);
 }
 
+/**
+ * Login topilmaganda solishtiriladigan HAQIQIY bcrypt hash (xuddi shu rounds bilan): javob vaqti mavjud
+ * foydalanuvchinikidek bo'ladi va vaqt bo'yicha login borligini bilib bo'lmaydi.
+ * (Noto'g'ri formatdagi soxta hash bilan bcrypt 0 ms da qaytadi — bu loginni oshkor qiladi.)
+ */
+let dummyHash: Promise<string> | null = null;
+function getDummyHash(): Promise<string> {
+  dummyHash ??= bcrypt.hash(`dummy-${crypto.randomUUID()}`, BCRYPT_ROUNDS);
+  return dummyHash;
+}
+void getDummyHash(); // oldindan tayyorlanadi: birinchi noma'lum login ham sekinroq bo'lib qolmasin
+
+/** Foydalanuvchining hamma sessiyalarini bekor qiladi (keyingi so'rovda getActor null qaytaradi). */
+export async function revokeSessions(userId: string): Promise<void> {
+  await db.user.update({ where: { id: userId }, data: { sessionVersion: { increment: 1 } } });
+}
+
 export type SessionActor = Actor & { name: string; mustChange: boolean };
 
 export async function getSession(): Promise<SessionPayload | null> {
@@ -32,18 +49,6 @@ export async function getSession(): Promise<SessionPayload | null> {
   return verifySession(jar.get(SESSION_COOKIE)?.value);
 }
 
-/** Sahifa uchun sessiya talab qiladi, bo'lmasa login'ga yuboradi. */
-export async function requireSession(): Promise<SessionPayload> {
-  const session = await getSession();
-  if (!session) redirect('/login');
-  return session;
-}
-
-export async function requireRole(...roles: Role[]): Promise<SessionPayload> {
-  const session = await requireSession();
-  if (!roles.includes(session.role)) redirect('/ruxsat-yoq');
-  return session;
-}
 
 export async function createSessionCookie(payload: SessionPayload): Promise<void> {
   const token = await signSession(payload);
@@ -71,7 +76,7 @@ export interface LoginResult {
 export async function authenticate(login: string, password: string): Promise<LoginResult> {
   const user = await db.user.findUnique({ where: { login: login.trim().toLowerCase() } });
   // Foydalanuvchi topilmasa ham parol tekshiriladi — javob vaqti bo'yicha login ochilmasligi uchun
-  const hash = user?.passwordHash ?? '$2a$12$invalidinvalidinvalidinvalidinvalidinvalidinvalidinvalidinv';
+  const hash = user?.passwordHash ?? (await getDummyHash());
   const valid = await verifyPassword(password, hash);
 
   if (!user || !valid) return { ok: false, error: 'Login yoki parol xato' };
@@ -81,7 +86,14 @@ export async function authenticate(login: string, password: string): Promise<Log
 
   return {
     ok: true,
-    session: { sub: user.id, key: user.key, name: user.shortName, role: user.role as Role, mc: user.mustChangePassword },
+    session: {
+      sub: user.id,
+      key: user.key,
+      name: user.shortName,
+      role: user.role as Role,
+      mc: user.mustChangePassword,
+      sv: user.sessionVersion,
+    },
   };
 }
 
@@ -94,9 +106,10 @@ export async function getActor(): Promise<SessionActor | null> {
   if (!session) return null;
   const user = await db.user.findUnique({
     where: { id: session.sub },
-    select: { id: true, role: true, deptId: true, active: true, shortName: true, mustChangePassword: true },
+    select: { id: true, role: true, deptId: true, active: true, shortName: true, mustChangePassword: true, sessionVersion: true },
   });
-  if (!user || !user.active) return null;
+  // Versiya mos kelmasa — sessiya bekor qilingan (parol almashgan, chiqilgan yoki hisob o'chirilgan)
+  if (!user || !user.active || user.sessionVersion !== session.sv) return null;
   return { id: user.id, role: user.role as Role, deptId: user.deptId, name: user.shortName, mustChange: user.mustChangePassword };
 }
 

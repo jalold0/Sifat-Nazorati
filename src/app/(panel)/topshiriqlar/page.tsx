@@ -8,7 +8,7 @@ import { PageHead } from '@/components/ui';
 import { requireActorFor } from '@/lib/auth';
 import { todayTashkent } from '@/qc/calc';
 import { canEditTask } from '@/qc/policy';
-import { listDepartments, listTasks } from '@/server/qc';
+import { listDepartments, listTaskTab, PAGE_SIZE } from '@/server/qc';
 
 export const metadata: Metadata = { title: 'Topshiriqlar' };
 export const dynamic = 'force-dynamic';
@@ -22,25 +22,22 @@ const TABS = [
 export default async function TopshiriqlarPage({
   searchParams,
 }: {
-  searchParams: Promise<{ t?: string; d?: string }>;
+  searchParams: Promise<{ t?: string; d?: string; o?: string }>;
 }) {
   const actor = await requireActorFor('HEAD', 'INSPECTOR');
   const sp = await searchParams;
   const tab = TABS.find((x) => x.key === sp.t)?.key ?? 'overdue';
+  const offset = Math.max(Number(sp.o) || 0, 0);
   const today = todayTashkent();
 
   const [departments, res] = await Promise.all([
     listDepartments(actor, { includeInactive: true }),
-    listTasks(actor, { dept: sp.d || undefined }),
+    listTaskTab(actor, { tab, dept: sp.d || undefined, offset }),
   ]);
-  const all = res.ok ? res.data : [];
-
-  const overdue = all.filter((t) => t.status === 'open' && t.due < today);
-  const open = all.filter((t) => t.status === 'open');
-  const closed = all.filter((t) => t.status === 'closed').sort((a, b) => (b.closedAt ?? '').localeCompare(a.closedAt ?? ''));
-  const shown = { overdue, open, closed }[tab];
-  const counts = { overdue: overdue.length, open: open.length, closed: closed.length };
-  const href = (t: string, d = sp.d) => `/topshiriqlar?t=${t}${d ? `&d=${d}` : ''}`;
+  const shown = res.ok ? res.data.rows : [];
+  const total = res.ok ? res.data.total : 0;
+  const counts = res.ok ? res.data.counts : { overdue: 0, open: 0, closed: 0 };
+  const href = (t: string, o = 0) => `/topshiriqlar?t=${t}${sp.d ? `&d=${sp.d}` : ''}${o > 0 ? `&o=${o}` : ''}`;
 
   return (
     <>
@@ -91,6 +88,28 @@ export default async function TopshiriqlarPage({
         canClose={canEditTask(actor)}
         emptyText={tab === 'overdue' ? 'Muddati o‘tgan topshiriq yo‘q' : tab === 'open' ? 'Ochiq topshiriq yo‘q' : 'Hali yopilgan topshiriq yo‘q'}
       />
+
+      {total > PAGE_SIZE ? (
+        <nav className="mt-4 flex items-center justify-between text-meta" aria-label="Sahifalar">
+          {offset > 0 ? (
+            <Link className="btn-ghost min-h-[44px]" href={href(tab, Math.max(offset - PAGE_SIZE, 0))}>
+              ← Oldingi
+            </Link>
+          ) : (
+            <span />
+          )}
+          <span className="tnum text-muted">
+            {offset + 1}–{Math.min(offset + PAGE_SIZE, total)} / {total}
+          </span>
+          {offset + PAGE_SIZE < total ? (
+            <Link className="btn-ghost min-h-[44px]" href={href(tab, offset + PAGE_SIZE)}>
+              Keyingi →
+            </Link>
+          ) : (
+            <span />
+          )}
+        </nav>
+      ) : null}
     </>
   );
 }

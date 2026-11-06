@@ -84,6 +84,8 @@ export async function saveUser(actor: Actor, input: UserInput, ctx?: Ctx): Promi
           deptId,
           active: input.active,
           ...(hash ? { passwordHash: hash, mustChangePassword: true } : {}),
+          // Parol qayta o'rnatilsa yoki hisob o'chirilsa — uning hamma ochiq sessiyalari darhol bekor bo'ladi
+          ...(hash || !input.active ? { sessionVersion: { increment: 1 } } : {}),
         },
       });
       if (lines.length > 0) {

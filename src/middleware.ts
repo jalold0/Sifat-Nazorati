@@ -1,7 +1,7 @@
 import { NextResponse, type NextRequest } from 'next/server';
 
 import { SESSION_COOKIE, verifySession } from '@/lib/session';
-import { canOpenPath, homePath } from '@/qc/policy';
+import { canOpenPath } from '@/qc/policy';
 
 const PUBLIC_PATHS = ['/login', '/ruxsat-yoq'];
 
@@ -9,11 +9,9 @@ export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
   const session = await verifySession(request.cookies.get(SESSION_COOKIE)?.value);
 
-  if (PUBLIC_PATHS.some((p) => pathname.startsWith(p))) {
-    // Kirgan foydalanuvchini login sahifasida ushlab turmaymiz
-    if (session && pathname.startsWith('/login')) {
-      return NextResponse.redirect(new URL(homePath(session.role), request.url));
-    }
+  if (PUBLIC_PATHS.some((p) => pathname === p || pathname.startsWith(`${p}/`))) {
+    // Kirgan foydalanuvchini /login dan yo'naltirish sahifaning o'zida (sessiya versiyasi bazada tekshiriladi);
+    // bu yerda JWT ga qarab qilinsa, bekor qilingan sessiya /login ↔ / orasida aylanib qoladi.
     return NextResponse.next();
   }
 

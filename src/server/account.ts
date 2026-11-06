@@ -30,7 +30,8 @@ export async function changePassword(
 
   await client.user.update({
     where: { id: userId },
-    data: { passwordHash: await bcrypt.hash(next, 12), mustChangePassword: false },
+    // Parol almashsa boshqa qurilmalardagi hamma sessiyalar bekor bo'ladi
+    data: { passwordHash: await bcrypt.hash(next, 12), mustChangePassword: false, sessionVersion: { increment: 1 } },
   });
   return { ok: true, data: { id: userId } };
 }

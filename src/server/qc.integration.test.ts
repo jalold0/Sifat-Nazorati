@@ -24,6 +24,7 @@ import {
   listAudits,
   listDepartments,
   listTasks,
+  listTaskTab,
   saveDepartment,
   updateAudit,
   type Ctx,
@@ -340,6 +341,64 @@ suite('server qatlami (PostgreSQL)', () => {
     const logged = await db.qcLog.findFirst({ where: { action: 'user.save', entityId: row.id, summary: { contains: 'parol qayta o‘rnatildi' } } });
     expect(logged).toBeTruthy();
     expect(JSON.stringify(logged)).not.toContain('Tiklangan-12'); // parol jurnalga tushmaydi
+  });
+
+  it('sessiya versiyasi: parol almashtirish, rahbar tiklashi va o‘chirish eski sessiyalarni bekor qiladi; oddiy tahrir — yo‘q', async () => {
+    const made = await saveUser(head, { login: 'sessiya.sinov', fullName: 'Sessiya Sinov', role: 'INSPECTOR', active: true, password: 'Boshlangich1' }, ctx);
+    if (!made.ok) throw new Error(JSON.stringify(made));
+    const sv = async () => (await db.user.findUniqueOrThrow({ where: { id: made.data.id } })).sessionVersion;
+    expect(await sv()).toBe(0);
+
+    await changePassword(made.data.id, { current: 'Boshlangich1', next: 'Yangi-Parol7', confirm: 'Yangi-Parol7' }, ctx);
+    expect(await sv()).toBe(1);
+
+    // ism o'zgarishi sessiyani bekor qilmaydi
+    await saveUser(head, { id: made.data.id, fullName: 'Sessiya Sinov 2', role: 'INSPECTOR', active: true }, ctx);
+    expect(await sv()).toBe(1);
+
+    await saveUser(head, { id: made.data.id, fullName: 'Sessiya Sinov 2', role: 'INSPECTOR', active: true, password: 'Tiklangan-12' }, ctx);
+    expect(await sv()).toBe(2);
+
+    await saveUser(head, { id: made.data.id, fullName: 'Sessiya Sinov 2', role: 'INSPECTOR', active: false }, ctx);
+    expect(await sv()).toBe(3);
+  });
+
+  it('topshiriqlar varag‘i: bazada filtrlanadi, sonlar to‘liq, 50 tadan sahifalanadi (hech biri tushib qolmaydi)', async () => {
+    const audit = await db.qcAudit.findFirstOrThrow({ where: { deptId: d2 } });
+    const past = '2020-01-01';
+    const far = '2099-12-31';
+    await db.qcTask.createMany({
+      data: [
+        // 60 ta eski yopilgan — avvalgi 1000 talik cheklovda yangi ochiqlarni siqib chiqargan holat
+        ...Array.from({ length: 60 }, (_, i) => ({ auditId: audit.id, deptId: d2, cpId: 'cp2', what: `yopiq ${i}`, owner: 'A', due: past, status: 'CLOSED' as const, checkedOn: past })),
+        { auditId: audit.id, deptId: d2, cpId: 'cp3', what: 'uzoq muddatli ochiq', owner: 'B', due: far },
+      ],
+    });
+    const counts = {
+      overdue: await db.qcTask.count({ where: { deptId: d2, status: 'OPEN', due: { lt: today } } }),
+      open: await db.qcTask.count({ where: { deptId: d2, status: 'OPEN' } }),
+      closed: await db.qcTask.count({ where: { deptId: d2, status: 'CLOSED' } }),
+    };
+
+    const closed = await listTaskTab(head, { tab: 'closed', dept: d2 }, ctx);
+    if (!closed.ok) throw new Error('closed');
+    expect(closed.data.counts).toEqual(counts);
+    expect(closed.data.total).toBe(counts.closed);
+    expect(closed.data.rows).toHaveLength(Math.min(50, counts.closed));
+    const page2 = await listTaskTab(head, { tab: 'closed', dept: d2, offset: 50 }, ctx);
+    if (!page2.ok) throw new Error('page2');
+    expect(page2.data.rows).toHaveLength(counts.closed - 50);
+
+    const open = await listTaskTab(head, { tab: 'open', dept: d2 }, ctx);
+    if (!open.ok) throw new Error('open');
+    expect(open.data.rows.every((t) => t.status === 'open')).toBe(true);
+    expect(open.data.rows.some((t) => t.what === 'uzoq muddatli ochiq')).toBe(true);
+
+    const overdue = await listTaskTab(head, { tab: 'overdue', dept: d2 }, ctx);
+    if (!overdue.ok) throw new Error('overdue');
+    expect(overdue.data.rows.every((t) => t.status === 'open' && t.due < today)).toBe(true);
+
+    expect(await listTaskTab(viewer, { tab: 'open', dept: d2 }, ctx)).toMatchObject({ ok: false, status: 403 });
   });
 
   it('tarix sahifalanadi, yangisi birinchi', async () => {

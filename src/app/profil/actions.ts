@@ -20,8 +20,15 @@ export async function changePasswordAction(_prev: PasswordState, formData: FormD
   });
   if (!r.ok) return { error: r.error };
 
-  // Sessiya yangilanadi: «majburiy almashtirish» belgisi olib tashlanadi
+  // changePassword boshqa hamma sessiyalarni bekor qildi (versiya oshdi) — shu qurilmaga yangi sessiya beriladi
   const user = await db.user.findUniqueOrThrow({ where: { id: actor.id } });
-  await createSessionCookie({ sub: user.id, key: user.key, name: user.shortName, role: user.role, mc: false });
+  await createSessionCookie({
+    sub: user.id,
+    key: user.key,
+    name: user.shortName,
+    role: user.role,
+    mc: false,
+    sv: user.sessionVersion,
+  });
   redirect(homePath(user.role));
 }

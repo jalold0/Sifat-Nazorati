@@ -12,8 +12,8 @@ export default function ForbiddenPage() {
           Sizning rolingiz bu sahifani ko'rishga yoki o'zgartirishga imkon bermaydi. Agar bu xato bo'lsa,
           bo'lim boshlig'iga murojaat qiling.
         </p>
-        <Link href="/dashboard" className="btn-ghost mt-5">
-          Boshqaruv paneliga qaytish
+        <Link href="/" className="btn-ghost mt-5">
+          Bosh sahifaga qaytish
         </Link>
       </div>
     </main>

@@ -315,9 +315,48 @@ export async function listTasks(actor: Actor, q: TaskQuery, ctx?: Ctx): Promise<
     },
     include: { checkedBy: { select: { shortName: true } } },
     orderBy: [{ due: 'asc' }, { createdAt: 'asc' }],
-    take: 1000,
   });
   return ok(rows.map(toTask));
+}
+
+export type TaskTab = 'overdue' | 'open' | 'closed';
+
+/**
+ * Topshiriqlar sahifasi: tanlangan varaq bazada filtrlanadi va 50 tadan sahifalanadi, sonlar `count()` bilan
+ * olinadi — topshiriqlar ko'paysa ham hech biri ro'yxatdan jim tushib qolmaydi.
+ * Muddati o'tgan va ochiq — muddat bo'yicha (eng shoshilinchi birinchi); yopilgan — eng oxirgi yopilgani birinchi.
+ */
+export async function listTaskTab(
+  actor: Actor,
+  q: { tab: TaskTab; dept?: string; offset?: number },
+  ctx?: Ctx,
+): Promise<Res<{ rows: TaskDto[]; total: number; counts: Record<TaskTab, number> }>> {
+  if (q.dept && !canReadDept(actor, q.dept)) return forbidden('Bu bo‘limni ko‘rishga ruxsatingiz yo‘q.');
+  const scope = deptScope(actor);
+  const base: Prisma.QcTaskWhereInput = q.dept ? { deptId: q.dept } : scope ? { deptId: scope } : {};
+  const today = todayTashkent(nowOf(ctx));
+  const where: Record<TaskTab, Prisma.QcTaskWhereInput> = {
+    overdue: { ...base, status: 'OPEN', due: { lt: today } },
+    open: { ...base, status: 'OPEN' },
+    closed: { ...base, status: 'CLOSED' },
+  };
+  const orderBy: Prisma.QcTaskOrderByWithRelationInput[] =
+    q.tab === 'closed' ? [{ checkedOn: 'desc' }, { updatedAt: 'desc' }] : [{ due: 'asc' }, { createdAt: 'asc' }];
+  const client = dbOf(ctx);
+  const [rows, overdue, open, closed] = await Promise.all([
+    client.qcTask.findMany({
+      where: where[q.tab],
+      include: { checkedBy: { select: { shortName: true } } },
+      orderBy,
+      take: PAGE_SIZE,
+      skip: Math.max(q.offset ?? 0, 0),
+    }),
+    client.qcTask.count({ where: where.overdue }),
+    client.qcTask.count({ where: where.open }),
+    client.qcTask.count({ where: where.closed }),
+  ]);
+  const counts = { overdue, open, closed };
+  return ok({ rows: rows.map(toTask), total: counts[q.tab], counts });
 }
 
 // ── Tekshiruv yozish ─────────────────────────────────────────────────────────

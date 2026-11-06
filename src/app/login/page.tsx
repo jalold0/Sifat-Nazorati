@@ -1,4 +1,8 @@
 import type { Metadata } from 'next';
+import { redirect } from 'next/navigation';
+
+import { getActor } from '@/lib/auth';
+import { homePath } from '@/qc/policy';
 
 import { LoginForm } from './login-form';
 
@@ -10,6 +14,10 @@ export default async function LoginPage({
   searchParams: Promise<{ keyin?: string }>;
 }) {
   const { keyin } = await searchParams;
+  // Kirgan foydalanuvchi login sahifasida ushlanmaydi. Tekshiruv bazada (getActor): bekor qilingan sessiya
+  // cookie'si bilan kelgan foydalanuvchi shaklni ko'radi — middleware'da JWT bo'yicha qilinsa aylanib qolardi.
+  const actor = await getActor();
+  if (actor) redirect(actor.mustChange ? '/profil' : homePath(actor.role));
 
   return (
     <main className="flex min-h-screen items-center justify-center px-5 py-12">

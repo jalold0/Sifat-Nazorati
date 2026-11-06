@@ -17,6 +17,8 @@ export interface SessionPayload {
   role: Role;
   /** Parolni almashtirish majburiy (middleware shu bo'yicha /profil ga yo'naltiradi; asl tekshiruv bazada). */
   mc?: boolean;
+  /** Sessiya versiyasi — har so'rovda bazadagi `User.sessionVersion` bilan solishtiriladi (getActor). */
+  sv: number;
 }
 
 function secretKey(): Uint8Array {
@@ -40,9 +42,9 @@ export async function verifySession(token: string | undefined): Promise<SessionP
   if (!token) return null;
   try {
     const { payload } = await jwtVerify(token, secretKey());
-    const { sub, key, name, role, mc } = payload as unknown as SessionPayload;
-    if (!sub || !role) return null;
-    return { sub, key, name, role, mc: mc === true };
+    const { sub, key, name, role, mc, sv } = payload as unknown as SessionPayload;
+    if (!sub || !role || typeof sv !== 'number') return null; // `sv` siz eski token — qayta kirish kerak
+    return { sub, key, name, role, mc: mc === true, sv };
   } catch {
     return null;
   }

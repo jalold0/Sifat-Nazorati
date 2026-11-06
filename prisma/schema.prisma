@@ -34,7 +34,10 @@ model User {
   active             Boolean       @default(true)
   /// Keyingi kirishda parolni almashtirish majburiy (yangi hisob yoki rahbar parolni tiklaganda)
   mustChangePassword Boolean       @default(false)
-  lastLoginAt        DateTime?
+  /// Sessiya versiyasi: oshirilsa, shu foydalanuvchining hamma eski sessiyalari (JWT) bekor bo'ladi
+  /// (parolni almashtirish yoki qayta o'rnatish, chiqish, hisobni o'chirish).
+  sessionVersion     Int           @default(0)
+  lastLoginAt       DateTime?
   createdAt          DateTime      @default(now())
   updatedAt          DateTime      @updatedAt
 

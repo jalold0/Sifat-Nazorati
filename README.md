@@ -99,7 +99,13 @@ Ball, foiz va xulosa **saqlanmaydi**, har safar hisoblanadi.
   parollar rad etiladi). Yangi hisob yoki rahbar parolni qayta o‘rnatganda keyingi kirishda almashtirish **majburiy**
   (server shuni har amalda tekshiradi). Ishlab chiqarishga o‘tishda hammaga majburlash: `pnpm users:force-password-change`.
 - **Kirishni cheklash:** bir login uchun 5 ta, bir manzil uchun 30 ta noto‘g‘ri urinishdan keyin 15 daqiqa qulf
-  (jarayon xotirasida; server qayta ishga tushsa tozalanadi).
+  (jarayon xotirasida; server qayta ishga tushsa tozalanadi). Manzil bo‘yicha cheklov faqat ishonchli proxy ortida
+  ishlaydi (`TRUSTED_PROXY_HOPS=1`): proxysiz `X-Forwarded-For` ni mijoz soxtalashtira oladi, shuning uchun u holda
+  faqat login bo‘yicha cheklanadi. Mavjud bo‘lmagan login ham haqiqiy bcrypt solishtiruvidan o‘tadi — javob vaqtidan
+  login borligini bilib bo‘lmaydi.
+- **Sessiyani bekor qilish:** `User.sessionVersion` har so‘rovda tekshiriladi. Parolni almashtirish, rahbar parolni
+  qayta o‘rnatishi, hisobni o‘chirish va «Chiqish» shu foydalanuvchining **hamma qurilmalardagi** sessiyalarini
+  darhol bekor qiladi (nusxalangan token ham ishlamaydi).
 - **Nuqtalar sifati:** `docs/nuqtalar-tavsiya.md` — rahbar uchun «jiddiy» va og‘irlik bo‘yicha tavsiya. Bazadagi
   bo‘limlar matnini yangilash: `pnpm exec tsx scripts/update-checkpoint-texts.ts [--apply]`.
 

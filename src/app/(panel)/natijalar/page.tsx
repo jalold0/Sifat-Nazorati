@@ -5,8 +5,9 @@ import { AutoRefresh } from '@/components/qc/auto-refresh';
 import { Badge, Empty, PageHead } from '@/components/ui';
 import { requireActorFor } from '@/lib/auth';
 import { dateTime } from '@/lib/format';
-import type { TrainingStatus } from '@/qc/training';
 import { listProgress } from '@/server/training';
+
+import type { TrainingStatus } from '@/modules/oquv/domain';
 
 export const metadata: Metadata = { title: 'Natijalar' };
 export const dynamic = 'force-dynamic';

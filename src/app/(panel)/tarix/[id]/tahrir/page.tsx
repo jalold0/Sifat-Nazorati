@@ -5,8 +5,9 @@ import { notFound, redirect } from 'next/navigation';
 import { AuditForm } from '@/app/(panel)/tekshiruv/audit-form';
 import { PageHead } from '@/components/ui';
 import { requireActorFor } from '@/lib/auth';
-import { todayTashkent } from '@/qc/calc';
 import { getAudit } from '@/server/qc';
+
+import { todayTashkent } from '@/shared/time';
 
 export const metadata: Metadata = { title: 'Tekshiruvni tuzatish' };
 export const dynamic = 'force-dynamic';

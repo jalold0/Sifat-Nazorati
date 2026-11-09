@@ -12,8 +12,9 @@ import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
 
 import { db } from './db';
-import type { Actor } from '@/qc/policy';
 import { SESSION_COOKIE, SESSION_MAX_AGE, signSession, verifySession, type Role, type SessionPayload } from './session';
+
+import type { Actor } from '@/shared/actor';
 
 const BCRYPT_ROUNDS = 12;
 

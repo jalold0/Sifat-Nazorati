@@ -3,8 +3,8 @@
  * Jurnalda nima o'zgargani o'qilsin (kim, qachon — serverda yoziladi).
  */
 
-import type { Answer } from './calc';
-import { KIND_LABEL, type CheckpointKind } from './staff';
+import { type CheckpointKind, KIND_LABEL } from './checkpoint';
+
 
 interface CpFields {
   text: string;
@@ -85,21 +85,4 @@ export function diffDept(before: DeptSnapshot | null, after: DeptEdit): string[]
     }
   }
   return out;
-}
-
-/** Tekshiruv tuzatilganda: qaysi javoblar o'zgargani. */
-export function diffAnswers(before: Record<string, Answer>, after: Record<string, Answer>): string[] {
-  const LABEL: Record<Answer, string> = { yes: 'Ha', no: 'Yo‘q', na: 'Tegishli emas' };
-  const out: string[] = [];
-  for (const id of new Set([...Object.keys(before), ...Object.keys(after)])) {
-    const b = before[id];
-    const a = after[id];
-    if (b === a) continue;
-    out.push(`${id}: ${b ? LABEL[b] : '—'} → ${a ? LABEL[a] : '—'}`);
-  }
-  return out;
-}
-
-export function joinSummary(lines: string[], fallback = 'o‘zgarish yo‘q'): string {
-  return lines.length === 0 ? fallback : lines.join('; ');
 }

@@ -14,7 +14,8 @@ import { join } from 'node:path';
 import { PrismaClient, type Role } from '@prisma/client';
 import bcrypt from 'bcryptjs';
 
-import { buildTrainingDoc, validateKeys, type KeysFile, type OldTraining } from '../src/qc/training-seed';
+import { buildTrainingDoc, type KeysFile, type OldTraining, validateKeys } from '@/modules/oquv/domain';
+
 
 const db = new PrismaClient();
 

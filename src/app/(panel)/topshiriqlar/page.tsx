@@ -6,9 +6,10 @@ import { AutoRefresh } from '@/components/qc/auto-refresh';
 import { TaskList } from '@/components/qc/task-list';
 import { PageHead } from '@/components/ui';
 import { requireActorFor } from '@/lib/auth';
-import { todayTashkent } from '@/qc/calc';
-import { canEditTask } from '@/qc/policy';
 import { listDepartments, listTaskTab, PAGE_SIZE } from '@/server/qc';
+
+import { canEditTask } from '@/modules/foydalanuvchilar/domain';
+import { todayTashkent } from '@/shared/time';
 
 export const metadata: Metadata = { title: 'Topshiriqlar' };
 export const dynamic = 'force-dynamic';

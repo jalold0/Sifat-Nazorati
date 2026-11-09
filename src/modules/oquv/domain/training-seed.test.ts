@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 
-import { buildTrainingDoc, convertQuiz, validateKeys, type KeysFile, type OldTraining } from './training-seed';
+import { buildTrainingDoc, convertQuiz, type KeysFile, type OldTraining, validateKeys } from './training-seed';
+
 
 const old: OldTraining = {
   title: 'Kuryerka bo‘limini tekshirish: 1 haftalik dastur',

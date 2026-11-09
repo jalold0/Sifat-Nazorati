@@ -2,11 +2,12 @@ import type { Metadata } from 'next';
 
 import { Empty, PageHead } from '@/components/ui';
 import { requireActorFor } from '@/lib/auth';
-import { todayTashkent } from '@/qc/calc';
-import { creatableLists } from '@/qc/policy';
 import { listDepartments } from '@/server/qc';
 
 import { AuditForm } from './audit-form';
+
+import { creatableLists } from '@/modules/foydalanuvchilar/domain';
+import { todayTashkent } from '@/shared/time';
 
 export const metadata: Metadata = { title: 'Tekshiruv' };
 export const dynamic = 'force-dynamic';

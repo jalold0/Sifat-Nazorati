@@ -7,9 +7,10 @@
 
 import clsx from 'clsx';
 
-import type { Checkpoint } from '@/qc/calc';
-import { cpTotals, fmtPct, kindLabels, type StaffCell } from '@/qc/staff';
 import type { StaffDto } from '@/server/qc';
+
+import { cpTotals, fmtPct, type StaffCell } from '@/modules/auditlar/domain';
+import { type Checkpoint, kindLabels } from '@/modules/bolimlar/domain';
 
 /** Kiritish holatidagi yacheyka: son maydonlari matn (bo'sh bo'lishi mumkin). */
 export type CellDraft = { v?: 'yes' | 'no'; ok?: string; bad?: string; reason?: string };

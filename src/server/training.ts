@@ -9,26 +9,16 @@
 import type { Prisma } from '@prisma/client';
 
 import { db as defaultDb } from '@/lib/db';
-import { todayTashkent } from '@/qc/calc';
-import { canEditReport, canSeeProgress, canSeeReport, canTrain, type Actor } from '@/qc/policy';
-import {
-  allTaskKeys,
-  attemptSummary,
-  gradeTest,
-  programProgress,
-  stripAnswers,
-  validateWeek,
-  weekRange,
-  type Day,
-  type GradeResult,
-  type PublicQuestion,
-  type Question,
-  type TrainingStatus,
-} from '@/qc/training';
 
 import { logChange } from './log';
 import type { Ctx, Res } from './qc';
 import { loadReportForRange, type Report } from './report';
+
+import { canEditReport, canSeeProgress, canSeeReport, canTrain } from '@/modules/foydalanuvchilar/domain';
+import { validateWeek, weekRange } from '@/modules/hisobot/domain';
+import { allTaskKeys, attemptSummary, type Day, type GradeResult, gradeTest, programProgress, type PublicQuestion, type Question, stripAnswers, type TrainingStatus } from '@/modules/oquv/domain';
+import type { Actor } from '@/shared/actor';
+import { todayTashkent } from '@/shared/time';
 
 const dbOf = (ctx?: Ctx) => ctx?.db ?? defaultDb;
 const ok = <T>(data: T): Res<T> => ({ ok: true, data });

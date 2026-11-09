@@ -7,8 +7,6 @@
 import { PrismaClient } from '@prisma/client';
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
 
-import { todayTashkent } from '@/qc/calc';
-import type { Actor } from '@/qc/policy';
 import bcrypt from 'bcryptjs';
 
 import { changePassword } from './account';
@@ -29,6 +27,9 @@ import {
   updateAudit,
   type Ctx,
 } from './qc';
+
+import type { Actor } from '@/shared/actor';
+import { todayTashkent } from '@/shared/time';
 
 const url = process.env.QC_TEST_DATABASE_URL;
 const suite = url ? describe : describe.skip;

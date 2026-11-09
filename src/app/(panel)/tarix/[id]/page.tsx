@@ -7,12 +7,13 @@ import { TaskList } from '@/components/qc/task-list';
 import { Badge, Card, CardHead, PageHead } from '@/components/ui';
 import { requireActorFor } from '@/lib/auth';
 import { date as fmtDate, dateTime } from '@/lib/format';
-import { todayTashkent } from '@/qc/calc';
-import { CHANNELS, isChannel, LIST_LABEL } from '@/qc/lists';
-import { canEditTask } from '@/qc/policy';
 import { getAudit } from '@/server/qc';
 
 import { DeleteAuditButton } from './delete-button';
+
+import { canEditTask } from '@/modules/foydalanuvchilar/domain';
+import { CHANNELS, isChannel, LIST_LABEL } from '@/shared/lists';
+import { todayTashkent } from '@/shared/time';
 
 export const metadata: Metadata = { title: 'Tekshiruv' };
 export const dynamic = 'force-dynamic';

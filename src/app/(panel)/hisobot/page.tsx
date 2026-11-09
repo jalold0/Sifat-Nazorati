@@ -6,11 +6,12 @@ import { pct } from '@/components/qc/dept-report';
 import { PageHead } from '@/components/ui';
 import { requireActorFor } from '@/lib/auth';
 import { date as fmtDate } from '@/lib/format';
-import { addDays, todayTashkent, type Status } from '@/qc/calc';
-import { defaultWeek, mondayOf, validateWeek } from '@/qc/training';
 import { getWeeklyReport } from '@/server/training';
 
 import { NoteForm, PrintButton } from './report-tools';
+
+import { defaultWeek, mondayOf, type Status, validateWeek } from '@/modules/hisobot/domain';
+import { addDays, todayTashkent } from '@/shared/time';
 
 export const metadata: Metadata = { title: 'Haftalik hisobot' };
 export const dynamic = 'force-dynamic';

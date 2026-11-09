@@ -1,22 +1,13 @@
 import { describe, expect, it } from 'vitest';
 
-import {
-  addDays,
-  auditCritical,
-  buildSummary,
-  evaluateDept,
-  openAt,
-  periodRange,
-  scoreAnswers,
-  todayTashkent,
-  topNoCheckpoints,
-  trafficCount,
-  trafficPct,
-  type AuditRec,
-  type Checkpoint,
-  type DeptInput,
-  type TaskRec,
-} from './calc';
+import { evaluateDept } from './evaluate';
+import { periodRange } from './period';
+import { trafficCount, trafficPct } from './status';
+import { buildSummary, topNoCheckpoints } from './summary';
+import { auditCritical, type AuditRec, openAt, scoreAnswers, type TaskRec } from '@/modules/auditlar/domain';
+import type { Checkpoint, DeptInput } from '@/modules/bolimlar/domain';
+import { addDays, todayTashkent } from '@/shared/time';
+
 
 const cps = (n: number, weights: number[] = []): Checkpoint[] =>
   Array.from({ length: n }, (_, i) => ({

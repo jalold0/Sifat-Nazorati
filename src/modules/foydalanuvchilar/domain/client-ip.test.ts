@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest';
 
 import { clientIp, trustedHops } from './client-ip';
 
+
 describe('clientIp', () => {
   it('proxysiz (hops=0) — sarlavhaga ishonilmaydi', () => {
     expect(clientIp('1.2.3.4', 0)).toBeNull();

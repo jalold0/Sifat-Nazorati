@@ -3,9 +3,12 @@
  * Xato matnlari o'zbekcha va nima qilish kerakligini aytadi; server ularni 400 bilan qaytaradi.
  */
 
-import { addDays, isYmd, type Answer, type Checkpoint } from './calc';
-import { isChannel, LIST_LABEL, listOf, type Channel, type ListKind } from './lists';
-import { derivedAnswer, isStaffKind, type StaffBlock, type StaffCell, type StaffPerson } from './staff';
+import { derivedAnswer, type StaffBlock, type StaffCell, type StaffPerson } from './staff';
+import type { Answer } from './types';
+import { type Checkpoint, isStaffKind } from '@/modules/bolimlar/domain';
+import { type Channel, isChannel, LIST_LABEL, type ListKind, listOf } from '@/shared/lists';
+import { addDays, isYmd } from '@/shared/time';
+
 
 export interface NoteInput {
   text?: string;

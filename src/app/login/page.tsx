@@ -2,9 +2,10 @@ import type { Metadata } from 'next';
 import { redirect } from 'next/navigation';
 
 import { getActor } from '@/lib/auth';
-import { homePath } from '@/qc/policy';
 
 import { LoginForm } from './login-form';
+
+import { homePath } from '@/modules/foydalanuvchilar/domain';
 
 export const metadata: Metadata = { title: 'Kirish' };
 

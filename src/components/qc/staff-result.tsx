@@ -1,9 +1,11 @@
 import clsx from 'clsx';
 
 import { Card, CardHead } from '@/components/ui';
-import type { Checkpoint, InteractionRow } from '@/qc/calc';
-import { CHANNELS, isChannel } from '@/qc/lists';
-import { cpStaffSummary, fmtPct, isStaffKind, kindLabels, type StaffBlock, type StaffBreakdownRow } from '@/qc/staff';
+
+import { cpStaffSummary, fmtPct, type StaffBlock, type StaffBreakdownRow } from '@/modules/auditlar/domain';
+import { type Checkpoint, isStaffKind, kindLabels } from '@/modules/bolimlar/domain';
+import type { InteractionRow } from '@/modules/hisobot/domain';
+import { CHANNELS, isChannel } from '@/shared/lists';
 
 /** Ok/yomon ulushi chizig'i (yashil / qizil). */
 function RatioBar({ ok, bad }: { ok: number; bad: number }) {

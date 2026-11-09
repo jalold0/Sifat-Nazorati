@@ -1,9 +1,10 @@
 import { NextResponse, type NextRequest } from 'next/server';
 
 import { getActor } from '@/lib/auth';
-import { canExport } from '@/qc/policy';
-import { toCsv } from '@/qc/csv';
 import { listAudits, listDepartments } from '@/server/qc';
+
+import { canExport } from '@/modules/foydalanuvchilar/domain';
+import { toCsv } from '@/shared/csv';
 
 export const dynamic = 'force-dynamic';
 

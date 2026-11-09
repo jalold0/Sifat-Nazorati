@@ -4,10 +4,11 @@ import clsx from 'clsx';
 import { useRouter } from 'next/navigation';
 import { useState, useTransition } from 'react';
 
-import { KIND_LABEL, kindLabels, type CheckpointKind } from '@/qc/staff';
 import type { DeptDto } from '@/server/qc';
 
 import { saveDepartmentAction } from '../actions';
+
+import { type CheckpointKind, KIND_LABEL, kindLabels } from '@/modules/bolimlar/domain';
 
 interface Row {
   key: string;

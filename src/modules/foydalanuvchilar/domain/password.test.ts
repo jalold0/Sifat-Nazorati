@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest';
 
 import { createThrottle, validateNewPassword } from './password';
 
+
 const ctx = { login: 'jasur' };
 
 describe('validateNewPassword', () => {

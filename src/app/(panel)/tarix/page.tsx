@@ -6,10 +6,11 @@ import { AutoRefresh } from '@/components/qc/auto-refresh';
 import { Badge, Empty, PageHead } from '@/components/ui';
 import { requireActorFor } from '@/lib/auth';
 import { date as fmtDate } from '@/lib/format';
-import { isYmd } from '@/qc/calc';
-import { LIST_LABEL } from '@/qc/lists';
-import { canExport } from '@/qc/policy';
 import { listAudits, listDepartments, PAGE_SIZE } from '@/server/qc';
+
+import { canExport } from '@/modules/foydalanuvchilar/domain';
+import { LIST_LABEL } from '@/shared/lists';
+import { isYmd } from '@/shared/time';
 
 export const metadata: Metadata = { title: 'Tarix' };
 export const dynamic = 'force-dynamic';

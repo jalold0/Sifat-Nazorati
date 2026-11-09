@@ -5,10 +5,11 @@ import Link from 'next/link';
 import { useRef, useState, useTransition } from 'react';
 
 import { ProgressBar } from '@/components/ui';
-import { programProgress, taskKey } from '@/qc/training';
 import type { TrainingDto } from '@/server/training';
 
 import { setTaskAction } from './actions';
+
+import { programProgress, taskKey } from '@/modules/oquv/domain';
 
 export function Program({ training }: { training: TrainingDto }) {
   const [done, setDone] = useState<Set<string>>(() => new Set(training.done));

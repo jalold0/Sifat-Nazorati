@@ -1,4 +1,5 @@
-import { createThrottle, type Throttle } from '@/qc/password';
+import { createThrottle, type Throttle } from '@/modules/foydalanuvchilar/domain';
+
 
 /** Kirishdagi muvaffaqiyatsiz urinishlar: login bo'yicha 5 ta / 15 daqiqa, manzil bo'yicha 30 ta / 15 daqiqa. */
 const g = globalThis as unknown as { __loginThrottle?: { login: Throttle; ip: Throttle } };

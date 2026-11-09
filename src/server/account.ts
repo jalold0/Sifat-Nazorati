@@ -5,9 +5,10 @@
 import bcrypt from 'bcryptjs';
 
 import { db as defaultDb } from '@/lib/db';
-import { validateNewPassword } from '@/qc/password';
 
 import type { Ctx, Res } from './qc';
+
+import { validateNewPassword } from '@/modules/foydalanuvchilar/domain';
 
 export async function changePassword(
   userId: string,

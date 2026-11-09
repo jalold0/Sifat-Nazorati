@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest';
 
 import { pickCheckpoints } from './seed-pick';
 
+
 const g = (title: string, n: number) => ({ title, items: Array.from({ length: n }, (_, i) => `${title}${i + 1}`) });
 
 describe('pickCheckpoints', () => {

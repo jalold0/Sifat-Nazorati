@@ -3,7 +3,9 @@ import Link from 'next/link';
 import { logoutAction } from '@/app/login/actions';
 import { TopNav } from '@/components/qc/top-nav';
 import { requireActor } from '@/lib/auth';
-import { homePath, navFor, QC_ROLE_LABEL } from '@/qc/policy';
+
+import { homePath, navFor } from '@/modules/foydalanuvchilar/domain';
+import { QC_ROLE_LABEL } from '@/shared/actor';
 
 export default async function PanelLayout({ children }: { children: React.ReactNode }) {
   const actor = await requireActor();

@@ -9,7 +9,8 @@
 import { readFileSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
 
-import type { OldTraining } from '../src/qc/training-seed';
+import type { OldTraining } from '@/modules/oquv/domain';
+
 
 const src = process.argv[2];
 if (!src) throw new Error('Foydalanish: tsx scripts/extract-training-seed.ts <config.json>');

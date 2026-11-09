@@ -2,9 +2,10 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 
 import { requireActor } from '@/lib/auth';
-import { homePath } from '@/qc/policy';
 
 import { PasswordForm } from './password-form';
+
+import { homePath } from '@/modules/foydalanuvchilar/domain';
 
 export const metadata: Metadata = { title: 'Parolni almashtirish' };
 export const dynamic = 'force-dynamic';

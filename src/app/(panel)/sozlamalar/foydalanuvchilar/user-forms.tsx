@@ -3,10 +3,11 @@
 import { useRouter } from 'next/navigation';
 import { useState, useTransition } from 'react';
 
-import { QC_ROLE_LABEL, roleNeedsDept, type QcRole } from '@/qc/policy';
 import type { UserDto } from '@/server/users';
 
 import { saveUserAction } from '../actions';
+
+import { QC_ROLE_LABEL, type QcRole, roleNeedsDept } from '@/shared/actor';
 
 type Dept = { id: string; name: string };
 

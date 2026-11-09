@@ -6,10 +6,11 @@
 import bcrypt from 'bcryptjs';
 
 import { db as defaultDb } from '@/lib/db';
-import { QC_ROLE_LABEL, roleNeedsDept, type Actor, type QcRole } from '@/qc/policy';
 
 import { logChange } from './log';
 import type { Ctx, Res } from './qc';
+
+import { type Actor, QC_ROLE_LABEL, type QcRole, roleNeedsDept } from '@/shared/actor';
 
 export interface UserDto {
   id: string;

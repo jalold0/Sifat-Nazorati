@@ -6,8 +6,8 @@
  * Bo'lim uchun `oquv_<kalit>_keys.json` ({ pass, questions }) bo'lsa — test shundan olinadi, bo'lmasa eski quiz.
  */
 
-import type { Day, Question } from './training';
-import { DEFAULT_PASS } from './training';
+import { type Day, DEFAULT_PASS, type Question } from './training';
+
 
 export interface OldTraining {
   title: string;

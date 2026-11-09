@@ -4,14 +4,14 @@ import clsx from 'clsx';
 import { useRouter } from 'next/navigation';
 import { useEffect, useMemo, useRef, useState, useTransition } from 'react';
 
-import { scoreAnswers, type Answer } from '@/qc/calc';
-import { CHANNELS, isChannel, isListKind, LIST_HINT, LIST_LABEL, LIST_ORDER, listOf, type Channel, type ListKind } from '@/qc/lists';
-import { derivedAnswer, isStaffKind, type StaffBlock, type StaffCell } from '@/qc/staff';
 import type { DeptDto, StaffDto, TaskDto } from '@/server/qc';
-import { defaultDue, validateAudit } from '@/qc/validate';
 
 import { saveAuditAction, updateAuditAction } from './actions';
 import { ShiftRoster, StaffCard, toCell, type CellDraft } from './staff-inputs';
+
+import { type Answer, defaultDue, derivedAnswer, scoreAnswers, type StaffBlock, type StaffCell, validateAudit } from '@/modules/auditlar/domain';
+import { isStaffKind } from '@/modules/bolimlar/domain';
+import { type Channel, CHANNELS, isChannel, isListKind, LIST_HINT, LIST_LABEL, LIST_ORDER, type ListKind, listOf } from '@/shared/lists';
 
 interface TaskDraft {
   what: string;

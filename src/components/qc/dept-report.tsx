@@ -2,15 +2,16 @@ import clsx from 'clsx';
 import Link from 'next/link';
 
 import { Badge, Card, CardHead } from '@/components/ui';
-import { PERIOD_LABEL, type Metric, type PeriodKey } from '@/qc/calc';
 import type { TaskDto } from '@/server/qc';
 import type { DeptReportData } from '@/server/report';
 
-import { LIST_LABEL, type ListKind } from '@/qc/lists';
 
 import { InteractionCard, StaffBreakdownCard } from './staff-result';
 import { StatusDot, StatusLabel, STATUS_TEXT_COLOR } from './status';
 import { TaskList } from './task-list';
+
+import { type Metric, PERIOD_LABEL, type PeriodKey } from '@/modules/hisobot/domain';
+import { LIST_LABEL, type ListKind } from '@/shared/lists';
 
 export const pct = (v: number) => `${Math.round(v * 10) / 10}%`.replace('.', ',');
 

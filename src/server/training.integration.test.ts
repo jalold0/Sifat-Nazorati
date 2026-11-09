@@ -5,9 +5,6 @@
 import { PrismaClient } from '@prisma/client';
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
 
-import { addDays, todayTashkent } from '@/qc/calc';
-import type { Actor } from '@/qc/policy';
-import { defaultWeek, mondayOf } from '@/qc/training';
 
 import { createAudit, type Ctx } from './qc';
 import {
@@ -19,6 +16,10 @@ import {
   setTask,
   submitTest,
 } from './training';
+
+import { defaultWeek, mondayOf } from '@/modules/hisobot/domain';
+import type { Actor } from '@/shared/actor';
+import { addDays, todayTashkent } from '@/shared/time';
 
 const url = process.env.QC_TEST_DATABASE_URL;
 const suite = url ? describe : describe.skip;

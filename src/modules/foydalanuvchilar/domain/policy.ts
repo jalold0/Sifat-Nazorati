@@ -9,30 +9,10 @@
  *               Muloqot bahosi, haftalik tahlil va topshiriqni yopish — OTK'da (mustaqil nazorat).
  */
 
-import type { ListKind } from './lists';
-
-export type QcRole = 'HEAD' | 'INSPECTOR' | 'VIEWER' | 'SUPERVISOR';
-
-export interface Actor {
-  id: string;
-  role: QcRole;
-  /** Ko'ruvchi va supervayzerning bo'limi. */
-  deptId?: string | null;
-}
+import { type Actor, type QcRole, roleNeedsDept } from '@/shared/actor';
+import type { ListKind } from '@/shared/lists';
 
 export const EDIT_WINDOW_MS = 24 * 3_600_000;
-
-export const QC_ROLE_LABEL: Record<QcRole, string> = {
-  HEAD: 'Rahbar',
-  INSPECTOR: 'Tekshiruvchi',
-  SUPERVISOR: 'Supervayzer',
-  VIEWER: 'Ko‘ruvchi',
-};
-
-/** Bu rolga bo'lim biriktirilishi shart (ko'ruvchi, supervayzer). */
-export function roleNeedsDept(role: QcRole): boolean {
-  return role === 'VIEWER' || role === 'SUPERVISOR';
-}
 
 /** Ko'ruvchi va supervayzer uchun faqat o'z bo'limi; qolganlar uchun null (cheklov yo'q). */
 export function deptScope(actor: Actor): string | null {

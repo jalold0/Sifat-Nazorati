@@ -1,6 +1,7 @@
 import clsx from 'clsx';
 
-import type { Status } from '@/qc/calc';
+import type { Status } from '@/modules/hisobot/domain';
+
 
 /** Rang + matn (faqat rangga tayanilmaydi). */
 export const STATUS_TEXT: Record<Status | 'info', string> = {

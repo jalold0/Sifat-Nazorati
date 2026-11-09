@@ -1,20 +1,8 @@
 import { describe, expect, it } from 'vitest';
 
-import {
-  attemptSummary,
-  gradeTest,
-  isMonday,
-  mondayOf,
-  programProgress,
-  shuffleWithSeed,
-  stripAnswers,
-  taskKey,
-  validateWeek,
-  weekRange,
-  defaultWeek,
-  type Day,
-  type Question,
-} from './training';
+import { attemptSummary, type Day, gradeTest, programProgress, type Question, shuffleWithSeed, stripAnswers, taskKey } from './training';
+import { defaultWeek, isMonday, mondayOf, validateWeek, weekRange } from '@/modules/hisobot/domain';
+
 
 const questions = (n: number): Question[] =>
   Array.from({ length: n }, (_, i) => ({

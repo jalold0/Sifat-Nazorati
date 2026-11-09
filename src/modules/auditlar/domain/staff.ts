@@ -11,9 +11,9 @@
  * «Yo'q» soni va eng ko'p «Yo'q» olgan nuqtalar o'zgarishsiz ishlaydi.
  */
 
-import type { Answer } from './calc';
+import type { Answer } from './types';
+import { type CheckpointKind, isStaffKind, kindLabels } from '@/modules/bolimlar/domain';
 
-export type CheckpointKind = 'check' | 'staff_check' | 'staff_count';
 export type StaffVerdict = 'yes' | 'no' | 'na';
 
 /** Bitta hodimning bitta nuqtadagi natijasi. */
@@ -29,25 +29,6 @@ export interface StaffBlock {
   people: StaffPerson[];
   /** { nuqtaId: { hodimId: yacheyka } } */
   results: Record<string, Record<string, StaffCell>>;
-}
-
-export const KIND_LABEL: Record<CheckpointKind, string> = {
-  check: 'Butun bo‘lim: Ha / Yo‘q',
-  staff_check: 'Har hodim: Ha / Yo‘q',
-  staff_count: 'Har hodim: son (yaxshi / yomon)',
-};
-
-export function isStaffKind(kind: CheckpointKind | undefined | null): kind is 'staff_check' | 'staff_count' {
-  return kind === 'staff_check' || kind === 'staff_count';
-}
-
-/** Nuqtaning «yaxshi» va «yomon» yorliqlari (bo'sh bo'lsa — turga mos standart). */
-export function kindLabels(cp: { kind?: CheckpointKind; okLabel?: string | null; badLabel?: string | null }): {
-  ok: string;
-  bad: string;
-} {
-  const def = cp.kind === 'staff_count' ? { ok: 'Yaxshi', bad: 'Yomon' } : { ok: 'Ha', bad: 'Yo‘q' };
-  return { ok: cp.okLabel?.trim() || def.ok, bad: cp.badLabel?.trim() || def.bad };
 }
 
 /** Yacheykani songa aylantiradi: Ha → 1/0, Yo'q → 0/1, Tegishli emas → 0/0, son — o'zi. */

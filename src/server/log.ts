@@ -6,9 +6,10 @@
 import type { Prisma, PrismaClient } from '@prisma/client';
 
 import { db as defaultDb } from '@/lib/db';
-import type { Actor } from '@/qc/policy';
 
 import type { Ctx, Res } from './qc';
+
+import type { Actor } from '@/shared/actor';
 
 type Client = PrismaClient | Prisma.TransactionClient;
 

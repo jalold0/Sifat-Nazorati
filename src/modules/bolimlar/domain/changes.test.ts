@@ -1,6 +1,9 @@
 import { describe, expect, it } from 'vitest';
 
-import { diffAnswers, diffDept, joinSummary, type DeptEdit, type DeptSnapshot } from './changes';
+import { type DeptEdit, type DeptSnapshot, diffDept } from './changes';
+import { diffAnswers } from '@/modules/auditlar/domain';
+import { joinSummary } from '@/shared/text';
+
 
 const before: DeptSnapshot = {
   name: 'Call center',

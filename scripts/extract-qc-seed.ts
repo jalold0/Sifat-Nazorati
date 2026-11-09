@@ -8,7 +8,8 @@
 import { readFileSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
 
-import { pickCheckpoints, type SeedGroup } from '../src/qc/seed-pick';
+import { pickCheckpoints, type SeedGroup } from '@/modules/bolimlar/domain';
+
 
 interface OldDept {
   id: string;

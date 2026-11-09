@@ -1,7 +1,8 @@
 import { NextResponse, type NextRequest } from 'next/server';
 
 import { SESSION_COOKIE, verifySession } from '@/lib/session';
-import { canOpenPath } from '@/qc/policy';
+
+import { canOpenPath } from '@/modules/foydalanuvchilar/domain';
 
 const PUBLIC_PATHS = ['/login', '/ruxsat-yoq'];
 

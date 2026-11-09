@@ -3,27 +3,13 @@
  * Hisob mantig'i bu yerda YO'Q — faqat chaqiriladi.
  */
 
-import {
-  buildSummary,
-  evaluateDept,
-  interactionBreakdown,
-  openAt,
-  overdueAt,
-  periodRange,
-  STATUS_RANK,
-  todayTashkent,
-  topNoCheckpoints,
-  type DeptEvaluation,
-  type InteractionRow,
-  type PeriodKey,
-  type Range,
-  type Summary,
-  type TopNo,
-} from '@/qc/calc';
-import type { Actor } from '@/qc/policy';
-import { staffBreakdown, type StaffBreakdownRow } from '@/qc/staff';
 
 import { getSummaryData, type Ctx, type DeptDto, type Res } from './qc';
+
+import { openAt, overdueAt, staffBreakdown, type StaffBreakdownRow } from '@/modules/auditlar/domain';
+import { buildSummary, type DeptEvaluation, evaluateDept, interactionBreakdown, type InteractionRow, type PeriodKey, periodRange, type Range, STATUS_RANK, type Summary, type TopNo, topNoCheckpoints } from '@/modules/hisobot/domain';
+import type { Actor } from '@/shared/actor';
+import { todayTashkent } from '@/shared/time';
 
 export interface DeptReportData {
   dept: DeptDto;

@@ -4,8 +4,9 @@ import { redirect } from 'next/navigation';
 
 import { createSessionCookie, requireActor } from '@/lib/auth';
 import { db } from '@/lib/db';
-import { homePath } from '@/qc/policy';
 import { changePassword } from '@/server/account';
+
+import { homePath } from '@/modules/foydalanuvchilar/domain';
 
 export interface PasswordState {
   error?: string;

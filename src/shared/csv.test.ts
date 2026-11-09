@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 
-import { CSV_BOM, toCsv } from './csv';
+import { CSV_BOM, toCsv } from '@/shared/csv';
+
 
 describe('toCsv', () => {
   it('BOM bilan boshlanadi, «;» ajratgich va CRLF', () => {

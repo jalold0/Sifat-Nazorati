@@ -6,8 +6,8 @@ import { z } from 'zod';
 
 import { authenticate, createSessionCookie, destroySessionCookie, getActor, revokeSessions } from '@/lib/auth';
 import { loginThrottle } from '@/lib/throttle';
-import { clientIp, trustedHops } from '@/qc/client-ip';
-import { homePath } from '@/qc/policy';
+
+import { clientIp, homePath, trustedHops } from '@/modules/foydalanuvchilar/domain';
 
 const schema = z.object({
   login: z.string().min(2, 'Login kiritilmadi'),

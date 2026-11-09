@@ -1,8 +1,10 @@
 import { describe, expect, it } from 'vitest';
 
-import { auditCritical, scoreAnswers, scoreAudits, type Checkpoint } from './calc';
-import { cpStaffSummary, derivedAnswer, staffBreakdown, staffRatio, type StaffBlock } from './staff';
+import { auditCritical, scoreAnswers, scoreAudits } from './scoring';
+import { cpStaffSummary, derivedAnswer, type StaffBlock, staffBreakdown, staffRatio } from './staff';
 import { validateAudit } from './validate';
+import type { Checkpoint } from '@/modules/bolimlar/domain';
+
 
 const cps: Checkpoint[] = [
   { id: 'cp1', text: 'Ish joyi tartibda', weight: 1, critical: false, active: true },

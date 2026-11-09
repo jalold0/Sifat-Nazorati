@@ -2,8 +2,9 @@ import { NextResponse, type NextRequest } from 'next/server';
 
 import { getActor } from '@/lib/auth';
 import { dateTime } from '@/lib/format';
-import { toCsv } from '@/qc/csv';
 import { listProgress } from '@/server/training';
+
+import { toCsv } from '@/shared/csv';
 
 export const dynamic = 'force-dynamic';
 

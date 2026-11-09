@@ -10,32 +10,16 @@
 import { Prisma, type PrismaClient, type QcCheckpointKind, type QcListKind } from '@prisma/client';
 
 import { db as defaultDb } from '@/lib/db';
-import {
-  auditCritical,
-  isYmd,
-  scoreAnswers,
-  todayTashkent,
-  type Answer,
-  type AuditRec,
-  type Checkpoint,
-  type TaskRec,
-} from '@/qc/calc';
-import {
-  canCreateAudit,
-  canDeleteAudit,
-  canEditAudit,
-  canEditTask,
-  canManageDepartments,
-  canReadDept,
-  deptScope,
-  type Actor,
-} from '@/qc/policy';
-import { diffAnswers, diffDept, joinSummary } from '@/qc/changes';
-import { isListKind, type ListKind } from '@/qc/lists';
-import type { CheckpointKind, StaffBlock, StaffPerson } from '@/qc/staff';
-import { validateAudit, type TaskInput } from '@/qc/validate';
 
 import { logChange } from './log';
+
+import { type Answer, auditCritical, type AuditRec, diffAnswers, scoreAnswers, type StaffBlock, type StaffPerson, type TaskInput, type TaskRec, validateAudit } from '@/modules/auditlar/domain';
+import { type Checkpoint, type CheckpointKind, diffDept } from '@/modules/bolimlar/domain';
+import { canCreateAudit, canDeleteAudit, canEditAudit, canEditTask, canManageDepartments, canReadDept, deptScope } from '@/modules/foydalanuvchilar/domain';
+import type { Actor } from '@/shared/actor';
+import { isListKind, type ListKind } from '@/shared/lists';
+import { joinSummary } from '@/shared/text';
+import { isYmd, todayTashkent } from '@/shared/time';
 
 export type Res<T> = { ok: true; data: T } | { ok: false; status: 400 | 403 | 404 | 409; error: string };
 

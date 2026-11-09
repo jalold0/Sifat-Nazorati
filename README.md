@@ -109,6 +109,19 @@ Ball, foiz va xulosa **saqlanmaydi**, har safar hisoblanadi.
 - **Nuqtalar sifati:** `docs/nuqtalar-tavsiya.md` — rahbar uchun «jiddiy» va og‘irlik bo‘yicha tavsiya. Bazadagi
   bo‘limlar matnini yangilash: `pnpm exec tsx scripts/update-checkpoint-texts.ts [--apply]`.
 
+## Hodimlar kesimida tekshirish (4-bosqich)
+
+To‘liq spetsifikatsiya: [`docs/spec-hodimlar-kesimida.md`](docs/spec-hodimlar-kesimida.md).
+
+- **Sozlamalar → bo‘lim:** «Hodimlar» ro‘yxati (bir nechtasini vergul bilan qo‘shish, yashirish) va har nuqtada
+  «Turi»: *Butun bo‘lim: Ha / Yo‘q* (eski), *Har hodim: Ha / Yo‘q* (masalan «Topshirdi / Topshirmadi»),
+  *Har hodim: son* (masalan «Sifatli yopdi / Yopa olmadi», «Vaqtida / Kechikdi»). Yorliqlarni rahbar yozadi.
+- **Tekshiruv:** «Smenada kim bor» (kelmaganlar olib tashlanadi), har hodim qatori, «yomon» natijada sabab
+  majburiy, kartada jonli xulosa («3 / 4 hodim · 75%», «Jami 159: … · 95% · 2 hodimda»).
+- **Ball:** hodimli nuqta 0..1 ulush beradi (yaxshi / jami) — «3 / 4» va «0 / 4» endi bir xil «Yo‘q» emas.
+  Oddiy nuqtalar va eski tekshiruvlar bali o‘zgarmaydi. Umumiy javob natijalardan hosil qilinadi.
+- **Hisobot:** tekshiruv tafsilotida hodimlar jadvali; Panel / Bo‘limim da «Hodimlar kesimida» — eng zaifi tepada.
+
 ## Testlar
 
 ```bash

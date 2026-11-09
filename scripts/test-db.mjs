@@ -1,5 +1,5 @@
 /**
- * Server testlarini (src/server/qc.integration.test.ts) lokal PostgreSQL'dagi alohida «otk_test»
+ * Server testlarini (src/integration/*.integration.test.ts) lokal PostgreSQL'dagi alohida «otk_test»
  * bazasida ishga tushiradi. Avval `pnpm db:local` ishlab turishi kerak.
  * .env dagi (masalan Neon) bazaga TEGILMAYDI.
  */
@@ -24,5 +24,5 @@ const run = (args) => spawnSync('pnpm', args, { stdio: 'inherit', env, shell: tr
 
 let r = run(['exec', 'prisma', 'migrate', 'deploy']);
 if (r.status !== 0) process.exit(r.status ?? 1);
-r = run(['exec', 'vitest', 'run', 'src/server', '--no-file-parallelism']);
+r = run(['exec', 'vitest', 'run', 'src/integration', '--no-file-parallelism']);
 process.exit(r.status ?? 1);

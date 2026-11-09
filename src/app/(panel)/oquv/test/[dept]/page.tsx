@@ -1,11 +1,11 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
 
-import { Empty, PageHead } from '@/components/ui';
+import { Empty, PageHead } from '@/shared/ui';
 import { requireActorFor } from '@/modules/foydalanuvchilar/ui';
-import { getTest, listTraining } from '@/server/training';
+import { getTest, listTraining } from '@/modules/oquv';
 
-import { TestForm } from './test-form';
+import { TestForm } from '@/modules/oquv/ui';
 
 export const metadata: Metadata = { title: 'Yakuniy test' };
 export const dynamic = 'force-dynamic';

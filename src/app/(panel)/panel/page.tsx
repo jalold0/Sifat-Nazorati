@@ -2,13 +2,12 @@ import clsx from 'clsx';
 import type { Metadata } from 'next';
 import Link from 'next/link';
 
-import { AutoRefresh } from '@/components/qc/auto-refresh';
-import { DeptReport, PeriodTabs, pct } from '@/components/qc/dept-report';
-import { StatusDot, StatusLabel } from '@/components/qc/status';
-import { Badge, Empty, PageHead } from '@/components/ui';
+import { DeptReport, pct, PeriodTabs, StatusDot, StatusLabel } from '@/modules/hisobot/ui';
+import { AutoRefresh } from '@/shared/ui/auto-refresh';
+import { Badge, Empty, PageHead } from '@/shared/ui';
 import { requireActorFor } from '@/modules/foydalanuvchilar/ui';
 import { listTasks } from '@/modules/auditlar';
-import { loadReport, parsePeriod } from '@/server/report';
+import { loadReport, parsePeriod } from '@/modules/hisobot';
 
 export const metadata: Metadata = { title: 'Panel' };
 export const dynamic = 'force-dynamic';

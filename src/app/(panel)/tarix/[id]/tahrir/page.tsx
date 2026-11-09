@@ -3,7 +3,7 @@ import Link from 'next/link';
 import { notFound, redirect } from 'next/navigation';
 
 import { AuditForm } from '@/modules/auditlar/ui';
-import { PageHead } from '@/components/ui';
+import { PageHead } from '@/shared/ui';
 import { requireActorFor } from '@/modules/foydalanuvchilar/ui';
 import { getAudit } from '@/modules/auditlar';
 

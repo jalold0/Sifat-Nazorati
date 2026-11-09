@@ -2,10 +2,10 @@ import clsx from 'clsx';
 import type { Metadata } from 'next';
 import Link from 'next/link';
 
-import { AutoRefresh } from '@/components/qc/auto-refresh';
-import { Badge, Empty, PageHead } from '@/components/ui';
+import { AutoRefresh } from '@/shared/ui/auto-refresh';
+import { Badge, Empty, PageHead } from '@/shared/ui';
 import { requireActorFor } from '@/modules/foydalanuvchilar/ui';
-import { date as fmtDate } from '@/lib/format';
+import { date as fmtDate } from '@/shared/format';
 import { listDepartments } from '@/modules/bolimlar';
 import { listAudits, PAGE_SIZE } from '@/modules/auditlar';
 

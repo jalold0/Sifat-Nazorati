@@ -3,7 +3,7 @@
 import { revalidatePath } from 'next/cache';
 
 import { requireActor } from '@/modules/foydalanuvchilar/ui';
-import { saveReportNote } from '@/server/training';
+import { saveReportNote } from '..';
 
 export async function saveNoteAction(week: string, note: string): Promise<{ ok: true } | { ok: false; error: string }> {
   const actor = await requireActor();

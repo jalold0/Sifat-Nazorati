@@ -2,11 +2,11 @@ import clsx from 'clsx';
 import type { Metadata } from 'next';
 import Link from 'next/link';
 
-import { Empty, PageHead } from '@/components/ui';
+import { Empty, PageHead } from '@/shared/ui';
 import { requireActorFor } from '@/modules/foydalanuvchilar/ui';
-import { listTraining } from '@/server/training';
+import { listTraining } from '@/modules/oquv';
 
-import { Program } from './program';
+import { Program } from '@/modules/oquv/ui';
 
 export const metadata: Metadata = { title: 'O‘quv dasturi' };
 export const dynamic = 'force-dynamic';

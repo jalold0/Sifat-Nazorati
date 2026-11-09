@@ -38,6 +38,14 @@ export function prismaUserRepository(client: PrismaClient, tx?: Tx): UserReposit
       });
       return rows.map((u) => ({ ...u, role: u.role as QcRole }));
     },
+    async reviewers() {
+      const rows = await db.user.findMany({
+        where: { active: true, role: { in: ['HEAD', 'INSPECTOR'] } },
+        select: { id: true, shortName: true },
+        orderBy: { shortName: 'asc' },
+      });
+      return rows.map((u) => ({ id: u.id, name: u.shortName }));
+    },
     async departmentExists(id) {
       return (await db.qcDepartment.findUnique({ where: { id }, select: { id: true } })) !== null;
     },

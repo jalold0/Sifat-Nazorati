@@ -1,16 +1,15 @@
 import clsx from 'clsx';
 import Link from 'next/link';
 
-import { Badge, Card, CardHead } from '@/components/ui';
+import { Badge, Card, CardHead } from '@/shared/ui';
 import type { TaskDto } from '@/modules/auditlar';
-import type { DeptReportData } from '@/server/report';
 
 
 import { InteractionCard, StaffBreakdownCard } from './staff-cards';
 import { StatusDot, StatusLabel, STATUS_TEXT_COLOR } from './status';
 import { TaskList } from '@/modules/auditlar/ui';
 
-import { type Metric, PERIOD_LABEL, type PeriodKey } from '@/modules/hisobot/domain';
+import { type DeptReportData, type Metric, PERIOD_LABEL, type PeriodKey } from '../domain';
 import { LIST_LABEL, type ListKind } from '@/shared/lists';
 
 export const pct = (v: number) => `${Math.round(v * 10) / 10}%`.replace('.', ',');

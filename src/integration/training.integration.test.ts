@@ -8,17 +8,9 @@ import { afterAll, beforeAll, describe, expect, it } from 'vitest';
 
 import { createAudit } from '@/modules/auditlar';
 import type { Ctx } from '@/shared/context';
-import {
-  getTest,
-  getWeeklyReport,
-  listProgress,
-  listTraining,
-  saveReportNote,
-  setTask,
-  submitTest,
-} from './training';
-
+import { getWeeklyReport, saveReportNote } from '@/modules/hisobot';
 import { defaultWeek, mondayOf } from '@/modules/hisobot/domain';
+import { getTest, listProgress, listTraining, setTask, submitTest } from '@/modules/oquv';
 import type { Actor } from '@/shared/actor';
 import { addDays, todayTashkent } from '@/shared/time';
 

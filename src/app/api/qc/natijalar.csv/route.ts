@@ -1,8 +1,8 @@
 import { NextResponse, type NextRequest } from 'next/server';
 
 import { getActor } from '@/modules/foydalanuvchilar/ui';
-import { dateTime } from '@/lib/format';
-import { listProgress } from '@/server/training';
+import { dateTime } from '@/shared/format';
+import { listProgress } from '@/modules/oquv';
 
 import { toCsv } from '@/shared/csv';
 

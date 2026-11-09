@@ -1,9 +1,9 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
 
-import { Badge, Empty, PageHead } from '@/components/ui';
+import { Badge, Empty, PageHead } from '@/shared/ui';
 import { requireActorFor } from '@/modules/foydalanuvchilar/ui';
-import { dateTime } from '@/lib/format';
+import { dateTime } from '@/shared/format';
 import { listLog, LOG_PAGE } from '@/modules/jurnal';
 
 export const metadata: Metadata = { title: 'O‘zgarishlar jurnali' };

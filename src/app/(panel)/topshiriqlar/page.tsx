@@ -2,9 +2,9 @@ import clsx from 'clsx';
 import type { Metadata } from 'next';
 import Link from 'next/link';
 
-import { AutoRefresh } from '@/components/qc/auto-refresh';
+import { AutoRefresh } from '@/shared/ui/auto-refresh';
 import { TaskList } from '@/modules/auditlar/ui';
-import { PageHead } from '@/components/ui';
+import { PageHead } from '@/shared/ui';
 import { requireActorFor } from '@/modules/foydalanuvchilar/ui';
 import { listDepartments } from '@/modules/bolimlar';
 import { listTaskTab, PAGE_SIZE } from '@/modules/auditlar';

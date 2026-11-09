@@ -4,12 +4,11 @@ import clsx from 'clsx';
 import Link from 'next/link';
 import { useRef, useState, useTransition } from 'react';
 
-import { ProgressBar } from '@/components/ui';
-import type { TrainingDto } from '@/server/training';
+import { ProgressBar } from '@/shared/ui';
 
 import { setTaskAction } from './actions';
 
-import { programProgress, taskKey } from '@/modules/oquv/domain';
+import { programProgress, taskKey, type TrainingDto } from '../domain';
 
 export function Program({ training }: { training: TrainingDto }) {
   const [done, setDone] = useState<Set<string>>(() => new Set(training.done));

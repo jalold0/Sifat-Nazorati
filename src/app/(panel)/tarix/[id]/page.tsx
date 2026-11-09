@@ -2,9 +2,9 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 import { notFound, redirect } from 'next/navigation';
 
-import { Badge, Card, CardHead, PageHead } from '@/components/ui';
+import { Badge, Card, CardHead, PageHead } from '@/shared/ui';
 import { requireActorFor } from '@/modules/foydalanuvchilar/ui';
-import { date as fmtDate, dateTime } from '@/lib/format';
+import { date as fmtDate, dateTime } from '@/shared/format';
 import { getAudit } from '@/modules/auditlar';
 
 import { DeleteAuditButton, StaffCpResult, TaskList } from '@/modules/auditlar/ui';

@@ -4,3 +4,4 @@ export * from './period';
 export * from './status';
 export * from './summary';
 export * from './week';
+export * from './report-models';

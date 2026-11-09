@@ -13,6 +13,9 @@ export async function listUsers(deps: UserDeps, actor: Actor): Promise<Res<UserD
   return ok(await deps.users().list());
 }
 
+/** Faol tekshiruvchilar ro'yxati (boshqa modullar uchun: masalan o'quv natijalari). Ruxsatni chaqiruvchi tekshiradi. */
+export const listReviewers = (deps: UserDeps) => deps.users().reviewers();
+
 /** Foydalanuvchi yaratish/o'zgartirish (faqat rahbar). O'zgarish jurnalga shu tranzaksiyada yoziladi. */
 export async function saveUser(deps: UserDeps, actor: Actor, input: UserInput): Promise<Res<{ id: string }>> {
   if (!canManageUsers(actor)) return forbidden(NO_ACCESS);

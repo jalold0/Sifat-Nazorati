@@ -3,7 +3,7 @@
 import { revalidatePath } from 'next/cache';
 
 import { requireActor } from '@/modules/foydalanuvchilar/ui';
-import { setTask, submitTest, type SubmitResult } from '@/server/training';
+import { setTask, submitTest, type SubmitResult } from '..';
 
 export type TaskResult = { ok: true } | { ok: false; error: string };
 export type SubmitActionResult = ({ ok: true } & SubmitResult) | { ok: false; error: string; status: number };

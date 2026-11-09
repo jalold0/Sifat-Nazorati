@@ -12,7 +12,7 @@ import type { Ctx } from '@/shared/context';
 
 import { changePassword as changePasswordUseCase } from './application/change-password';
 import { login as loginUseCase } from './application/login';
-import { listUsers as listUsersUseCase, saveUser as saveUserUseCase } from './application/manage-users';
+import { listReviewers as listReviewersUseCase, listUsers as listUsersUseCase, saveUser as saveUserUseCase } from './application/manage-users';
 import type { UserInput } from './application/ports';
 import { currentClaims as currentClaimsUseCase, resolveActor as resolveActorUseCase, revokeSessions as revokeSessionsUseCase } from './application/resolve-actor';
 import type { SessionClaims } from './domain';
@@ -37,5 +37,7 @@ export const changePassword = (
 ) => changePasswordUseCase(userDeps(ctx), userId, input);
 
 export const listUsers = (actor: Actor, ctx?: Ctx) => listUsersUseCase(userDeps(ctx), actor);
+
+export const listReviewers = (ctx?: Ctx) => listReviewersUseCase(userDeps(ctx));
 
 export const saveUser = (actor: Actor, input: UserInput, ctx?: Ctx) => saveUserUseCase(userDeps(ctx), actor, input);

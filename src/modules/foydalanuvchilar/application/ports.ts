@@ -66,6 +66,8 @@ export interface UserRepository {
   findByLogin(login: string): Promise<StoredUser | null>;
   findById(id: string): Promise<StoredUser | null>;
   list(): Promise<UserDto[]>;
+  /** Faol tekshiruvchilar (rahbar va tekshiruvchi): qisqa ism bilan, ism bo'yicha tartiblangan. */
+  reviewers(): Promise<Array<{ id: string; name: string }>>;
   /** Ko'ruvchi/supervayzerga biriktiriladigan bo'lim bormi. */
   departmentExists(id: string): Promise<boolean>;
   create(data: NewUser): Promise<string>;

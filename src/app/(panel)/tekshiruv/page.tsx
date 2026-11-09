@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 
-import { Empty, PageHead } from '@/components/ui';
+import { Empty, PageHead } from '@/shared/ui';
 import { requireActorFor } from '@/modules/foydalanuvchilar/ui';
 import { listDepartments } from '@/modules/bolimlar';
 

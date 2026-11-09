@@ -1,10 +1,10 @@
 import clsx from 'clsx';
 
-import { Card, CardHead } from '@/components/ui';
+import { Card, CardHead } from '@/shared/ui';
 
 import { fmtPct, type StaffBreakdownRow } from '@/modules/auditlar/domain';
 import { type Checkpoint, isStaffKind, kindLabels } from '@/modules/bolimlar/domain';
-import type { InteractionRow } from '@/modules/hisobot/domain';
+import type { InteractionRow } from '../domain';
 import { CHANNELS, isChannel } from '@/shared/lists';
 
 /** Davr hisobotida muloqot bahosi: har operator — soni, o'rtacha ball, jiddiy, eng zaif mezonlar. */

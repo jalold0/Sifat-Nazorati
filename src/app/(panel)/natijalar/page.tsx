@@ -1,11 +1,11 @@
 import clsx from 'clsx';
 import type { Metadata } from 'next';
 
-import { AutoRefresh } from '@/components/qc/auto-refresh';
-import { Badge, Empty, PageHead } from '@/components/ui';
+import { AutoRefresh } from '@/shared/ui/auto-refresh';
+import { Badge, Empty, PageHead } from '@/shared/ui';
 import { requireActorFor } from '@/modules/foydalanuvchilar/ui';
-import { dateTime } from '@/lib/format';
-import { listProgress } from '@/server/training';
+import { dateTime } from '@/shared/format';
+import { listProgress } from '@/modules/oquv';
 
 import type { TrainingStatus } from '@/modules/oquv/domain';
 

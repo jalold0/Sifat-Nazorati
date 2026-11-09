@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
 
-import { Badge, Callout, Empty, PageHead } from '@/components/ui';
+import { Badge, Callout, Empty, PageHead } from '@/shared/ui';
 import { requireActorFor } from '@/modules/foydalanuvchilar/ui';
 import { listDepartments } from '@/modules/bolimlar';
 

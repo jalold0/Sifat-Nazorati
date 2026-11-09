@@ -1,8 +1,8 @@
 import clsx from 'clsx';
 import Link from 'next/link';
 
-import { Badge, Empty } from '@/components/ui';
-import { date as fmtDate } from '@/lib/format';
+import { Badge, Empty } from '@/shared/ui';
+import { date as fmtDate } from '@/shared/format';
 import type { DeptDto } from '@/modules/bolimlar/domain';
 import type { TaskDto } from '../domain';
 

@@ -1,6 +1,6 @@
 import clsx from 'clsx';
 
-import type { Status } from '@/modules/hisobot/domain';
+import type { Status } from '../domain';
 
 
 /** Rang + matn (faqat rangga tayanilmaydi). */

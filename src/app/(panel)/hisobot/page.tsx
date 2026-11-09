@@ -1,14 +1,13 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
 
-import { AutoRefresh } from '@/components/qc/auto-refresh';
-import { pct } from '@/components/qc/dept-report';
-import { PageHead } from '@/components/ui';
+import { NoteForm, pct, PrintButton } from '@/modules/hisobot/ui';
+import { AutoRefresh } from '@/shared/ui/auto-refresh';
+import { PageHead } from '@/shared/ui';
 import { requireActorFor } from '@/modules/foydalanuvchilar/ui';
-import { date as fmtDate } from '@/lib/format';
-import { getWeeklyReport } from '@/server/training';
+import { date as fmtDate } from '@/shared/format';
+import { getWeeklyReport } from '@/modules/hisobot';
 
-import { NoteForm, PrintButton } from './report-tools';
 
 import { defaultWeek, mondayOf, type Status, validateWeek } from '@/modules/hisobot/domain';
 import { addDays, todayTashkent } from '@/shared/time';

@@ -4,11 +4,8 @@ import clsx from 'clsx';
 import Link from 'next/link';
 import { useMemo, useState, useTransition } from 'react';
 
-import type { TestDto } from '@/server/training';
-
-import { submitTestAction } from '../../actions';
-
-import { shuffleWithSeed } from '@/modules/oquv/domain';
+import { submitTestAction } from './actions';
+import { shuffleWithSeed, type TestDto } from '../domain';
 
 type Result = Extract<Awaited<ReturnType<typeof submitTestAction>>, { ok: true }>;
 

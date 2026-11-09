@@ -1,12 +1,12 @@
 import type { Metadata } from 'next';
 
-import { AutoRefresh } from '@/components/qc/auto-refresh';
-import { DeptReport, PeriodTabs } from '@/components/qc/dept-report';
+import { DeptReport, PeriodTabs } from '@/modules/hisobot/ui';
+import { AutoRefresh } from '@/shared/ui/auto-refresh';
 import { TaskList } from '@/modules/auditlar/ui';
-import { Empty, PageHead } from '@/components/ui';
+import { Empty, PageHead } from '@/shared/ui';
 import { requireActorFor } from '@/modules/foydalanuvchilar/ui';
 import { listTasks } from '@/modules/auditlar';
-import { loadReport, parsePeriod } from '@/server/report';
+import { loadReport, parsePeriod } from '@/modules/hisobot';
 
 export const metadata: Metadata = { title: 'Bo‘limim' };
 export const dynamic = 'force-dynamic';

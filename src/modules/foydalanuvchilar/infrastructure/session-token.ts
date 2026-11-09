@@ -5,6 +5,8 @@
 
 import { jwtVerify, SignJWT } from 'jose';
 
+import { env } from '@/shared/env';
+
 import type { SessionClaims } from '../domain';
 
 export const SESSION_COOKIE = 'otk_session';
@@ -12,11 +14,7 @@ const SESSION_TTL_SECONDS = 60 * 60 * 12; // 12 soat — ish smenasi
 export const SESSION_MAX_AGE = SESSION_TTL_SECONDS;
 
 function secretKey(): Uint8Array {
-  const secret = process.env.AUTH_SECRET;
-  if (!secret || secret.length < 32) {
-    throw new Error('AUTH_SECRET yo‘q yoki 32 belgidan qisqa — .env faylini tekshiring');
-  }
-  return new TextEncoder().encode(secret);
+  return new TextEncoder().encode(env().AUTH_SECRET);
 }
 
 export async function signSession(claims: SessionClaims): Promise<string> {

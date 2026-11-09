@@ -141,7 +141,8 @@ function violations(): string[] {
     }
 
     // 3) app / middleware: ichki qatlamlarga va infratuzilmaga tegmaydi
-    if (from.area === 'app' && to.area === 'sharedInfra') add(e, 'sahifa/route infratuzilmani bilmaydi: use-case orqali ishlang.');
+    // Istisno: /api/health — kompozitsiya ildizi (infratuzilma holatini tekshiradi)
+    if (from.area === 'app' && to.area === 'sharedInfra' && from.path !== 'app/api/health/route') add(e, 'sahifa/route infratuzilmani bilmaydi: use-case orqali ishlang.');
 
     // 4) modullar o'rtasi: faqat ochiq kirish nuqtalari
     if (to.area === 'module' && (from.area !== 'module' || from.module !== to.module)) {

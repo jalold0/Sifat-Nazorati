@@ -7,6 +7,8 @@ import { z } from 'zod';
 
 import { changePassword, currentClaims, login, revokeSessions, saveUser, type UserInput } from '..';
 import { clientIp, homePath, trustedHops } from '../domain';
+import { env } from '@/shared/env';
+import { logger } from '@/shared/logger';
 
 import { getActor, requireActor } from './guards';
 import { createSessionCookie, destroySessionCookie } from './session-cookie';
@@ -39,9 +41,13 @@ export async function loginAction(_prev: LoginState, formData: FormData): Promis
 
   // IP faqat ishonchli proxy ortida olinadi (domain/client-ip.ts); aks holda faqat login bo'yicha cheklanadi
   const h = await headers();
-  const ip = clientIp(h.get('x-forwarded-for'), trustedHops(process.env.TRUSTED_PROXY_HOPS));
+  const ip = clientIp(h.get('x-forwarded-for'), trustedHops(String(env().TRUSTED_PROXY_HOPS)));
   const outcome = await login({ login: parsed.data.login, password: parsed.data.password, ip, now: Date.now() });
-  if (!outcome.ok) return { error: outcome.error };
+  if (!outcome.ok) {
+    logger.warn('auth.login_failed', { login: parsed.data.login, ip });
+    return { error: outcome.error };
+  }
+  logger.info('auth.login', { login: parsed.data.login, ip });
 
   await createSessionCookie(outcome.claims);
   if (outcome.claims.mc) redirect('/profil');

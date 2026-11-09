@@ -70,6 +70,11 @@
       }
     },
     {
+      // /api/health — kompozitsiya ildizi: infratuzilma holatini tekshiradi
+      "files": ["src/app/api/health/route.ts"],
+      "rules": { "no-restricted-imports": "off" }
+    },
+    {
       // shared hech qachon modullarga bog'lanmaydi (bog'liqlik faqat modul → shared)
       "files": ["src/shared/**/*.{ts,tsx}"],
       "rules": {

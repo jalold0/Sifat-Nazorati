@@ -7,6 +7,7 @@ import { Badge, Empty, PageHead } from '@/components/ui';
 import { requireActorFor } from '@/lib/auth';
 import { date as fmtDate } from '@/lib/format';
 import { isYmd } from '@/qc/calc';
+import { LIST_LABEL } from '@/qc/lists';
 import { canExport } from '@/qc/policy';
 import { listAudits, listDepartments, PAGE_SIZE } from '@/server/qc';
 
@@ -18,7 +19,7 @@ export default async function TarixPage({
 }: {
   searchParams: Promise<{ from?: string; to?: string; d?: string; o?: string }>;
 }) {
-  const actor = await requireActorFor('HEAD', 'INSPECTOR');
+  const actor = await requireActorFor('HEAD', 'INSPECTOR', 'SUPERVISOR');
   const sp = await searchParams;
   const from = sp.from && isYmd(sp.from) ? sp.from : '';
   const to = sp.to && isYmd(sp.to) ? sp.to : '';
@@ -101,7 +102,13 @@ export default async function TarixPage({
                 )}
               >
                 <span className="tnum w-[88px] text-meta text-ink2">{fmtDate(a.date)}</span>
-                <span className="min-w-0 flex-1 text-body font-semibold">{names.get(a.dept) ?? 'Bo‘lim'}</span>
+                <span className="min-w-0 flex-1">
+                  <span className="block text-body font-semibold">
+                    {names.get(a.dept) ?? 'Bo‘lim'}
+                    {a.list === 'interaction' && a.staffName ? <span className="font-normal text-ink2"> · {a.staffName}</span> : null}
+                  </span>
+                  <span className="block text-micro text-muted">{LIST_LABEL[a.list]}</span>
+                </span>
                 <span className="tnum text-body font-semibold">{a.scorePct === null ? '—' : `${Math.round(a.scorePct)}%`}</span>
                 <span className="text-meta text-ink2">{a.byName}</span>
                 <span className="tnum text-meta text-ink2">«Yo‘q»: {a.noCount}</span>

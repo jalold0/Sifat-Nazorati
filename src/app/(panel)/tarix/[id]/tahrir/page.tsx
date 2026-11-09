@@ -12,7 +12,7 @@ export const metadata: Metadata = { title: 'Tekshiruvni tuzatish' };
 export const dynamic = 'force-dynamic';
 
 export default async function TahrirPage({ params }: { params: Promise<{ id: string }> }) {
-  const actor = await requireActorFor('HEAD', 'INSPECTOR');
+  const actor = await requireActorFor('HEAD', 'INSPECTOR', 'SUPERVISOR');
   const { id } = await params;
   const res = await getAudit(actor, id);
   if (!res.ok) {
@@ -42,6 +42,10 @@ export default async function TahrirPage({ params }: { params: Promise<{ id: str
           answers: audit.answers,
           notes: audit.notes,
           tasks,
+          staff: audit.staff ?? null,
+          list: audit.list,
+          staffId: audit.staffId ?? null,
+          channel: audit.channel ?? null,
         }}
       />
     </>

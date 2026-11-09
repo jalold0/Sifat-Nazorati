@@ -3,7 +3,7 @@
 import { useRouter } from 'next/navigation';
 import { useState, useTransition } from 'react';
 
-import { QC_ROLE_LABEL, type QcRole } from '@/qc/policy';
+import { QC_ROLE_LABEL, roleNeedsDept, type QcRole } from '@/qc/policy';
 import type { UserDto } from '@/server/users';
 
 import { saveUserAction } from '../actions';
@@ -59,11 +59,11 @@ export function UserRow({ user, departments, self }: { user: UserDto; department
           </select>
         </label>
         <label className="text-meta">
-          <span className="field-label">Bo‘lim (ko‘ruvchi uchun)</span>
+          <span className="field-label">Bo‘lim (ko‘ruvchi, supervayzer)</span>
           <select
             className="field min-h-[44px]"
             value={deptId}
-            disabled={role !== 'VIEWER'}
+            disabled={!roleNeedsDept(role)}
             onChange={(e) => setDeptId(e.target.value)}
           >
             <option value="">— tanlang —</option>
@@ -103,7 +103,7 @@ export function UserRow({ user, departments, self }: { user: UserDto; department
                   id: user.id,
                   fullName: user.fullName,
                   role,
-                  deptId: role === 'VIEWER' ? deptId || null : null,
+                  deptId: roleNeedsDept(role) ? deptId || null : null,
                   active,
                   password: password || undefined,
                 }),
@@ -163,8 +163,8 @@ export function NewUserForm({ departments }: { departments: Dept[] }) {
           </select>
         </label>
         <label>
-          <span className="field-label">Bo‘lim (ko‘ruvchi uchun majburiy)</span>
-          <select className="field min-h-[44px]" value={deptId} disabled={role !== 'VIEWER'} onChange={(e) => setDeptId(e.target.value)}>
+          <span className="field-label">Bo‘lim (ko‘ruvchi, supervayzer uchun majburiy)</span>
+          <select className="field min-h-[44px]" value={deptId} disabled={!roleNeedsDept(role)} onChange={(e) => setDeptId(e.target.value)}>
             <option value="">— tanlang —</option>
             {departments.map((d) => (
               <option key={d.id} value={d.id}>
@@ -196,7 +196,7 @@ export function NewUserForm({ departments }: { departments: Dept[] }) {
           disabled={pending}
           onClick={() =>
             run(
-              () => saveUserAction({ login, fullName, role, deptId: role === 'VIEWER' ? deptId || null : null, active: true, password }),
+              () => saveUserAction({ login, fullName, role, deptId: roleNeedsDept(role) ? deptId || null : null, active: true, password }),
               () => {
                 setOpen(false);
                 setLogin('');

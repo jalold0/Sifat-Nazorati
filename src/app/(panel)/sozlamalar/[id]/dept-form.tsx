@@ -4,6 +4,7 @@ import clsx from 'clsx';
 import { useRouter } from 'next/navigation';
 import { useState, useTransition } from 'react';
 
+import { KIND_LABEL, kindLabels, type CheckpointKind } from '@/qc/staff';
 import type { DeptDto } from '@/server/qc';
 
 import { saveDepartmentAction } from '../actions';
@@ -16,10 +17,22 @@ interface Row {
   weight: number;
   critical: boolean;
   active: boolean;
+  kind: CheckpointKind;
+  okLabel: string;
+  badLabel: string;
+}
+
+interface StaffRow {
+  key: string;
+  id?: string;
+  name: string;
+  role: string;
+  active: boolean;
 }
 
 let counter = 0;
 const newKey = () => `n${++counter}`;
+const blankRow = (): Row => ({ key: newKey(), text: '', group: null, weight: 1, critical: false, active: true, kind: 'check', okLabel: '', badLabel: '' });
 
 export function DeptForm({ dept }: { dept: DeptDto | null }) {
   const router = useRouter();
@@ -37,9 +50,31 @@ export function DeptForm({ dept }: { dept: DeptDto | null }) {
           weight: c.weight,
           critical: c.critical,
           active: c.active,
+          kind: c.kind ?? 'check',
+          okLabel: c.okLabel ?? '',
+          badLabel: c.badLabel ?? '',
         }))
-      : [{ key: newKey(), text: '', group: null, weight: 1, critical: false, active: true }],
+      : [blankRow()],
   );
+  const [staff, setStaff] = useState<StaffRow[]>(
+    (dept?.staff ?? []).map((s) => ({ key: s.id, id: s.id, name: s.name, role: s.role, active: s.active })),
+  );
+  const [newName, setNewName] = useState('');
+  const patchStaff = (key: string, p: Partial<StaffRow>) => {
+    setSaved(false);
+    setStaff((rs) => rs.map((r) => (r.key === key ? { ...r, ...p } : r)));
+  };
+  /** Bir nechta ismni bir yo'la qo'shish: vergul yoki yangi qator bilan ajratilgan. */
+  const addStaff = () => {
+    const names = newName
+      .split(/[\n,;]+/)
+      .map((s) => s.trim())
+      .filter(Boolean);
+    if (names.length === 0) return;
+    setSaved(false);
+    setStaff((rs) => [...rs, ...names.map((name) => ({ key: newKey(), name, role: '', active: true }))]);
+    setNewName('');
+  };
   const [error, setError] = useState<string | null>(null);
   const [saved, setSaved] = useState(false);
   const [pending, start] = useTransition();
@@ -77,7 +112,11 @@ export function DeptForm({ dept }: { dept: DeptDto | null }) {
             weight: x.weight,
             critical: x.critical,
             active: x.active,
+            kind: x.kind,
+            okLabel: x.kind === 'check' ? null : x.okLabel,
+            badLabel: x.kind === 'check' ? null : x.badLabel,
           })),
+          staff: staff.map((s) => ({ id: s.id, name: s.name, role: s.role, active: s.active })),
         });
         if (!r.ok) {
           setError(r.error);
@@ -132,6 +171,58 @@ export function DeptForm({ dept }: { dept: DeptDto | null }) {
       </section>
 
       <section>
+        <h2 className="mb-1 text-title">Hodimlar</h2>
+        <p className="mb-3 text-meta text-muted">
+          Tekshiriladigan xodimlar (operator, kuryer, omborchi). Ular tizimga kirmaydi — «har hodim bo‘yicha» nuqtalarda
+          shu ro‘yxatdan tanlanadi. Ketgan hodimni yashiring: eski tekshiruvlarda u saqlanib qoladi.
+        </p>
+        <div className="card p-3.5">
+          {staff.length === 0 ? <p className="mb-3 text-meta text-muted">Hali hodim qo‘shilmagan.</p> : null}
+          <ul className="divide-y divide-grid">
+            {staff.map((s) => (
+              <li key={s.key} className={clsx('flex flex-wrap items-center gap-2 py-2', !s.active && 'opacity-60')}>
+                <input
+                  aria-label="Hodim ismi"
+                  className="field min-h-[40px] min-w-[10rem] flex-1"
+                  value={s.name}
+                  onChange={(e) => patchStaff(s.key, { name: e.target.value })}
+                />
+                <input
+                  aria-label="Lavozim yoki smena (ixtiyoriy)"
+                  className="field min-h-[40px] w-full sm:w-48"
+                  placeholder="Lavozim, smena"
+                  value={s.role}
+                  onChange={(e) => patchStaff(s.key, { role: e.target.value })}
+                />
+                <label className="flex min-h-[40px] items-center gap-2 text-meta">
+                  <input type="checkbox" className="h-5 w-5" checked={!s.active} onChange={(e) => patchStaff(s.key, { active: !e.target.checked })} />
+                  Yashirish
+                </label>
+              </li>
+            ))}
+          </ul>
+          <div className="mt-3 flex flex-wrap gap-2">
+            <input
+              aria-label="Yangi hodimlar"
+              className="field min-h-[44px] min-w-[12rem] flex-1"
+              placeholder="Ism Familiya (bir nechtasini vergul bilan)"
+              value={newName}
+              onChange={(e) => setNewName(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter') {
+                  e.preventDefault();
+                  addStaff();
+                }
+              }}
+            />
+            <button type="button" className="btn-ghost min-h-[44px]" onClick={addStaff} disabled={!newName.trim()}>
+              Hodim qo‘shish
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <section>
         <h2 className="mb-2 text-title">Nuqtalar</h2>
         <p className="mb-3 text-meta text-muted">
           Savol «Ha» yaxshi degan ma‘noda yozilsin. Nuqta o‘chirilmaydi — «Yashirish» eski tekshiruvlarni saqlab qoladi.
@@ -158,6 +249,20 @@ export function DeptForm({ dept }: { dept: DeptDto | null }) {
               </div>
               <div className="mt-2 flex flex-wrap items-center gap-x-5 gap-y-1 pl-8">
                 <label className="flex min-h-[44px] items-center gap-2 text-meta">
+                  Turi
+                  <select
+                    className="field min-h-[44px] w-auto"
+                    value={r.kind}
+                    onChange={(e) => patch(r.key, { kind: e.target.value as CheckpointKind })}
+                  >
+                    {(Object.keys(KIND_LABEL) as CheckpointKind[]).map((k) => (
+                      <option key={k} value={k}>
+                        {KIND_LABEL[k]}
+                      </option>
+                    ))}
+                  </select>
+                </label>
+                <label className="flex min-h-[44px] items-center gap-2 text-meta">
                   Og‘irlik
                   <select
                     className="field min-h-[44px] w-20"
@@ -180,6 +285,33 @@ export function DeptForm({ dept }: { dept: DeptDto | null }) {
                   Yashirish
                 </label>
               </div>
+              {r.kind !== 'check' ? (
+                <div className="mt-1 grid gap-2 pl-8 sm:grid-cols-2">
+                  <label className="text-meta">
+                    <span className="mb-1 block text-ink2">Yaxshi natija yorlig‘i</span>
+                    <input
+                      className="field min-h-[40px]"
+                      maxLength={40}
+                      placeholder={r.kind === 'staff_count' ? 'masalan «Sifatli yopdi»' : 'masalan «Topshirdi»'}
+                      value={r.okLabel}
+                      onChange={(e) => patch(r.key, { okLabel: e.target.value })}
+                    />
+                  </label>
+                  <label className="text-meta">
+                    <span className="mb-1 block text-ink2">Yomon natija yorlig‘i</span>
+                    <input
+                      className="field min-h-[40px]"
+                      maxLength={40}
+                      placeholder={r.kind === 'staff_count' ? 'masalan «Yopa olmadi»' : 'masalan «Topshirmadi»'}
+                      value={r.badLabel}
+                      onChange={(e) => patch(r.key, { badLabel: e.target.value })}
+                    />
+                  </label>
+                  <p className="text-micro text-muted sm:col-span-2">
+                    Bo‘sh qolsa: «{kindLabels({ kind: r.kind }).ok}» / «{kindLabels({ kind: r.kind }).bad}».
+                  </p>
+                </div>
+              ) : null}
             </li>
           ))}
         </ol>
@@ -188,7 +320,7 @@ export function DeptForm({ dept }: { dept: DeptDto | null }) {
           className="btn-ghost mt-3 min-h-[44px]"
           onClick={() => {
             setSaved(false);
-            setRows((rs) => [...rs, { key: newKey(), text: '', group: null, weight: 1, critical: false, active: true }]);
+            setRows((rs) => [...rs, blankRow()]);
           }}
         >
           + Nuqta qo‘shish
@@ -207,9 +339,11 @@ export function DeptForm({ dept }: { dept: DeptDto | null }) {
               Saqlandi.
             </p>
           ) : null}
-          <button type="button" className="btn-primary min-h-[52px] w-full text-body" disabled={pending} onClick={submit}>
-            {pending ? 'Saqlanmoqda…' : 'Saqlash'}
-          </button>
+          <div className="flex justify-end">
+            <button type="button" className="btn-primary min-h-[44px] px-6 text-meta" disabled={pending} onClick={submit}>
+              {pending ? 'Saqlanmoqda…' : 'Bo‘limni saqlash'}
+            </button>
+          </div>
         </div>
       </div>
     </div>

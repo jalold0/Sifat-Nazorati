@@ -6,6 +6,9 @@ import { PERIOD_LABEL, type Metric, type PeriodKey } from '@/qc/calc';
 import type { TaskDto } from '@/server/qc';
 import type { DeptReportData } from '@/server/report';
 
+import { LIST_LABEL, type ListKind } from '@/qc/lists';
+
+import { InteractionCard, StaffBreakdownCard } from './staff-result';
 import { StatusDot, StatusLabel, STATUS_TEXT_COLOR } from './status';
 import { TaskList } from './task-list';
 
@@ -84,6 +87,17 @@ export function DeptReport({
             );
           })}
         </div>
+        {Object.keys(evaluation.scoreByList).length > 1 ? (
+          <p className="tnum mt-3 text-meta text-ink2">
+            Umumiy ball — cheklistlar o‘rtachasi:{' '}
+            {(Object.entries(evaluation.scoreByList) as Array<[ListKind, number | null]>).map(([l, v], i) => (
+              <span key={l}>
+                {i > 0 ? ', ' : ''}
+                {LIST_LABEL[l]} <span className="font-semibold text-ink">{v === null ? '—' : pct(v)}</span>
+              </span>
+            ))}
+          </p>
+        ) : null}
       </Card>
 
       <Card>
@@ -113,6 +127,10 @@ export function DeptReport({
           </ol>
         )}
       </Card>
+
+      <InteractionCard rows={data.interactions} />
+
+      <StaffBreakdownCard rows={data.staff} checkpoints={dept.checkpoints} />
 
       <section>
         <h2 className="mb-3 text-title">Muddati o‘tgan topshiriqlar</h2>

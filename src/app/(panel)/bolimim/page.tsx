@@ -13,7 +13,7 @@ export const dynamic = 'force-dynamic';
 
 /** Ko'ruvchi: panelning o'z bo'limi uchun nusxasi + shu bo'limga berilgan topshiriqlar. Hech narsa o'zgartirib bo'lmaydi. */
 export default async function BolimimPage({ searchParams }: { searchParams: Promise<{ p?: string }> }) {
-  const actor = await requireActorFor('VIEWER');
+  const actor = await requireActorFor('VIEWER', 'SUPERVISOR');
   const period = parsePeriod((await searchParams).p);
 
   if (!actor.deptId) {

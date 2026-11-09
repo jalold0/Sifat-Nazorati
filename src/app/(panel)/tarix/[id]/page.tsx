@@ -2,11 +2,13 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 import { notFound, redirect } from 'next/navigation';
 
+import { StaffCpResult } from '@/components/qc/staff-result';
 import { TaskList } from '@/components/qc/task-list';
 import { Badge, Card, CardHead, PageHead } from '@/components/ui';
 import { requireActorFor } from '@/lib/auth';
 import { date as fmtDate, dateTime } from '@/lib/format';
 import { todayTashkent } from '@/qc/calc';
+import { CHANNELS, isChannel, LIST_LABEL } from '@/qc/lists';
 import { canEditTask } from '@/qc/policy';
 import { getAudit } from '@/server/qc';
 
@@ -22,7 +24,7 @@ const ANSWER = {
 } as const;
 
 export default async function TekshiruvTafsilotPage({ params }: { params: Promise<{ id: string }> }) {
-  const actor = await requireActorFor('HEAD', 'INSPECTOR');
+  const actor = await requireActorFor('HEAD', 'INSPECTOR', 'SUPERVISOR');
   const { id } = await params;
   const res = await getAudit(actor, id);
   if (!res.ok) {
@@ -39,9 +41,15 @@ export default async function TekshiruvTafsilotPage({ params }: { params: Promis
         </Link>
       </p>
       <PageHead
-        eyebrow={fmtDate(audit.date)}
-        title={dept.name}
-        lede={`${audit.byName} kiritgan, ${dateTime(audit.createdAt)}${audit.subject ? ` · ${audit.subject}` : ''}`}
+        eyebrow={`${fmtDate(audit.date)} · ${LIST_LABEL[audit.list]}`}
+        title={audit.list === 'interaction' && audit.staffName ? `${dept.name}: ${audit.staffName}` : dept.name}
+        lede={[
+          `${audit.byName} kiritgan, ${dateTime(audit.createdAt)}`,
+          audit.list === 'interaction' && isChannel(audit.channel) ? CHANNELS[audit.channel] : null,
+          audit.subject || null,
+        ]
+          .filter(Boolean)
+          .join(' · ')}
         actions={
           <>
             {canEdit ? (
@@ -86,6 +94,7 @@ export default async function TekshiruvTafsilotPage({ params }: { params: Promis
                       {note.ref ? <span className="text-muted"> · dalil: {note.ref}</span> : null}
                     </p>
                   ) : null}
+                  <StaffCpResult cp={c} block={audit.staff ?? null} />
                 </li>
               );
             })}

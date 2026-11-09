@@ -401,6 +401,92 @@ suite('server qatlami (PostgreSQL)', () => {
     expect(await listTaskTab(viewer, { tab: 'open', dept: d2 }, ctx)).toMatchObject({ ok: false, status: 403 });
   });
 
+  it('hodimlar kesimi: ro‘yxat saqlanadi, natija hodim bo‘yicha, begona hodim rad etiladi, ism serverdan', async () => {
+    // Alohida bo'lim: oddiy nuqta + hodim Ha/Yo'q + hodim soni
+    const saved = await saveDepartment(
+      head,
+      {
+        name: 'Call center (hodimlar)',
+        norm: 90,
+        estimate: true,
+        active: true,
+        checkpoints: [
+          { text: 'Ish joyi tartibda', weight: 1, critical: false, active: true },
+          { text: 'Smenani topshirdi', weight: 2, critical: false, active: true, kind: 'staff_check', okLabel: 'Topshirdi', badLabel: 'Topshirmadi' },
+          { text: 'Murojaatlar sifatli yopildi', weight: 1, critical: false, active: true, kind: 'staff_count', okLabel: 'Sifatli', badLabel: 'Yopilmadi' },
+        ],
+        staff: [
+          { name: 'Aziz', active: true },
+          { name: 'Vali', active: true },
+          { name: 'Ketgan hodim', active: false },
+        ],
+      },
+      ctx,
+    );
+    if (!saved.ok) throw new Error(JSON.stringify(saved));
+    const deptId = saved.data.id;
+    const dept = (await listDepartments(head, { includeInactive: true }, ctx)).find((d) => d.id === deptId)!;
+    expect(dept.checkpoints.map((c) => c.kind)).toEqual(['check', 'staff_check', 'staff_count']);
+    expect(dept.staff.map((s) => [s.name, s.active])).toEqual([['Aziz', true], ['Vali', true], ['Ketgan hodim', false]]);
+    const [aziz, vali, ketgan] = dept.staff.map((s) => s.id) as [string, string, string];
+
+    // hodimsiz bo'limda hodimli nuqta saqlanmaydi
+    expect(
+      await saveDepartment(head, { name: 'Bo‘sh', norm: 90, estimate: true, active: true, checkpoints: [{ text: 'x', weight: 1, critical: false, active: true, kind: 'staff_check' }] }, ctx),
+    ).toMatchObject({ ok: false, status: 400 });
+
+    const good = {
+      dept: deptId,
+      date: today,
+      answers: { cp1: 'yes' },
+      notes: {},
+      tasks: [],
+      staff: {
+        people: [aziz, vali],
+        results: {
+          cp2: { [aziz]: { v: 'yes' }, [vali]: { v: 'no', reason: 'Kech qoldi' } },
+          cp3: { [aziz]: { ok: 40, bad: 0 }, [vali]: { ok: 30, bad: 10, reason: 'Tizim sekin' } },
+        },
+      },
+    };
+    const created = await createAudit(insp1, good, ctx);
+    if (!created.ok) throw new Error(JSON.stringify(created));
+    const got = await getAudit(head, created.data.id, ctx);
+    if (!got.ok) throw new Error('get');
+    expect(got.data.audit.answers).toEqual({ cp1: 'yes', cp2: 'no', cp3: 'no' });
+    expect(got.data.audit.staff?.people).toEqual([{ id: aziz, name: 'Aziz' }, { id: vali, name: 'Vali' }]);
+    expect(got.data.audit.scorePct).toBeCloseTo(((1 + 2 * 0.5 + 70 / 80) / 4) * 100, 6);
+    expect(await db.qcTask.count({ where: { auditId: created.data.id } })).toBe(0); // hodimli nuqtada topshiriq ixtiyoriy
+
+    // yashirilgan hodim yangi tekshiruvda tanlanmaydi; boshqa bo'lim hodimi ham
+    const hidden = { ...good, staff: { ...good.staff, people: [aziz, vali, ketgan] } };
+    expect(await createAudit(insp1, hidden, ctx)).toMatchObject({ ok: false, status: 400 });
+
+    // ism serverdan: hodim nomi o'zgarsa ham eski tekshiruvda nusxa qoladi
+    await saveDepartment(
+      head,
+      {
+        id: deptId,
+        name: dept.name,
+        norm: 90,
+        estimate: true,
+        active: true,
+        checkpoints: dept.checkpoints.map((c) => ({ ...c })),
+        staff: [
+          { id: aziz, name: 'Aziz Karimov', active: true },
+          { id: vali, name: 'Vali', active: true },
+          { id: ketgan, name: 'Ketgan hodim', active: false },
+        ],
+      },
+      ctx,
+    );
+    const again = await getAudit(head, created.data.id, ctx);
+    if (!again.ok) throw new Error('get2');
+    expect(again.data.audit.staff?.people[0]?.name).toBe('Aziz');
+    const log = await db.qcLog.findFirst({ where: { action: 'dept.save', entityId: deptId, summary: { contains: 'Aziz Karimov' } } });
+    expect(log).toBeTruthy();
+  });
+
   it('tarix sahifalanadi, yangisi birinchi', async () => {
     const r = await listAudits(head, { limit: 2, offset: 0 }, ctx);
     expect(r.ok).toBe(true);

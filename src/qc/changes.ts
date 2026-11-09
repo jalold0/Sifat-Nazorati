@@ -4,13 +4,25 @@
  */
 
 import type { Answer } from './calc';
+import { KIND_LABEL, type CheckpointKind } from './staff';
+
+interface CpFields {
+  text: string;
+  weight: number;
+  critical: boolean;
+  active: boolean;
+  kind?: CheckpointKind;
+  okLabel?: string | null;
+  badLabel?: string | null;
+}
 
 export interface DeptSnapshot {
   name: string;
   norm: number;
   estimate: boolean;
   active: boolean;
-  checkpoints: Array<{ id: string; text: string; weight: number; critical: boolean; active: boolean }>;
+  checkpoints: Array<CpFields & { id: string }>;
+  staff?: Array<{ id: string; name: string; active: boolean }>;
 }
 
 export interface DeptEdit {
@@ -18,7 +30,9 @@ export interface DeptEdit {
   norm: number;
   estimate: boolean;
   active: boolean;
-  checkpoints: Array<{ id?: string; text: string; weight: number; critical: boolean; active: boolean }>;
+  checkpoints: Array<CpFields & { id?: string }>;
+  /** Bo'lmasa — hodimlar o'zgarmagan. */
+  staff?: Array<{ id?: string; name: string; active: boolean }>;
 }
 
 const short = (s: string, n = 60) => (s.length > n ? `${s.slice(0, n - 1)}…` : s);
@@ -50,6 +64,25 @@ export function diffDept(before: DeptSnapshot | null, after: DeptEdit): string[]
     if (o.weight !== c.weight) out.push(`${tag}: og‘irlik ${o.weight} → ${c.weight}`);
     if (o.critical !== c.critical) out.push(`${tag}: ${c.critical ? 'jiddiy belgisi qo‘yildi' : 'jiddiy belgisi olib tashlandi'}`);
     if (o.active !== c.active) out.push(`${tag}: ${c.active ? 'qayta faollashtirildi' : 'yashirildi'}`);
+    const ok = o.kind ?? 'check';
+    const nk = c.kind ?? 'check';
+    if (ok !== nk) out.push(`${tag}: turi «${KIND_LABEL[ok]}» → «${KIND_LABEL[nk]}»`);
+    if ((o.okLabel ?? null) !== (c.okLabel ?? null) || (o.badLabel ?? null) !== (c.badLabel ?? null)) {
+      out.push(`${tag}: yorliqlar «${c.okLabel ?? '—'} / ${c.badLabel ?? '—'}»`);
+    }
+  }
+
+  if (after.staff) {
+    const was = new Map((before.staff ?? []).map((s) => [s.id, s]));
+    for (const s of after.staff) {
+      const o = s.id ? was.get(s.id) : undefined;
+      if (!o) {
+        out.push(`Yangi hodim: ${s.name}`);
+        continue;
+      }
+      if (o.name !== s.name) out.push(`Hodim: «${o.name}» → «${s.name}»`);
+      if (o.active !== s.active) out.push(`Hodim ${s.name}: ${s.active ? 'qayta faollashtirildi' : 'yashirildi'}`);
+    }
   }
   return out;
 }

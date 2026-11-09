@@ -228,7 +228,9 @@ describe('validateAudit — server majburiy qiladigan qoidalar', () => {
   it('mijoz yuborgan by/created/critical kabi maydonlar natijaga o‘tmaydi', () => {
     const r = validateAudit({ ...good(), by: 'hacker', created: 1, critical: true }, cps, opts);
     expect(r.ok).toBe(true);
-    if (r.ok) expect(Object.keys(r.data).sort()).toEqual(['answers', 'date', 'dept', 'notes', 'subject', 'tasks']);
+    if (r.ok) expect(Object.keys(r.data).sort()).toEqual(['answers', 'channel', 'date', 'dept', 'list', 'notes', 'staff', 'staffId', 'subject', 'tasks']);
+    // hodimli nuqta yo'q bo'limda hodim bloki bo'lmaydi
+    if (r.ok) expect(r.data.staff).toBeNull();
   });
 
   it('bo‘sh/buzuq tana — xato, istisno chiqmaydi', () => {

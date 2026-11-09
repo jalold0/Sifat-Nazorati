@@ -7,7 +7,7 @@
  * Server actions, route handler'lar va testlar shu qatlamni chaqiradi — framework'ga bog'liq emas.
  */
 
-import type { Prisma, PrismaClient } from '@prisma/client';
+import { Prisma, type PrismaClient, type QcCheckpointKind, type QcListKind } from '@prisma/client';
 
 import { db as defaultDb } from '@/lib/db';
 import {
@@ -31,6 +31,8 @@ import {
   type Actor,
 } from '@/qc/policy';
 import { diffAnswers, diffDept, joinSummary } from '@/qc/changes';
+import { isListKind, type ListKind } from '@/qc/lists';
+import type { CheckpointKind, StaffBlock, StaffPerson } from '@/qc/staff';
 import { validateAudit, type TaskInput } from '@/qc/validate';
 
 import { logChange } from './log';
@@ -60,7 +62,35 @@ export interface DeptDto {
   norm: number;
   estimate: boolean;
   checkpoints: Checkpoint[];
+  /** Bo'lim hodimlari (yashirilganlari ham — `active`), tartib bo'yicha. */
+  staff: StaffDto[];
 }
+
+export interface StaffDto {
+  id: string;
+  name: string;
+  role: string;
+  active: boolean;
+}
+
+const KIND_FROM_DB: Record<QcCheckpointKind, CheckpointKind> = {
+  CHECK: 'check',
+  STAFF_CHECK: 'staff_check',
+  STAFF_COUNT: 'staff_count',
+};
+const KIND_TO_DB: Record<CheckpointKind, QcCheckpointKind> = {
+  check: 'CHECK',
+  staff_check: 'STAFF_CHECK',
+  staff_count: 'STAFF_COUNT',
+};
+
+const LIST_FROM_DB: Record<QcListKind, ListKind> = { SHIFT: 'shift', INTERACTION: 'interaction', WEEKLY: 'weekly' };
+const LIST_TO_DB: Record<ListKind, QcListKind> = { shift: 'SHIFT', interaction: 'INTERACTION', weekly: 'WEEKLY' };
+
+/** Json ustunidan o'qilgan hodimlar bloki (eski yozuvda null). */
+const staffOf = (v: Prisma.JsonValue | null): StaffBlock | null => (v && typeof v === 'object' ? (v as unknown as StaffBlock) : null);
+/** Json ustuniga yozish: null — bazada NULL. */
+const staffJson = (b: StaffBlock | null) => (b ? (b as unknown as Prisma.InputJsonValue) : Prisma.DbNull);
 
 export interface AuditDto extends AuditRec {
   by: string;
@@ -71,6 +101,9 @@ export interface AuditDto extends AuditRec {
   updatedAt: string;
   noCount: number;
   scorePct: number | null;
+  list: ListKind;
+  /** Muloqot bahosida baholangan operator ismi */
+  staffName: string | null;
 }
 
 export interface TaskDto extends TaskRec {
@@ -78,7 +111,9 @@ export interface TaskDto extends TaskRec {
   checkedByName: string | null;
 }
 
-type DeptRow = Prisma.QcDepartmentGetPayload<{ include: { checkpoints: true } }>;
+/** Bo'lim + nuqtalar + hodimlar — DeptDto uchun yagona `include`. */
+const DEPT_INCLUDE = { checkpoints: true, staff: true } satisfies Prisma.QcDepartmentInclude;
+type DeptRow = Prisma.QcDepartmentGetPayload<{ include: typeof DEPT_INCLUDE }>;
 
 function toDept(d: DeptRow): DeptDto {
   return {
@@ -97,15 +132,32 @@ function toDept(d: DeptRow): DeptDto {
         weight: c.weight,
         critical: c.critical,
         active: c.active,
+        kind: KIND_FROM_DB[c.kind],
+        okLabel: c.okLabel,
+        badLabel: c.badLabel,
+        list: LIST_FROM_DB[c.list],
       })),
+    staff: [...d.staff]
+      .sort((a, b) => a.position - b.position || a.name.localeCompare(b.name))
+      .map((s) => ({ id: s.id, name: s.name, role: s.role, active: s.active })),
   };
 }
 
-type AuditRow = Prisma.QcAuditGetPayload<{ include: { by: { select: { shortName: true } } } }>;
+/** Tekshiruv + kiritgan + baholangan operator — AuditDto uchun yagona `include`. */
+const AUDIT_INCLUDE = {
+  by: { select: { shortName: true } },
+  staffRef: { select: { name: true } },
+} satisfies Prisma.QcAuditInclude;
+type AuditRow = Prisma.QcAuditGetPayload<{ include: typeof AUDIT_INCLUDE }>;
 
 function toAudit(a: AuditRow, checkpoints: Checkpoint[]): AuditDto {
   const answers = a.answers as Record<string, Answer>;
+  const staff = staffOf(a.staff);
   return {
+    list: LIST_FROM_DB[a.list],
+    staffId: a.staffId,
+    staffName: a.staffRef?.name ?? null,
+    channel: a.channel,
     id: a.id,
     dept: a.deptId,
     date: a.date,
@@ -115,10 +167,11 @@ function toAudit(a: AuditRow, checkpoints: Checkpoint[]): AuditDto {
     answers,
     notes: a.notes as AuditDto['notes'],
     critical: a.critical,
+    staff,
     createdAt: a.createdAt.toISOString(),
     updatedAt: a.updatedAt.toISOString(),
     noCount: Object.values(answers).filter((v) => v === 'no').length,
-    scorePct: scoreAnswers(answers, checkpoints, a.weights as Record<string, number> | null).pct,
+    scorePct: scoreAnswers(answers, checkpoints, a.weights as Record<string, number> | null, staff).pct,
   };
 }
 
@@ -154,7 +207,7 @@ export async function listDepartments(
       ...(opts.includeInactive ? {} : { active: true }),
       ...(scope ? { id: scope } : {}),
     },
-    include: { checkpoints: true },
+    include: DEPT_INCLUDE,
     orderBy: [{ position: 'asc' }, { name: 'asc' }],
   });
   return rows.map(toDept);
@@ -186,7 +239,7 @@ export async function getSummaryData(
   const [audits, tasks] = await Promise.all([
     client.qcAudit.findMany({
       where: { deptId: { in: ids }, date: { gte: q.from, lte: q.to } },
-      select: { id: true, deptId: true, date: true, answers: true, critical: true, weights: true },
+      select: { id: true, deptId: true, date: true, answers: true, critical: true, weights: true, staff: true, list: true, staffId: true, channel: true },
     }),
     client.qcTask.findMany({
       where: { deptId: { in: ids }, OR: [{ due: { gte: q.from } }, { status: 'OPEN' }, { checkedOn: { gte: q.from } }] },
@@ -204,6 +257,10 @@ export async function getSummaryData(
       answers: a.answers as Record<string, Answer>,
       critical: a.critical,
       weights: a.weights as Record<string, number> | null,
+      staff: staffOf(a.staff),
+      list: LIST_FROM_DB[a.list],
+      staffId: a.staffId,
+      channel: a.channel,
     })),
     tasks: tasks.map((t) => ({
       id: t.id,
@@ -228,6 +285,8 @@ export interface AuditQuery {
   to?: string;
   limit?: number;
   offset?: number;
+  /** Faqat shu cheklist */
+  list?: ListKind;
 }
 
 /** Tekshiruvlar ro'yxati: yangisi birinchi, 50 tadan. */
@@ -243,6 +302,7 @@ export async function listAudits(
   const where: Prisma.QcAuditWhereInput = {
     ...(q.dept ? { deptId: q.dept } : scope ? { deptId: scope } : {}),
     ...(q.from || q.to ? { date: { ...(q.from ? { gte: q.from } : {}), ...(q.to ? { lte: q.to } : {}) } } : {}),
+    ...(q.list ? { list: LIST_TO_DB[q.list] } : {}),
   };
   const take = Math.min(Math.max(q.limit ?? PAGE_SIZE, 1), 50_000);
   const skip = Math.max(q.offset ?? 0, 0);
@@ -251,7 +311,7 @@ export async function listAudits(
   const [rows, total, depts] = await Promise.all([
     client.qcAudit.findMany({
       where,
-      include: { by: { select: { shortName: true } } },
+      include: AUDIT_INCLUDE,
       orderBy: [{ date: 'desc' }, { createdAt: 'desc' }],
       take,
       skip,
@@ -277,7 +337,7 @@ export async function getAudit(
   const client = dbOf(ctx);
   const row = await client.qcAudit.findUnique({
     where: { id },
-    include: { by: { select: { shortName: true } }, dept: { include: { checkpoints: true } } },
+    include: { ...AUDIT_INCLUDE, dept: { include: DEPT_INCLUDE } },
   });
   if (!row) return notFound('Tekshiruv topilmadi. U o‘chirilgan bo‘lishi mumkin.');
   if (!canReadDept(actor, row.deptId)) return forbidden('Bu bo‘limni ko‘rishga ruxsatingiz yo‘q.');
@@ -362,8 +422,13 @@ export async function listTaskTab(
 // ── Tekshiruv yozish ─────────────────────────────────────────────────────────
 
 async function loadDept(client: PrismaClient, id: string): Promise<DeptDto | null> {
-  const d = await client.qcDepartment.findUnique({ where: { id }, include: { checkpoints: true } });
+  const d = await client.qcDepartment.findUnique({ where: { id }, include: DEPT_INCLUDE });
   return d ? toDept(d) : null;
+}
+
+/** Tekshiruvda tanlash mumkin bo'lgan hodimlar. Ism mijozdan emas — shu ro'yxatdan olinadi. */
+function rosterOf(dept: DeptDto, opts: { includeHidden: boolean }): StaffPerson[] {
+  return dept.staff.filter((s) => opts.includeHidden || s.active).map((s) => ({ id: s.id, name: s.name }));
 }
 
 function taskRows(auditId: string, deptId: string, tasks: TaskInput[]): Prisma.QcTaskCreateManyInput[] {
@@ -376,7 +441,13 @@ function taskRows(auditId: string, deptId: string, tasks: TaskInput[]): Prisma.Q
  */
 export async function createAudit(actor: Actor, body: unknown, ctx?: Ctx): Promise<Res<{ id: string }>> {
   if (!canCreateAudit(actor)) return forbidden('Tekshiruv kiritish huquqingiz yo‘q.');
-  const deptId = typeof (body as { dept?: unknown } | null)?.dept === 'string' ? (body as { dept: string }).dept : '';
+  const raw = (body ?? {}) as { dept?: unknown; list?: unknown };
+  const deptId = typeof raw.dept === 'string' ? raw.dept : '';
+  const list: ListKind = raw.list === undefined ? 'shift' : isListKind(raw.list) ? raw.list : ('' as ListKind);
+  if (!isListKind(list)) return bad('Cheklist noto‘g‘ri.');
+  if (!canCreateAudit(actor, { deptId, list })) {
+    return forbidden('Bu cheklistni kiritish huquqingiz yo‘q: supervayzer faqat o‘z bo‘limining kunlik smena cheklistini kiritadi.');
+  }
   const client = dbOf(ctx);
   const dept = deptId ? await loadDept(client, deptId) : null;
   if (!dept) return bad('Bo‘lim topilmadi. Bo‘limni tanlang.');
@@ -386,6 +457,8 @@ export async function createAudit(actor: Actor, body: unknown, ctx?: Ctx): Promi
     today: todayTashkent(nowOf(ctx)),
     allowPast: false,
     requireComplete: true,
+    roster: rosterOf(dept, { includeHidden: false }),
+    list,
   });
   if (!v.ok) return bad(v.error);
   const d = v.data;
@@ -399,6 +472,10 @@ export async function createAudit(actor: Actor, body: unknown, ctx?: Ctx): Promi
         answers: d.answers,
         notes: d.notes,
         subject: d.subject,
+        staff: staffJson(d.staff),
+        list: LIST_TO_DB[d.list],
+        staffId: d.staffId,
+        channel: d.channel,
         critical: auditCritical(d.answers, dept.checkpoints),
         // Kiritilgan paytdagi og'irliklar qotiriladi: keyin sozlama o'zgarsa ham bu tekshiruv bali o'zgarmaydi
         weights: Object.fromEntries(dept.checkpoints.map((c) => [c.id, c.weight])),
@@ -429,6 +506,10 @@ export async function updateAudit(actor: Actor, id: string, body: unknown, ctx?:
     today: todayTashkent(nowOf(ctx)),
     allowPast: actor.role === 'HEAD',
     requireComplete: false,
+    // Tuzatishda yashirilgan hodimlar ham (tekshiruv paytida faol bo'lgan bo'lishi mumkin)
+    roster: rosterOf(dept, { includeHidden: true }),
+    // Cheklist o'zgarmaydi — tekshiruv qaysi cheklist bilan kiritilgan bo'lsa, shu bilan tuzatiladi
+    list: LIST_FROM_DB[row.list],
   });
   if (!v.ok) return bad(v.error);
   const d = v.data;
@@ -437,6 +518,7 @@ export async function updateAudit(actor: Actor, id: string, body: unknown, ctx?:
 
   const lines = diffAnswers(row.answers as Record<string, Answer>, d.answers);
   if (date !== row.date) lines.unshift(`Sana: ${row.date} → ${date}`);
+  if (JSON.stringify(staffOf(row.staff)) !== JSON.stringify(d.staff)) lines.push('hodimlar natijasi o‘zgardi');
   await client.$transaction(async (tx) => {
     await tx.qcAudit.update({
       where: { id },
@@ -445,6 +527,9 @@ export async function updateAudit(actor: Actor, id: string, body: unknown, ctx?:
         answers: d.answers,
         notes: d.notes,
         subject: d.subject,
+        staff: staffJson(d.staff),
+        staffId: d.staffId,
+        channel: d.channel,
         critical: auditCritical(d.answers, dept.checkpoints),
         // Og'irliklar birinchi kiritishdagidek qoladi (eski yozuvda bo'lmasa — hozirgidan qotiriladi)
         weights: (row.weights as Record<string, number> | null) ?? Object.fromEntries(dept.checkpoints.map((c) => [c.id, c.weight])),
@@ -456,7 +541,7 @@ export async function updateAudit(actor: Actor, id: string, body: unknown, ctx?:
       entity: 'QcAudit',
       entityId: id,
       summary: `Tekshiruv tuzatildi (${dept.name}, ${row.date}): ${joinSummary(lines)}`,
-      details: { before: { answers: row.answers, notes: row.notes, subject: row.subject } as object },
+      details: { before: { answers: row.answers, notes: row.notes, subject: row.subject, staff: row.staff ?? null } as object },
     });
     await tx.qcTask.deleteMany({ where: { auditId: id, status: 'OPEN' } });
     // Allaqachon yopilgan topshirig'i bor nuqtaga takroran topshiriq ochilmaydi
@@ -488,6 +573,7 @@ export async function deleteAudit(actor: Actor, id: string, ctx?: Ctx): Promise<
         answers: row.answers,
         notes: row.notes,
         weights: row.weights ?? null,
+        staff: row.staff ?? null,
         tasks: row.tasks.map((t) => ({ cp: t.cpId, what: t.what, owner: t.owner, due: t.due, status: t.status, checkNote: t.checkNote })),
       } as object,
     });
@@ -551,8 +637,27 @@ export interface DeptInput {
   norm: number;
   estimate: boolean;
   active: boolean;
-  checkpoints: Array<{ id?: string; text: string; group?: string | null; weight: number; critical: boolean; active: boolean }>;
+  checkpoints: Array<{
+    id?: string;
+    text: string;
+    group?: string | null;
+    weight: number;
+    critical: boolean;
+    active: boolean;
+    /** Bo'lmasa — 'check' */
+    kind?: CheckpointKind;
+    okLabel?: string | null;
+    badLabel?: string | null;
+    /** Bo'lmasa — 'shift' (kunlik smena) */
+    list?: ListKind;
+  }>;
+  /** Bo'lim hodimlari. Bo'lmasa — o'zgarmaydi. Hodim o'chirilmaydi, faqat `active:false`. */
+  staff?: Array<{ id?: string; name: string; role?: string; active: boolean }>;
 }
+
+const KINDS = new Set<CheckpointKind>(['check', 'staff_check', 'staff_count']);
+const LABEL_MAX = 40;
+const cleanLabel = (v: string | null | undefined) => (v ?? '').trim().slice(0, LABEL_MAX) || null;
 
 /**
  * Bo'lim yaratish/o'zgartirish. Nuqtalar O'CHIRILMAYDI — faqat `active:false` qilinadi;
@@ -567,8 +672,27 @@ export async function saveDepartment(actor: Actor, input: DeptInput, ctx?: Ctx):
   for (const c of input.checkpoints) {
     if (!c.text?.trim()) return bad('Har bir nuqtaga savol matnini yozing (bo‘sh nuqtani «yashirish» mumkin).');
     if (![1, 2, 3].includes(c.weight)) return bad('Nuqta og‘irligi 1, 2 yoki 3 bo‘lishi kerak.');
+    if (c.kind !== undefined && !KINDS.has(c.kind)) return bad('Nuqta turi noto‘g‘ri.');
+    if (c.list !== undefined && !isListKind(c.list)) return bad('Nuqtaning cheklisti noto‘g‘ri.');
+    if (c.list === 'interaction' && c.kind && c.kind !== 'check') {
+      return bad(`«${c.text.trim()}»: muloqot bahosi bitta operatorni baholaydi — turi «Butun bo‘lim: Ha / Yo‘q» bo‘lsin.`);
+    }
   }
   if (!input.checkpoints.some((c) => c.active)) return bad('Kamida bitta faol nuqta qoldiring.');
+  const staffIn = input.staff;
+  if (staffIn !== undefined) {
+    if (!Array.isArray(staffIn) || staffIn.length > 200) return bad('Hodimlar ro‘yxati noto‘g‘ri (ko‘pi bilan 200 kishi).');
+    const seen = new Set<string>();
+    for (const s of staffIn) {
+      const n = (s.name ?? '').trim();
+      if (!n) return bad('Har bir hodimning ismini yozing (keraksizini «yashirish» mumkin).');
+      if (n.length > 80) return bad('Hodim ismi 80 belgidan oshmasin.');
+      const key = n.toLowerCase();
+      if (s.active && seen.has(key)) return bad(`«${n}» ro‘yxatda ikki marta. Ismlarni farqlang (masalan familiya qo‘shing).`);
+      if (s.active) seen.add(key);
+    }
+  }
+  const hasStaffCp = input.checkpoints.some((c) => c.active && c.kind && c.kind !== 'check');
 
   const client = dbOf(ctx);
   const dupe = await client.qcDepartment.findFirst({
@@ -578,15 +702,36 @@ export async function saveDepartment(actor: Actor, input: DeptInput, ctx?: Ctx):
   if (dupe) return bad('Bunday nomli bo‘lim allaqachon bor. Boshqa nom tanlang.');
 
   const existing = input.id
-    ? await client.qcDepartment.findUnique({ where: { id: input.id }, include: { checkpoints: true } })
+    ? await client.qcDepartment.findUnique({ where: { id: input.id }, include: DEPT_INCLUDE })
     : null;
   if (input.id && !existing) return notFound('Bo‘lim topilmadi.');
   const known = new Set((existing?.checkpoints ?? []).map((c) => c.id));
   for (const c of input.checkpoints) {
     if (c.id && !known.has(c.id)) return bad('Nuqta topilmadi. Sahifani yangilang.');
   }
+  const knownStaff = new Set((existing?.staff ?? []).map((s) => s.id));
+  for (const s of staffIn ?? []) {
+    if (s.id && !knownStaff.has(s.id)) return bad('Hodim topilmadi. Sahifani yangilang.');
+  }
+  const activeStaff = staffIn ? staffIn.filter((s) => s.active).length : (existing?.staff ?? []).filter((s) => s.active).length;
+  if (hasStaffCp && activeStaff === 0) {
+    return bad('Hodimlar kesimidagi nuqta bor, lekin bo‘limda faol hodim yo‘q. Avval hodimlarni qo‘shing.');
+  }
 
-  const lines = diffDept(existing ? toDept(existing) : null, { ...input, name, checkpoints: input.checkpoints.map((c) => ({ ...c, text: c.text.trim() })) });
+  const after = {
+    ...input,
+    name,
+    checkpoints: input.checkpoints.map((c) => ({
+      ...c,
+      text: c.text.trim(),
+      kind: c.kind ?? 'check',
+      okLabel: cleanLabel(c.okLabel),
+      badLabel: cleanLabel(c.badLabel),
+      list: c.list ?? 'shift',
+    })),
+    staff: staffIn?.map((s) => ({ ...s, name: s.name.trim(), role: (s.role ?? '').trim() })),
+  };
+  const lines = diffDept(existing ? toDept(existing) : null, after);
   const id = await client.$transaction(async (tx) => {
     let deptId = existing?.id;
     if (existing) {
@@ -602,14 +747,18 @@ export async function saveDepartment(actor: Actor, input: DeptInput, ctx?: Ctx):
       deptId = created.id;
     }
     let next = (existing?.checkpoints ?? []).reduce((m, c) => Math.max(m, Number(c.id.replace(/^cp/, '')) || 0), 0);
-    for (const [i, c] of input.checkpoints.entries()) {
+    for (const [i, c] of after.checkpoints.entries()) {
       const data = {
-        text: c.text.trim(),
+        text: c.text,
         grp: c.group?.trim() || null,
         weight: c.weight,
         critical: c.critical,
         active: c.active,
         position: i + 1,
+        kind: KIND_TO_DB[c.kind],
+        okLabel: c.okLabel,
+        badLabel: c.badLabel,
+        list: LIST_TO_DB[c.list],
       };
       if (c.id) {
         await tx.qcCheckpoint.update({ where: { deptId_id: { deptId: deptId as string, id: c.id } }, data });
@@ -617,6 +766,12 @@ export async function saveDepartment(actor: Actor, input: DeptInput, ctx?: Ctx):
         next += 1;
         await tx.qcCheckpoint.create({ data: { ...data, deptId: deptId as string, id: `cp${next}` } });
       }
+    }
+    // Hodimlar: tartib — massivdagi tartib; o'chirilmaydi, faqat yashiriladi
+    for (const [i, s] of (after.staff ?? []).entries()) {
+      const data = { name: s.name, role: s.role, active: s.active, position: i + 1 };
+      if (s.id) await tx.qcStaff.update({ where: { id: s.id }, data });
+      else await tx.qcStaff.create({ data: { ...data, deptId: deptId as string } });
     }
     if (lines.length > 0) {
       await logChange(tx, {

@@ -6,6 +6,7 @@
 import {
   buildSummary,
   evaluateDept,
+  interactionBreakdown,
   openAt,
   overdueAt,
   periodRange,
@@ -13,12 +14,14 @@ import {
   todayTashkent,
   topNoCheckpoints,
   type DeptEvaluation,
+  type InteractionRow,
   type PeriodKey,
   type Range,
   type Summary,
   type TopNo,
 } from '@/qc/calc';
 import type { Actor } from '@/qc/policy';
+import { staffBreakdown, type StaffBreakdownRow } from '@/qc/staff';
 
 import { getSummaryData, type Ctx, type DeptDto, type Res } from './qc';
 
@@ -27,6 +30,10 @@ export interface DeptReportData {
   evaluation: DeptEvaluation;
   summary: Summary;
   topNo: TopNo[];
+  /** Davr bo'yicha hodimlar kesimi (hodimli nuqtalar bo'lmasa — bo'sh). */
+  staff: StaffBreakdownRow[];
+  /** Davr bo'yicha muloqot bahosi — operatorlar kesimi (eng zaifi tepada). */
+  interactions: InteractionRow[];
   overdueTaskIds: string[];
   /** asOf kuniga ochiq topshiriqlar soni. */
   openCount: number;
@@ -83,6 +90,8 @@ export async function loadReportForRange(
       evaluation,
       summary: buildSummary(dept, audits, tasks, range, now),
       topNo: topNoCheckpoints(periodAudits, dept.checkpoints, 3),
+      staff: staffBreakdown(periodAudits, dept.checkpoints),
+      interactions: interactionBreakdown(periodAudits, dept.checkpoints, new Map(dept.staff.map((s) => [s.id, s.name]))),
       overdueTaskIds,
       openCount: openAt(
         tasks.filter((t) => t.dept === dept.id),

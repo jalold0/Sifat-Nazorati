@@ -6,7 +6,7 @@
 import bcrypt from 'bcryptjs';
 
 import { db as defaultDb } from '@/lib/db';
-import type { Actor, QcRole } from '@/qc/policy';
+import { QC_ROLE_LABEL, roleNeedsDept, type Actor, type QcRole } from '@/qc/policy';
 
 import { logChange } from './log';
 import type { Ctx, Res } from './qc';
@@ -23,7 +23,7 @@ export interface UserDto {
 const forbidden = (): Res<never> => ({ ok: false, status: 403, error: 'Foydalanuvchilarni faqat rahbar boshqara oladi.' });
 const bad = (error: string): Res<never> => ({ ok: false, status: 400, error });
 
-const ROLES: QcRole[] = ['HEAD', 'INSPECTOR', 'VIEWER'];
+const ROLES: QcRole[] = ['HEAD', 'INSPECTOR', 'SUPERVISOR', 'VIEWER'];
 
 export async function listUsers(actor: Actor, ctx?: Ctx): Promise<Res<UserDto[]>> {
   if (actor.role !== 'HEAD') return forbidden();
@@ -53,9 +53,9 @@ export async function saveUser(actor: Actor, input: UserInput, ctx?: Ctx): Promi
   const fullName = (input.fullName ?? '').trim();
   if (!fullName) return bad('Ism-familiyani yozing.');
   if (!ROLES.includes(input.role)) return bad('Rol noto‘g‘ri.');
-  const deptId = input.role === 'VIEWER' ? (input.deptId ?? null) : null;
-  if (input.role === 'VIEWER') {
-    if (!deptId) return bad('Ko‘ruvchi uchun bo‘limni tanlang.');
+  const deptId = roleNeedsDept(input.role) ? (input.deptId ?? null) : null;
+  if (roleNeedsDept(input.role)) {
+    if (!deptId) return bad(`${QC_ROLE_LABEL[input.role]} uchun bo‘limni tanlang.`);
     const dept = await client.qcDepartment.findUnique({ where: { id: deptId }, select: { id: true } });
     if (!dept) return bad('Bo‘lim topilmadi.');
   }
@@ -109,7 +109,7 @@ export async function saveUser(actor: Actor, input: UserInput, ctx?: Ctx): Promi
       fullName,
       shortName: fullName.length > 24 ? `${fullName.slice(0, 23)}…` : fullName,
       role: input.role,
-      position: input.role === 'VIEWER' ? 'Ko‘ruvchi' : input.role === 'HEAD' ? 'Rahbar' : 'Tekshiruvchi',
+      position: QC_ROLE_LABEL[input.role],
       deptId,
       active: input.active,
       passwordHash,

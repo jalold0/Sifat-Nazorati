@@ -5,14 +5,18 @@
  *   HEAD      — Rahbar: hammasi.
  *   INSPECTOR — Tekshiruvchi: tekshiruv kiritadi, topshiriqni yopadi; o'zi kiritganini 24 soat ichida tuzatadi.
  *   VIEWER    — Ko'ruvchi: faqat o'z bo'limini o'qiydi.
+ *   SUPERVISOR — Supervayzer: faqat o'z bo'limida «Kunlik smena» cheklistini kiritadi, o'z bo'limini o'qiydi.
+ *               Muloqot bahosi, haftalik tahlil va topshiriqni yopish — OTK'da (mustaqil nazorat).
  */
 
-export type QcRole = 'HEAD' | 'INSPECTOR' | 'VIEWER';
+import type { ListKind } from './lists';
+
+export type QcRole = 'HEAD' | 'INSPECTOR' | 'VIEWER' | 'SUPERVISOR';
 
 export interface Actor {
   id: string;
   role: QcRole;
-  /** Ko'ruvchining bo'limi. */
+  /** Ko'ruvchi va supervayzerning bo'limi. */
   deptId?: string | null;
 }
 
@@ -21,13 +25,22 @@ export const EDIT_WINDOW_MS = 24 * 3_600_000;
 export const QC_ROLE_LABEL: Record<QcRole, string> = {
   HEAD: 'Rahbar',
   INSPECTOR: 'Tekshiruvchi',
+  SUPERVISOR: 'Supervayzer',
   VIEWER: 'Ko‘ruvchi',
 };
 
-/** Ko'ruvchi uchun faqat o'z bo'limi; qolganlar uchun null (cheklov yo'q). */
-export function deptScope(actor: Actor): string | null {
-  return actor.role === 'VIEWER' ? (actor.deptId ?? '__none__') : null;
+/** Bu rolga bo'lim biriktirilishi shart (ko'ruvchi, supervayzer). */
+export function roleNeedsDept(role: QcRole): boolean {
+  return role === 'VIEWER' || role === 'SUPERVISOR';
 }
+
+/** Ko'ruvchi va supervayzer uchun faqat o'z bo'limi; qolganlar uchun null (cheklov yo'q). */
+export function deptScope(actor: Actor): string | null {
+  return roleNeedsDept(actor.role) ? (actor.deptId ?? '__none__') : null;
+}
+
+/** Supervayzer kirita oladigan cheklistlar. */
+export const SUPERVISOR_LISTS: ListKind[] = ['shift'];
 
 export function canReadDept(actor: Actor, deptId: string): boolean {
   const scope = deptScope(actor);
@@ -38,13 +51,26 @@ export function canManageDepartments(actor: Actor): boolean {
   return actor.role === 'HEAD';
 }
 
-export function canCreateAudit(actor: Actor): boolean {
-  return actor.role === 'HEAD' || actor.role === 'INSPECTOR';
+/**
+ * Tekshiruv kiritish. `target` berilmasa — umuman kirita oladimi (ekranni ochish uchun).
+ * Supervayzer: faqat o'z bo'limi va faqat kunlik smena cheklisti.
+ */
+export function canCreateAudit(actor: Actor, target?: { deptId: string; list: ListKind }): boolean {
+  if (actor.role === 'HEAD' || actor.role === 'INSPECTOR') return true;
+  if (actor.role !== 'SUPERVISOR') return false;
+  if (!target) return !!actor.deptId;
+  return target.deptId === actor.deptId && SUPERVISOR_LISTS.includes(target.list);
+}
+
+/** Qaysi cheklistlarni kirita oladi (tekshiruv ekranida varaqlar). */
+export function creatableLists(actor: Actor): ListKind[] {
+  if (actor.role === 'HEAD' || actor.role === 'INSPECTOR') return ['shift', 'interaction', 'weekly'];
+  return actor.role === 'SUPERVISOR' ? SUPERVISOR_LISTS : [];
 }
 
 export function canEditAudit(actor: Actor, audit: { byId: string; createdAt: Date }, now: Date = new Date()): boolean {
   if (actor.role === 'HEAD') return true;
-  if (actor.role !== 'INSPECTOR') return false;
+  if (actor.role !== 'INSPECTOR' && actor.role !== 'SUPERVISOR') return false;
   return audit.byId === actor.id && now.getTime() - audit.createdAt.getTime() <= EDIT_WINDOW_MS;
 }
 
@@ -80,7 +106,7 @@ export function canExport(actor: Actor): boolean {
 /** Rolga mos bosh sahifa. */
 export function homePath(role: QcRole): string {
   if (role === 'HEAD') return '/panel';
-  if (role === 'INSPECTOR') return '/tekshiruv';
+  if (role === 'INSPECTOR' || role === 'SUPERVISOR') return '/tekshiruv';
   return '/bolimim';
 }
 
@@ -93,14 +119,14 @@ export interface NavEntry {
 /** Yuqori navigatsiya. Ko'ruvchiga faqat Bo'limim (o'quv va hisobot ekranlari unga yo'q). */
 export const QC_NAV: NavEntry[] = [
   { href: '/panel', label: 'Panel', roles: ['HEAD'] },
-  { href: '/tekshiruv', label: 'Tekshiruv', roles: ['HEAD', 'INSPECTOR'] },
+  { href: '/tekshiruv', label: 'Tekshiruv', roles: ['HEAD', 'INSPECTOR', 'SUPERVISOR'] },
   { href: '/topshiriqlar', label: 'Topshiriqlar', roles: ['HEAD', 'INSPECTOR'] },
-  { href: '/tarix', label: 'Tarix', roles: ['HEAD', 'INSPECTOR'] },
+  { href: '/tarix', label: 'Tarix', roles: ['HEAD', 'INSPECTOR', 'SUPERVISOR'] },
   { href: '/oquv', label: 'O‘quv dasturi', roles: ['HEAD', 'INSPECTOR'] },
   { href: '/natijalar', label: 'Natijalar', roles: ['HEAD'] },
   { href: '/hisobot', label: 'Haftalik hisobot', roles: ['HEAD', 'INSPECTOR'] },
   { href: '/sozlamalar', label: 'Sozlamalar', roles: ['HEAD'] },
-  { href: '/bolimim', label: 'Bo‘limim', roles: ['VIEWER'] },
+  { href: '/bolimim', label: 'Bo‘limim', roles: ['VIEWER', 'SUPERVISOR'] },
 ];
 
 export function navFor(role: QcRole): NavEntry[] {

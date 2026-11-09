@@ -5,12 +5,11 @@ import { useRouter } from 'next/navigation';
 import { useEffect, useMemo, useRef, useState, useTransition } from 'react';
 
 import type { DeptDto, StaffDto } from '@/modules/bolimlar/domain';
-import type { TaskDto } from '@/server/qc';
 
 import { saveAuditAction, updateAuditAction } from './actions';
 import { ShiftRoster, StaffCard, toCell, type CellDraft } from './staff-inputs';
 
-import { type Answer, defaultDue, derivedAnswer, scoreAnswers, type StaffBlock, type StaffCell, validateAudit } from '@/modules/auditlar/domain';
+import { type Answer, defaultDue, derivedAnswer, scoreAnswers, type StaffBlock, type StaffCell, type TaskDto, validateAudit } from '../domain';
 import { isStaffKind } from '@/modules/bolimlar/domain';
 import { type Channel, CHANNELS, isChannel, isListKind, LIST_HINT, LIST_LABEL, LIST_ORDER, type ListKind, listOf } from '@/shared/lists';
 

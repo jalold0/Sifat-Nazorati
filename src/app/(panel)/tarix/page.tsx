@@ -7,7 +7,7 @@ import { Badge, Empty, PageHead } from '@/components/ui';
 import { requireActorFor } from '@/modules/foydalanuvchilar/ui';
 import { date as fmtDate } from '@/lib/format';
 import { listDepartments } from '@/modules/bolimlar';
-import { listAudits, PAGE_SIZE } from '@/server/qc';
+import { listAudits, PAGE_SIZE } from '@/modules/auditlar';
 
 import { canExport } from '@/modules/foydalanuvchilar/domain';
 import { LIST_LABEL } from '@/shared/lists';

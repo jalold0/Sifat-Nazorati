@@ -3,7 +3,7 @@
 import { useRouter } from 'next/navigation';
 import { useState, useTransition } from 'react';
 
-import { deleteAuditAction } from '@/app/(panel)/tekshiruv/actions';
+import { deleteAuditAction } from './actions';
 
 export function DeleteAuditButton({ id }: { id: string }) {
   const router = useRouter();

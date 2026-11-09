@@ -7,7 +7,7 @@ import { DeptReport, PeriodTabs, pct } from '@/components/qc/dept-report';
 import { StatusDot, StatusLabel } from '@/components/qc/status';
 import { Badge, Empty, PageHead } from '@/components/ui';
 import { requireActorFor } from '@/modules/foydalanuvchilar/ui';
-import { listTasks } from '@/server/qc';
+import { listTasks } from '@/modules/auditlar';
 import { loadReport, parsePeriod } from '@/server/report';
 
 export const metadata: Metadata = { title: 'Panel' };

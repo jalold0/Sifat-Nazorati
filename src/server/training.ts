@@ -8,10 +8,10 @@
 
 import type { Prisma } from '@prisma/client';
 
-import { db as defaultDb } from '@/lib/db';
-
+import type { Ctx } from '@/shared/context';
 import { writeJournal as logChange } from '@/shared/infrastructure/journal';
-import type { Ctx, Res } from './qc';
+import { clientOf } from '@/shared/infrastructure/prisma';
+import { fail as failWith, ok, type ErrorCode, type Res } from '@/shared/result';
 import { loadReportForRange, type Report } from './report';
 
 import { canEditReport, canSeeProgress, canSeeReport, canTrain } from '@/modules/foydalanuvchilar/domain';
@@ -20,9 +20,9 @@ import { allTaskKeys, attemptSummary, type Day, type GradeResult, gradeTest, pro
 import type { Actor } from '@/shared/actor';
 import { todayTashkent } from '@/shared/time';
 
-const dbOf = (ctx?: Ctx) => ctx?.db ?? defaultDb;
-const ok = <T>(data: T): Res<T> => ({ ok: true, data });
-const fail = (status: 400 | 403 | 404 | 409, error: string): Res<never> => ({ ok: false, status, error });
+const dbOf = clientOf;
+const CODE: Record<400 | 403 | 404 | 409, ErrorCode> = { 400: 'VALIDATION', 403: 'FORBIDDEN', 404: 'NOT_FOUND', 409: 'CONFLICT' };
+const fail = (status: 400 | 403 | 404 | 409, error: string): Res<never> => failWith(CODE[status], error);
 const forbidden = (msg = 'Bu amalga ruxsatingiz yo‘q.') => fail(403, msg);
 
 // ── O'quv dasturi ────────────────────────────────────────────────────────────

@@ -9,24 +9,11 @@ import { afterAll, beforeAll, describe, expect, it } from 'vitest';
 
 import bcrypt from 'bcryptjs';
 
-import { changePassword } from '@/modules/foydalanuvchilar';
-import { listLog } from '@/modules/jurnal';
-import { listUsers, saveUser } from '@/modules/foydalanuvchilar';
-
-import {
-  closeTask,
-  createAudit,
-  deleteAudit,
-  getAudit,
-  getSummaryData,
-  listAudits,
-  listTasks,
-  listTaskTab,
-  updateAudit,
-  type Ctx,
-} from './qc';
+import { closeTask, createAudit, deleteAudit, getAudit, getSummaryData, listAudits, listTasks, listTaskTab, updateAudit } from '@/modules/auditlar';
 import { listDepartments, saveDepartment } from '@/modules/bolimlar';
-
+import { changePassword, listUsers, saveUser } from '@/modules/foydalanuvchilar';
+import { listLog } from '@/modules/jurnal';
+import type { Ctx } from '@/shared/context';
 import type { Actor } from '@/shared/actor';
 import { todayTashkent } from '@/shared/time';
 

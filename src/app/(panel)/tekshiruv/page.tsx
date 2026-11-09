@@ -4,7 +4,7 @@ import { Empty, PageHead } from '@/components/ui';
 import { requireActorFor } from '@/modules/foydalanuvchilar/ui';
 import { listDepartments } from '@/modules/bolimlar';
 
-import { AuditForm } from './audit-form';
+import { AuditForm } from '@/modules/auditlar/ui';
 
 import { creatableLists } from '@/modules/foydalanuvchilar/domain';
 import { todayTashkent } from '@/shared/time';

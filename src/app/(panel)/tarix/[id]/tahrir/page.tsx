@@ -2,10 +2,10 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 import { notFound, redirect } from 'next/navigation';
 
-import { AuditForm } from '@/app/(panel)/tekshiruv/audit-form';
+import { AuditForm } from '@/modules/auditlar/ui';
 import { PageHead } from '@/components/ui';
 import { requireActorFor } from '@/modules/foydalanuvchilar/ui';
-import { getAudit } from '@/server/qc';
+import { getAudit } from '@/modules/auditlar';
 
 import { todayTashkent } from '@/shared/time';
 

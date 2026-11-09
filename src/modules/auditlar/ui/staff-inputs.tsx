@@ -9,7 +9,7 @@ import clsx from 'clsx';
 
 import type { StaffDto } from '@/modules/bolimlar/domain';
 
-import { cpTotals, fmtPct, type StaffCell } from '@/modules/auditlar/domain';
+import { cpTotals, fmtPct, type StaffCell } from '../domain';
 import { type Checkpoint, kindLabels } from '@/modules/bolimlar/domain';
 
 /** Kiritish holatidagi yacheyka: son maydonlari matn (bo'sh bo'lishi mumkin). */

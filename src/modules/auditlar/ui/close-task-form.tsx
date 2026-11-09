@@ -2,7 +2,7 @@
 
 import { useState, useTransition } from 'react';
 
-import { closeTaskAction } from '@/app/(panel)/topshiriqlar/actions';
+import { closeTaskAction } from './actions';
 
 /** «Qayta tekshirdim»: izoh so'raydi va topshiriqni yopadi. */
 export function CloseTaskForm({ taskId }: { taskId: string }) {

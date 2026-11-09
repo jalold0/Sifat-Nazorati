@@ -6,7 +6,8 @@ import { PrismaClient } from '@prisma/client';
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
 
 
-import { createAudit, type Ctx } from './qc';
+import { createAudit } from '@/modules/auditlar';
+import type { Ctx } from '@/shared/context';
 import {
   getTest,
   getWeeklyReport,

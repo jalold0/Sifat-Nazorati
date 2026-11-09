@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { Badge, Empty } from '@/components/ui';
 import { date as fmtDate } from '@/lib/format';
 import type { DeptDto } from '@/modules/bolimlar/domain';
-import type { TaskDto } from '@/server/qc';
+import type { TaskDto } from '../domain';
 
 import { CloseTaskForm } from './close-task-form';
 

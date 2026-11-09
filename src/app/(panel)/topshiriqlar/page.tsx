@@ -3,11 +3,11 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 
 import { AutoRefresh } from '@/components/qc/auto-refresh';
-import { TaskList } from '@/components/qc/task-list';
+import { TaskList } from '@/modules/auditlar/ui';
 import { PageHead } from '@/components/ui';
 import { requireActorFor } from '@/modules/foydalanuvchilar/ui';
 import { listDepartments } from '@/modules/bolimlar';
-import { listTaskTab, PAGE_SIZE } from '@/server/qc';
+import { listTaskTab, PAGE_SIZE } from '@/modules/auditlar';
 
 import { canEditTask } from '@/modules/foydalanuvchilar/domain';
 import { todayTashkent } from '@/shared/time';

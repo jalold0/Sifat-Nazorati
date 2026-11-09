@@ -2,14 +2,12 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 import { notFound, redirect } from 'next/navigation';
 
-import { StaffCpResult } from '@/components/qc/staff-result';
-import { TaskList } from '@/components/qc/task-list';
 import { Badge, Card, CardHead, PageHead } from '@/components/ui';
 import { requireActorFor } from '@/modules/foydalanuvchilar/ui';
 import { date as fmtDate, dateTime } from '@/lib/format';
-import { getAudit } from '@/server/qc';
+import { getAudit } from '@/modules/auditlar';
 
-import { DeleteAuditButton } from './delete-button';
+import { DeleteAuditButton, StaffCpResult, TaskList } from '@/modules/auditlar/ui';
 
 import { canEditTask } from '@/modules/foydalanuvchilar/domain';
 import { CHANNELS, isChannel, LIST_LABEL } from '@/shared/lists';

@@ -6,7 +6,9 @@
 
 import type { DeptDto } from '@/modules/bolimlar/domain';
 
-import { getSummaryData, type Ctx, type Res } from './qc';
+import { getSummaryData } from '@/modules/auditlar';
+import type { Ctx } from '@/shared/context';
+import type { Res } from '@/shared/result';
 
 import { openAt, overdueAt, staffBreakdown, type StaffBreakdownRow } from '@/modules/auditlar/domain';
 import { buildSummary, type DeptEvaluation, evaluateDept, interactionBreakdown, type InteractionRow, type PeriodKey, periodRange, type Range, STATUS_RANK, type Summary, type TopNo, topNoCheckpoints } from '@/modules/hisobot/domain';

@@ -2,9 +2,9 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 
 import { Badge, Empty, PageHead } from '@/components/ui';
-import { requireActorFor } from '@/lib/auth';
+import { requireActorFor } from '@/modules/foydalanuvchilar/ui';
 import { dateTime } from '@/lib/format';
-import { listLog, LOG_PAGE } from '@/server/log';
+import { listLog, LOG_PAGE } from '@/modules/jurnal';
 
 export const metadata: Metadata = { title: 'O‘zgarishlar jurnali' };
 export const dynamic = 'force-dynamic';

@@ -2,9 +2,8 @@
 
 import { revalidatePath } from 'next/cache';
 
-import { requireActor } from '@/lib/auth';
+import { requireActor } from '@/modules/foydalanuvchilar/ui';
 import { moveDepartment, saveDepartment, type DeptInput } from '@/server/qc';
-import { saveUser, type UserInput } from '@/server/users';
 
 export type ActionResult = { ok: true; id?: string } | { ok: false; error: string };
 
@@ -28,10 +27,3 @@ export async function moveDepartmentAction(id: string, dir: -1 | 1): Promise<Act
   return { ok: true };
 }
 
-export async function saveUserAction(input: UserInput): Promise<ActionResult> {
-  const actor = await requireActor();
-  const r = await saveUser(actor, input);
-  if (!r.ok) return { ok: false, error: r.error };
-  revalidatePath('/sozlamalar/foydalanuvchilar');
-  return { ok: true, id: r.data.id };
-}

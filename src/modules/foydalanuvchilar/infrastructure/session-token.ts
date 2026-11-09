@@ -5,21 +5,11 @@
 
 import { jwtVerify, SignJWT } from 'jose';
 
+import type { SessionClaims } from '../domain';
+
 export const SESSION_COOKIE = 'otk_session';
 const SESSION_TTL_SECONDS = 60 * 60 * 12; // 12 soat — ish smenasi
-
-export type Role = 'HEAD' | 'INSPECTOR' | 'VIEWER' | 'SUPERVISOR';
-
-export interface SessionPayload {
-  sub: string;
-  key: string;
-  name: string;
-  role: Role;
-  /** Parolni almashtirish majburiy (middleware shu bo'yicha /profil ga yo'naltiradi; asl tekshiruv bazada). */
-  mc?: boolean;
-  /** Sessiya versiyasi — har so'rovda bazadagi `User.sessionVersion` bilan solishtiriladi (getActor). */
-  sv: number;
-}
+export const SESSION_MAX_AGE = SESSION_TTL_SECONDS;
 
 function secretKey(): Uint8Array {
   const secret = process.env.AUTH_SECRET;
@@ -29,25 +19,23 @@ function secretKey(): Uint8Array {
   return new TextEncoder().encode(secret);
 }
 
-export async function signSession(payload: SessionPayload): Promise<string> {
-  return new SignJWT({ ...payload })
+export async function signSession(claims: SessionClaims): Promise<string> {
+  return new SignJWT({ ...claims })
     .setProtectedHeader({ alg: 'HS256' })
-    .setSubject(payload.sub)
+    .setSubject(claims.sub)
     .setIssuedAt()
     .setExpirationTime(`${SESSION_TTL_SECONDS}s`)
     .sign(secretKey());
 }
 
-export async function verifySession(token: string | undefined): Promise<SessionPayload | null> {
+export async function verifySession(token: string | undefined): Promise<SessionClaims | null> {
   if (!token) return null;
   try {
     const { payload } = await jwtVerify(token, secretKey());
-    const { sub, key, name, role, mc, sv } = payload as unknown as SessionPayload;
+    const { sub, key, name, role, mc, sv } = payload as unknown as SessionClaims;
     if (!sub || !role || typeof sv !== 'number') return null; // `sv` siz eski token — qayta kirish kerak
     return { sub, key, name, role, mc: mc === true, sv };
   } catch {
     return null;
   }
 }
-
-export const SESSION_MAX_AGE = SESSION_TTL_SECONDS;

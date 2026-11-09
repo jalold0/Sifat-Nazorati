@@ -3,7 +3,7 @@ import Link from 'next/link';
 import { notFound } from 'next/navigation';
 
 import { PageHead } from '@/components/ui';
-import { requireActorFor } from '@/lib/auth';
+import { requireActorFor } from '@/modules/foydalanuvchilar/ui';
 import { listDepartments } from '@/server/qc';
 
 import { DeptForm } from './dept-form';

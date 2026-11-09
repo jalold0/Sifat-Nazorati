@@ -9,9 +9,9 @@ import { afterAll, beforeAll, describe, expect, it } from 'vitest';
 
 import bcrypt from 'bcryptjs';
 
-import { changePassword } from './account';
-import { listLog } from './log';
-import { listUsers, saveUser } from './users';
+import { changePassword } from '@/modules/foydalanuvchilar';
+import { listLog } from '@/modules/jurnal';
+import { listUsers, saveUser } from '@/modules/foydalanuvchilar';
 
 import {
   closeTask,

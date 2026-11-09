@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { AutoRefresh } from '@/components/qc/auto-refresh';
 import { TaskList } from '@/components/qc/task-list';
 import { PageHead } from '@/components/ui';
-import { requireActorFor } from '@/lib/auth';
+import { requireActorFor } from '@/modules/foydalanuvchilar/ui';
 import { listDepartments, listTaskTab, PAGE_SIZE } from '@/server/qc';
 
 import { canEditTask } from '@/modules/foydalanuvchilar/domain';

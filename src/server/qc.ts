@@ -11,7 +11,7 @@ import { Prisma, type PrismaClient, type QcCheckpointKind, type QcListKind } fro
 
 import { db as defaultDb } from '@/lib/db';
 
-import { logChange } from './log';
+import { writeJournal as logChange } from '@/shared/infrastructure/journal';
 
 import { type Answer, auditCritical, type AuditRec, diffAnswers, scoreAnswers, type StaffBlock, type StaffPerson, type TaskInput, type TaskRec, validateAudit } from '@/modules/auditlar/domain';
 import { type Checkpoint, type CheckpointKind, diffDept } from '@/modules/bolimlar/domain';

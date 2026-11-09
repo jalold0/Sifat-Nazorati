@@ -2,7 +2,7 @@
 
 import { revalidatePath } from 'next/cache';
 
-import { requireActor } from '@/lib/auth';
+import { requireActor } from '@/modules/foydalanuvchilar/ui';
 import { setTask, submitTest, type SubmitResult } from '@/server/training';
 
 export type TaskResult = { ok: true } | { ok: false; error: string };

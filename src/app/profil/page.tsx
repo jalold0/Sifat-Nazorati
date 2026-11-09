@@ -1,9 +1,9 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
 
-import { requireActor } from '@/lib/auth';
+import { requireActor } from '@/modules/foydalanuvchilar/ui';
 
-import { PasswordForm } from './password-form';
+import { PasswordForm } from '@/modules/foydalanuvchilar/ui';
 
 import { homePath } from '@/modules/foydalanuvchilar/domain';
 

@@ -1,6 +1,6 @@
 import { redirect } from 'next/navigation';
 
-import { requireActor } from '@/lib/auth';
+import { requireActor } from '@/modules/foydalanuvchilar/ui';
 
 import { homePath } from '@/modules/foydalanuvchilar/domain';
 

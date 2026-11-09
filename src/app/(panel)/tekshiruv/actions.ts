@@ -2,7 +2,7 @@
 
 import { revalidatePath } from 'next/cache';
 
-import { requireActor } from '@/lib/auth';
+import { requireActor } from '@/modules/foydalanuvchilar/ui';
 import { createAudit, deleteAudit, updateAudit } from '@/server/qc';
 
 export type SaveResult = { ok: true; id: string } | { ok: false; error: string };

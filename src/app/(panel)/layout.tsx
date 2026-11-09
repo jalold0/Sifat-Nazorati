@@ -1,8 +1,8 @@
 import Link from 'next/link';
 
-import { logoutAction } from '@/app/login/actions';
-import { TopNav } from '@/components/qc/top-nav';
-import { requireActor } from '@/lib/auth';
+import { logoutAction } from '@/modules/foydalanuvchilar/ui';
+import { TopNav } from '@/modules/foydalanuvchilar/ui';
+import { requireActor } from '@/modules/foydalanuvchilar/ui';
 
 import { homePath, navFor } from '@/modules/foydalanuvchilar/domain';
 import { QC_ROLE_LABEL } from '@/shared/actor';

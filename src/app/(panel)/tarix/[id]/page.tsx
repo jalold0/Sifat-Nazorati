@@ -5,7 +5,7 @@ import { notFound, redirect } from 'next/navigation';
 import { StaffCpResult } from '@/components/qc/staff-result';
 import { TaskList } from '@/components/qc/task-list';
 import { Badge, Card, CardHead, PageHead } from '@/components/ui';
-import { requireActorFor } from '@/lib/auth';
+import { requireActorFor } from '@/modules/foydalanuvchilar/ui';
 import { date as fmtDate, dateTime } from '@/lib/format';
 import { getAudit } from '@/server/qc';
 

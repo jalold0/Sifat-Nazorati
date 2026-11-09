@@ -79,6 +79,16 @@ export function canEditReport(actor: Actor): boolean {
   return actor.role === 'HEAD';
 }
 
+/** O'zgarishlar jurnalini ko'rish. */
+export function canViewJournal(actor: Actor): boolean {
+  return actor.role === 'HEAD';
+}
+
+/** Foydalanuvchilarni boshqarish (yaratish, rol, bo'lim, parolni tiklash). */
+export function canManageUsers(actor: Actor): boolean {
+  return actor.role === 'HEAD';
+}
+
 export function canExport(actor: Actor): boolean {
   return actor.role === 'HEAD' || actor.role === 'INSPECTOR';
 }

@@ -3,7 +3,7 @@ import type { Metadata } from 'next';
 
 import { AutoRefresh } from '@/components/qc/auto-refresh';
 import { Badge, Empty, PageHead } from '@/components/ui';
-import { requireActorFor } from '@/lib/auth';
+import { requireActorFor } from '@/modules/foydalanuvchilar/ui';
 import { dateTime } from '@/lib/format';
 import { listProgress } from '@/server/training';
 

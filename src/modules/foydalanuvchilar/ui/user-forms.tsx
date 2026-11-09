@@ -3,9 +3,9 @@
 import { useRouter } from 'next/navigation';
 import { useState, useTransition } from 'react';
 
-import type { UserDto } from '@/server/users';
+import type { UserDto } from '..';
 
-import { saveUserAction } from '../actions';
+import { saveUserAction } from './actions';
 
 import { QC_ROLE_LABEL, type QcRole, roleNeedsDept } from '@/shared/actor';
 

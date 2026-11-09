@@ -2,7 +2,7 @@
 
 import { revalidatePath } from 'next/cache';
 
-import { requireActor } from '@/lib/auth';
+import { requireActor } from '@/modules/foydalanuvchilar/ui';
 import { saveReportNote } from '@/server/training';
 
 export async function saveNoteAction(week: string, note: string): Promise<{ ok: true } | { ok: false; error: string }> {

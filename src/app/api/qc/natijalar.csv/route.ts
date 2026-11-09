@@ -1,6 +1,6 @@
 import { NextResponse, type NextRequest } from 'next/server';
 
-import { getActor } from '@/lib/auth';
+import { getActor } from '@/modules/foydalanuvchilar/ui';
 import { dateTime } from '@/lib/format';
 import { listProgress } from '@/server/training';
 

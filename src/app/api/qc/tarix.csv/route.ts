@@ -1,6 +1,6 @@
 import { NextResponse, type NextRequest } from 'next/server';
 
-import { getActor } from '@/lib/auth';
+import { getActor } from '@/modules/foydalanuvchilar/ui';
 import { listAudits, listDepartments } from '@/server/qc';
 
 import { canExport } from '@/modules/foydalanuvchilar/domain';

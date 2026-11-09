@@ -4,7 +4,7 @@ import Link from 'next/link';
 
 import { AutoRefresh } from '@/components/qc/auto-refresh';
 import { Badge, Empty, PageHead } from '@/components/ui';
-import { requireActorFor } from '@/lib/auth';
+import { requireActorFor } from '@/modules/foydalanuvchilar/ui';
 import { date as fmtDate } from '@/lib/format';
 import { listAudits, listDepartments, PAGE_SIZE } from '@/server/qc';
 

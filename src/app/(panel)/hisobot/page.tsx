@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { AutoRefresh } from '@/components/qc/auto-refresh';
 import { pct } from '@/components/qc/dept-report';
 import { PageHead } from '@/components/ui';
-import { requireActorFor } from '@/lib/auth';
+import { requireActorFor } from '@/modules/foydalanuvchilar/ui';
 import { date as fmtDate } from '@/lib/format';
 import { getWeeklyReport } from '@/server/training';
 

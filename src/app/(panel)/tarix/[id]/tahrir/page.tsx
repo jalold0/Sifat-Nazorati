@@ -4,7 +4,7 @@ import { notFound, redirect } from 'next/navigation';
 
 import { AuditForm } from '@/app/(panel)/tekshiruv/audit-form';
 import { PageHead } from '@/components/ui';
-import { requireActorFor } from '@/lib/auth';
+import { requireActorFor } from '@/modules/foydalanuvchilar/ui';
 import { getAudit } from '@/server/qc';
 
 import { todayTashkent } from '@/shared/time';

@@ -2,7 +2,7 @@
 
 import { revalidatePath } from 'next/cache';
 
-import { requireActor } from '@/lib/auth';
+import { requireActor } from '@/modules/foydalanuvchilar/ui';
 import { closeTask } from '@/server/qc';
 
 export type CloseResult = { ok: true } | { ok: false; error: string };

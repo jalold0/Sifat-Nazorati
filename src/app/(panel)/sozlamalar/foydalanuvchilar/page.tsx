@@ -2,11 +2,11 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 
 import { Empty, PageHead } from '@/components/ui';
-import { requireActorFor } from '@/lib/auth';
+import { requireActorFor } from '@/modules/foydalanuvchilar/ui';
 import { listDepartments } from '@/server/qc';
-import { listUsers } from '@/server/users';
+import { listUsers } from '@/modules/foydalanuvchilar';
 
-import { UserRow, NewUserForm } from './user-forms';
+import { UserRow, NewUserForm } from '@/modules/foydalanuvchilar/ui';
 
 export const metadata: Metadata = { title: 'Foydalanuvchilar' };
 export const dynamic = 'force-dynamic';

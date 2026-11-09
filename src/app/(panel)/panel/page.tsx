@@ -6,7 +6,7 @@ import { AutoRefresh } from '@/components/qc/auto-refresh';
 import { DeptReport, PeriodTabs, pct } from '@/components/qc/dept-report';
 import { StatusDot, StatusLabel } from '@/components/qc/status';
 import { Badge, Empty, PageHead } from '@/components/ui';
-import { requireActorFor } from '@/lib/auth';
+import { requireActorFor } from '@/modules/foydalanuvchilar/ui';
 import { listTasks } from '@/server/qc';
 import { loadReport, parsePeriod } from '@/server/report';
 

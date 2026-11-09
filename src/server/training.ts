@@ -10,7 +10,7 @@ import type { Prisma } from '@prisma/client';
 
 import { db as defaultDb } from '@/lib/db';
 
-import { logChange } from './log';
+import { writeJournal as logChange } from '@/shared/infrastructure/journal';
 import type { Ctx, Res } from './qc';
 import { loadReportForRange, type Report } from './report';
 

@@ -1,6 +1,6 @@
 import { NextResponse, type NextRequest } from 'next/server';
 
-import { SESSION_COOKIE, verifySession } from '@/lib/session';
+import { SESSION_COOKIE, verifySession } from '@/modules/foydalanuvchilar/edge';
 
 import { canOpenPath } from '@/modules/foydalanuvchilar/domain';
 

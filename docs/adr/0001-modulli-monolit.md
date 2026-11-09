@@ -1,6 +1,6 @@
 # ADR 0001 — Modulli monolit
 
-- Holat: qabul qilingan
+- Holat: qabul qilingan va amalga oshirilgan (qarang: «Amalga oshirish holati»)
 - Sana: 2026-11-09
 - Qaror egalari: loyiha egasi (foydalanuvchi), Claude
 
@@ -57,9 +57,12 @@ infrastructure┘   (application'dagi port'larni amalga oshiradi)
 1. `domain` faqat `domain` va `shared` (sof qismi) ga import qiladi.
 2. `application` — `domain`, o‘z `ports`i va boshqa modullarning **ochiq API**siga. Prisma, Next, React — yo‘q.
 3. `infrastructure` — `application` port'lari, `domain`, Prisma.
-4. `ui` va `src/app` — modulning **ochiq API**si (`index.ts`, `ui/index.ts`); boshqa modul ichiga kirmaydi.
-5. Modul boshqa modulga **faqat uning `index.ts`si** orqali murojaat qiladi (chuqur import taqiqlangan).
-6. Tsikl yo‘q: `foydalanuvchilar` ← `bolimlar` ← `auditlar` ← `hisobot`; `oquv` va `jurnal` pastda.
+4. `ui` va `src/app` — modulning **ochiq API**si; Prisma va `infrastructure`/`application` ga tegmaydi.
+5. Modul boshqa modulga **faqat ochiq kirish nuqtalari** orqali murojaat qiladi: `index.ts` (use-case), `domain` (sof barrel), `ui`, `edge` (faqat middleware). Chuqur import taqiqlangan.
+   `application` boshqa modulga faqat `domain` orqali tayanadi; qolgan ma‘lumotni port orqali oladi (ulanishni `infrastructure/container.ts` bajaradi).
+6. Modullar grafi e‘lon qilingan va tsiklsiz: `foydalanuvchilar` ← `jurnal`; `foydalanuvchilar` ← `bolimlar` ← `auditlar` ← `hisobot`; `oquv` → `foydalanuvchilar`, `bolimlar`.
+   Yangi bog‘liqlik kerak bo‘lsa, avval `src/architecture.test.ts` dagi `ALLOWED_MODULE_DEPS` da ongli ravishda e‘lon qilinadi.
+7. `shared` hech qachon modullarga bog‘lanmaydi; sof qismi (`shared/*.ts`) Prisma/freymvorkni bilmaydi.
 
 Qoidalar ikki joyda tekshiriladi: ESLint `no-restricted-imports` (muharrirda darhol) va `vitest` arxitektura testi
 (`src/architecture.test.ts` — qoida buzilsa `pnpm test` yiqiladi; qo‘shimcha kutubxona kerak emas).
@@ -83,7 +86,7 @@ Qoidalar ikki joyda tekshiriladi: ESLint `no-restricted-imports` (muharrirda dar
 
 - Windows Server/10+, Node.js 20+, PostgreSQL 15+ (o‘sha serverda yoki ichki tarmoqda). Internet **shart emas**.
 - Tashqi CDN, shrift, rasm, analitika yo‘q — hamma resurs ilovadan beriladi.
-- `next build` `output: 'standalone'`; jarayon servis sifatida (NSSM yoki pm2) ishlaydi, avtomatik qayta ishga tushadi.
+- `next build` + `next start`; jarayon servis sifatida (NSSM yoki pm2) ishlaydi, avtomatik qayta ishga tushadi. (`output: 'standalone'` sinab ko‘rildi, yoqilmadi: Windows+pnpm da symlink `EPERM` — qarang: JOYLASHTIRISH.md §5.)
 - Zaxira: `pg_dump` kunlik reja bilan; migratsiya `prisma migrate deploy`; sessiya cheklovi va kirish cheklovi bitta
   jarayon xotirasida ishlaydi (bitta nusxa) — shu sabab ilova **bitta jarayon** sifatida yuritiladi.
 - Sozlama `.env` da, `src/shared/env.ts` zod bilan ishga tushishda tekshiradi (yo‘q/noto‘g‘ri bo‘lsa — aniq xabar bilan to‘xtaydi).
@@ -95,7 +98,19 @@ Qoidalar ikki joyda tekshiriladi: ESLint `no-restricted-imports` (muharrirda dar
 - (+) Domain va use-case'larni bazasiz testlash mumkin (port'ga soxta amalga oshirish).
 - (+) Qoida buzilishi tezda ushlanadi (lint + test).
 - (−) Ko‘proq fayl va biroz ko‘proq «yelim» kod; kichik o‘zgarish ba‘zan 3 faylni qamraydi.
-- (−) Ko‘chirish vaqti. Xulq o‘zgarmasligi mavjud testlar bilan kafolatlanadi (115+ sof, 24+ server testi).
+- (−) Ko‘chirish vaqti. Xulq o‘zgarmasligi mavjud testlar bilan kafolatlandi: 140 sof va 27 server testi o‘zgarishsiz o‘tadi (testlarda faqat import yo‘llari o‘zgargan).
+
+## Amalga oshirish holati
+
+Reja bo‘yicha bajarildi; rejadan farqlar:
+
+- **Jurnal yozish port'i `shared` da**, `jurnal` modulda emas (`shared/journal.ts` + `shared/infrastructure/journal.ts`): hamma modul yozuvni
+  asosiy amal bilan bir tranzaksiyada yozishi kerak, `jurnal` esa foydalanuvchilar policy'siga bog‘liq — aks holda sikl chiqardi.
+  `jurnal` moduli faqat **o‘qiydi** (`listLog`).
+- **Ochiq nuqtalar to‘rtta**, bitta emas: `index` (use-case), `domain` (sof barrel — policy va turlar hamma joyda kerak), `ui`, `edge` (Edge middleware).
+- `Actor`, rollar va ro‘yxat turlari (`ListKind`) `shared` ga olindi — modullar o‘rtasida sikl bo‘lmasligi uchun.
+- `oquv` foydalanuvchilar ro‘yxatini `foydalanuvchilar.listReviewers` orqali oladi (ochiq API), jadvalga to‘g‘ridan-to‘g‘ri tegmaydi.
+- `output: 'standalone'` yoqilmadi (yuqoriga qarang). `/api/health` — kompozitsiya ildizi sifatida arxitektura testida yagona istisno.
 
 ## Ko‘rib chiqilgan muqobillar
 

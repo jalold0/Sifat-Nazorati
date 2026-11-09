@@ -16,7 +16,7 @@ export interface AuditRec {
   critical: boolean;
   /** Kiritilgan paytdagi og'irliklar: keyin nuqta og'irligi o'zgarsa ham shu tekshiruv bali o'zgarmaydi. */
   weights?: Record<string, number> | null;
-  /** Hodimlar kesimidagi natijalar (src/qc/staff.ts); eski yozuvlarda yo'q. */
+  /** Hodimlar kesimidagi natijalar (domain/staff.ts); eski yozuvlarda yo'q. */
   staff?: StaffBlock | null;
   /** Qaysi cheklist; bo'lmasa — 'shift'. */
   list?: ListKind;

@@ -32,7 +32,7 @@ umumiy xulosa chiqaradi:
 | **Nuqta turi** (`QcCheckpoint.kind`) | `CHECK` — butun bo‘lim uchun Ha/Yo‘q (hozirgi). `STAFF_CHECK` — har hodim uchun Ha/Yo‘q. `STAFF_COUNT` — har hodim uchun ikki son: «yaxshi» va «yomon» (yorliqlari sozlanadi, masalan «Sifatli yopdi / Yopa olmadi», «Vaqtida / Kechikdi»). |
 | **Smenadagilar** | Shu tekshiruvda baholangan hodimlar. Boshlang‘ich holatda bo‘limning barcha faol hodimlari; tekshiruvchi kelmaganlarni olib tashlaydi. |
 
-## Hisob qoidalari (`src/qc/calc.ts`, sof funksiyalar)
+## Hisob qoidalari (`src/modules/auditlar/domain/scoring.ts`, sof funksiyalar)
 
 1. Har bir nuqta 0..1 oralig‘ida **ulush** beradi yoki ma’lumot bermaydi:
    - `CHECK`: Ha = 1, Yo‘q = 0, Tegishli emas = hisobga olinmaydi (avvalgidek).
@@ -46,7 +46,7 @@ umumiy xulosa chiqaradi:
 4. Og‘irlik avvalgidek tekshiruvga muzlatiladi. Hodim ismlari ham tekshiruvga nusxalanadi (keyin
    o‘zgartirilsa ham tarix buzilmaydi).
 
-## Kiritish qoidalari (`src/qc/validate.ts`, server va brauzerda bir xil)
+## Kiritish qoidalari (`src/modules/auditlar/domain/validate.ts`, server va brauzerda bir xil)
 
 - Hodim faqat shu bo‘lim ro‘yxatidan bo‘lishi mumkin (server tekshiradi; ism mijozdan olinmaydi).
 - Yangi tekshiruvda smenadagi har bir hodim uchun natija majburiy (yoki butun nuqta «Tegishli emas»).

@@ -1,6 +1,6 @@
 // iPOST — Sifat nazorati (OTK): 12 bo'limni tekshirish tizimi (1-bosqich)
 //
-// Ball, foiz va xulosa HECH QAYERDA saqlanmaydi — har safar src/qc/calc.ts hisoblaydi.
+// Ball, foiz va xulosa HECH QAYERDA saqlanmaydi — har safar src/modules/auditlar|hisobot/domain hisoblaydi.
 // Sana (YYYY-MM-DD) Toshkent vaqti bo'yicha satr sifatida saqlanadi: tartiblash va solishtirish oddiy.
 
 generator client {

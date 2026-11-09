@@ -3,7 +3,7 @@
 1-bosqich. Tekshiruvchi bir daqiqada bitta bo‘lim tekshiruvini kiritadi; rahbar panelda qaysi bo‘lim qizil
 ekanini bir qarashda ko‘radi. Ko‘ruvchi faqat o‘z bo‘limini ko‘radi.
 
-Texnologiya: Next.js 15 (App Router), Prisma + PostgreSQL, vitest. Tashqi CDN, shrift va rasm yo‘q —
+Texnologiya: Next.js 15 (App Router), Prisma + PostgreSQL, zod, vitest. Ofis serverida ishlaydi (Windows, o‘z PostgreSQL). Tashqi CDN, shrift va rasm yo‘q —
 ofis tarmog‘ida internetsiz ishlaydi (brauzer faqat serverning o‘z manziliga murojaat qiladi).
 
 > Taftish (murojaatlar) alohida loyiha. Eski Excel-KPI modeli (KPI, checklist, ish taqsimoti, reyestr)
@@ -27,9 +27,20 @@ ofis tarmog‘ida internetsiz ishlaydi (brauzer faqat serverning o‘z manziliga
 Rollar bazada: `HEAD` = Rahbar, `INSPECTOR` = Tekshiruvchi, `VIEWER` = Ko‘ruvchi (unga `deptId` — bo‘lim —
 biriktiriladi: Sozlamalar → Foydalanuvchilar).
 
-Ruxsat **faqat serverda** tekshiriladi (`src/qc/policy.ts` qoidalari, `src/server/qc.ts` har amalda
+Ruxsat **faqat serverda** tekshiriladi (qoidalar — `src/modules/foydalanuvchilar/domain/policy.ts`, use-case har amalda
 chaqiradi). Sahifa manzilini qo‘lda o‘zgartirib ham ruxsatsiz ekranga yoki boshqa bo‘lim ma’lumotiga
 kirib bo‘lmaydi. Xato javoblari o‘zbekcha: 400 tekshiruv, 403 ruxsat, 404 topilmadi; kirishsiz `/api/*` — 401.
+
+## Arxitektura
+
+Modulli monolit: `src/modules/{foydalanuvchilar, bolimlar, auditlar, hisobot, oquv, jurnal}`, har birida
+`domain → application → infrastructure → ui` qatlamlari; umumiy yadro — `src/shared`. Prisma'ni faqat `infrastructure` biladi,
+modullar faqat ochiq API orqali gaplashadi; qoidalar `src/architecture.test.ts` va ESLint bilan qulflangan.
+
+- [`docs/ARXITEKTURA.md`](docs/ARXITEKTURA.md) — xarita: papkalar, modullar, oqim, ruxsat, xato, yangi funksiya qo‘shish tartibi.
+- [`docs/adr/0001-modulli-monolit.md`](docs/adr/0001-modulli-monolit.md) — qaror va sabablar.
+- [`docs/JOYLASHTIRISH.md`](docs/JOYLASHTIRISH.md) — ofis serveriga o‘rnatish (Windows servis, zaxira, yangilash).
+- `GET /api/health` — ilova va baza holati (monitoring uchun).
 
 ## Ishga tushirish
 
@@ -56,7 +67,8 @@ sinash uchun Call center ko‘ruvchisini (`callcenter`) ham yaratadi.
 
 ## Hisob qoidalari
 
-Hammasi bitta sof modulda — `src/qc/calc.ts` (DB, DOM va tarmoqsiz; bir xil kirish — bir xil natija).
+Hammasi sof `domain` fayllarida — `src/modules/auditlar/domain` (ball) va `src/modules/hisobot/domain` (svetofor, xulosa);
+DB, DOM va tarmoqsiz: bir xil kirish — bir xil natija.
 Ball, foiz va xulosa **saqlanmaydi**, har safar hisoblanadi.
 
 - Ball = Σ og‘irlik(Ha) / Σ og‘irlik(Ha + Yo‘q) × 100; «Tegishli emas» hisobga olinmaydi; hammasi
@@ -75,7 +87,7 @@ Ball, foiz va xulosa **saqlanmaydi**, har safar hisoblanadi.
   (qayta bossa olib tashlanadi). Hamma topshiriq belgilangach «Testni boshlash» yonadi; sababi yozilgan.
 - **Yakuniy test** — Call centerda 10 keysli, qolgan 11 bo‘limda 7 savolli (eski quiz). Savollar va variantlar har
   ochilganda aralashadi. **To‘g‘ri javob (`answer`, `why`) test topshirilgunga qadar brauzerga yuborilmaydi**:
-  baholashni faqat server bajaradi (`gradeTest` — `src/qc/training.ts`; har to‘g‘ri javob 1 ball, o‘tish ≥ 70%).
+  baholashni faqat server bajaradi (`gradeTest` — `src/modules/oquv/domain/training.ts`; har to‘g‘ri javob 1 ball, o‘tish ≥ 70%).
   Topshiriqlar to‘liq bo‘lmasa server 409, javobsiz topshirish 400 qaytaradi. Urinish cheklanmagan.
 - **Natijalar** (rahbar) — xodim × bo‘lim, bajarilgan topshiriq, oxirgi/eng yaxshi foiz, holat, urinishlar va xato
   qilingan savollar; CSV. Sahifa o‘zi yangilanadi.
@@ -125,14 +137,15 @@ To‘liq spetsifikatsiya: [`docs/spec-hodimlar-kesimida.md`](docs/spec-hodimlar-
 ## Testlar
 
 ```bash
-pnpm test        # sof modullar: hisob, ruxsat, tekshirish, CSV, seed tanlash, test baholash, hafta
+pnpm test        # sof modullar (hisob, ruxsat, tekshirish, CSV, test baholash, hafta, env) + arxitektura testi
 pnpm typecheck
+pnpm lint        # ESLint, jumladan arxitektura qoidalari (no-restricted-imports)
 pnpm test:db     # server testlari haqiqiy PostgreSQL'da (alohida «otk_test» bazasi; pnpm db:local ishlab turishi kerak)
 ```
 
 `pnpm test:db` `.env` dagi bazaga tegmaydi: lokal klasterda `otk_test` bazasini yaratib, migratsiyani
-qo‘llaydi va `src/server/qc.integration.test.ts` ni ishga tushiradi (ruxsatlar, 400/403, `by` ni server
-qo‘yishi, tekshiruv + topshiriqlarning bitta tranzaksiyada saqlanishi).
+qo‘llaydi va `src/integration/*.integration.test.ts` ni ishga tushiradi (ruxsatlar, 400/403, `by` ni server
+qo‘yishi, tekshiruv + topshiriqlarning bitta tranzaksiyada saqlanishi, o‘quv va hisobot).
 
 ## Ochiq qarorlar (kelishilgan)
 

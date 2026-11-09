@@ -2,7 +2,7 @@
 
 /**
  * Hodimlar kesimida kiritish: smenadagilar, har hodim Ha/Yo'q yoki son, jonli xulosa.
- * Hisob mantig'i bu yerda YO'Q — src/qc/staff.ts (sof) ishlatiladi.
+ * Hisob mantig'i bu yerda YO'Q — domain/staff.ts (sof) ishlatiladi.
  */
 
 import clsx from 'clsx';

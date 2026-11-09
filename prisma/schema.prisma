@@ -17,6 +17,14 @@ enum Role {
   HEAD // Rahbar
   INSPECTOR // Tekshiruvchi
   VIEWER // Ko'ruvchi — faqat o'z bo'limi
+  SUPERVISOR // Supervayzer — o'z bo'limida kunlik smena cheklistini to'ldiradi (docs/call-center-cheklist.md)
+}
+
+/// Bo'limdagi cheklist (chastotasi bo'yicha): har nuqta va har tekshiruv shulardan biriga tegishli.
+enum QcListKind {
+  SHIFT // Kunlik smena tekshiruvi
+  INTERACTION // Muloqot bahosi: bitta qo'ng'iroq yoki yozishma, bitta operator
+  WEEKLY // Haftalik tahlil
 }
 
 model User {
@@ -67,6 +75,7 @@ model QcDepartment {
   updatedAt DateTime @updatedAt
 
   checkpoints      QcCheckpoint[]
+  staff            QcStaff[]
   audits           QcAudit[]
   tasks            QcTask[]
   viewers          User[]
@@ -91,8 +100,39 @@ model QcCheckpoint {
   critical Boolean      @default(false)
   active   Boolean      @default(true)
   position Int          @default(0)
+  /// Qanday baholanadi: butun bo'lim uchun Ha/Yo'q yoki har hodim uchun (docs/spec-hodimlar-kesimida.md)
+  kind     QcCheckpointKind @default(CHECK)
+  /// STAFF_COUNT uchun son maydonlari yorliqlari, masalan «Sifatli yopdi» / «Yopa olmadi»
+  okLabel  String?
+  badLabel String?
+  /// Qaysi cheklistga tegishli
+  list     QcListKind   @default(SHIFT)
 
   @@id([deptId, id])
+}
+
+enum QcCheckpointKind {
+  CHECK // butun bo'lim: Ha / Yo'q / Tegishli emas
+  STAFF_CHECK // har hodim: Ha / Yo'q
+  STAFF_COUNT // har hodim: «yaxshi» va «yomon» soni
+}
+
+/// Tekshiriladigan bo'lim hodimi (operator, kuryer, omborchi). Tizimga kirmaydi. O'chirilmaydi — yashiriladi.
+model QcStaff {
+  id        String       @id @default(cuid())
+  deptId    String
+  dept      QcDepartment @relation(fields: [deptId], references: [id], onDelete: Cascade)
+  name      String
+  /// Lavozim yoki smena (ixtiyoriy), masalan «Operator, 1-smena»
+  role      String       @default("")
+  active    Boolean      @default(true)
+  position  Int          @default(0)
+  createdAt DateTime     @default(now())
+
+  /// Muloqot bahosida baholangan hodim sifatida
+  interactionAudits QcAudit[]
+
+  @@index([deptId, active])
 }
 
 /// Bitta tekshiruv. `byId`, `createdAt`, `updatedAt` va `critical` ni faqat server qo'yadi.
@@ -115,12 +155,23 @@ model QcAudit {
   /// Kiritilgan paytdagi nuqta og'irliklari { nuqtaId: 1..3 }: keyin og'irlik o'zgarsa ham eski ball o'zgarmaydi.
   /// null — eski yozuv: joriy og'irliklar ishlatiladi.
   weights   Json?
+  /// Hodimlar kesimidagi natijalar: { people: [{id, name}], results: { nuqtaId: { hodimId: yacheyka } } };
+  /// yacheyka { v: yes|no|na, reason? } yoki { ok, bad, reason? }. Ismlar nusxa — keyin o'zgarsa ham tarix buzilmaydi.
+  staff     Json?
+  /// Qaysi cheklist bo'yicha tekshiruv
+  list      QcListKind   @default(SHIFT)
+  /// Muloqot bahosi: baholangan operator va kanal (phone | telegram | chat)
+  staffId   String?
+  staffRef  QcStaff?     @relation(fields: [staffId], references: [id])
+  channel   String?      @db.VarChar(16)
   createdAt DateTime     @default(now())
   updatedAt DateTime     @updatedAt
 
   tasks QcTask[]
 
   @@index([deptId, date])
+  @@index([deptId, list, date])
+  @@index([staffId])
   @@index([date])
 }
 

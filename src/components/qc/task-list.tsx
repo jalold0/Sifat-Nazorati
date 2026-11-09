@@ -3,7 +3,8 @@ import Link from 'next/link';
 
 import { Badge, Empty } from '@/components/ui';
 import { date as fmtDate } from '@/lib/format';
-import type { DeptDto, TaskDto } from '@/server/qc';
+import type { DeptDto } from '@/modules/bolimlar/domain';
+import type { TaskDto } from '@/server/qc';
 
 import { CloseTaskForm } from './close-task-form';
 

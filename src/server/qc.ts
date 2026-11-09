@@ -7,16 +7,18 @@
  * Server actions, route handler'lar va testlar shu qatlamni chaqiradi — framework'ga bog'liq emas.
  */
 
-import { Prisma, type PrismaClient, type QcCheckpointKind, type QcListKind } from '@prisma/client';
+import { Prisma, type PrismaClient } from '@prisma/client';
 
 import { db as defaultDb } from '@/lib/db';
 
 import { writeJournal as logChange } from '@/shared/infrastructure/journal';
 
 import { type Answer, auditCritical, type AuditRec, diffAnswers, scoreAnswers, type StaffBlock, type StaffPerson, type TaskInput, type TaskRec, validateAudit } from '@/modules/auditlar/domain';
-import { type Checkpoint, type CheckpointKind, diffDept } from '@/modules/bolimlar/domain';
-import { canCreateAudit, canDeleteAudit, canEditAudit, canEditTask, canManageDepartments, canReadDept, deptScope } from '@/modules/foydalanuvchilar/domain';
+import { listDepartments } from '@/modules/bolimlar';
+import type { Checkpoint, DeptDto } from '@/modules/bolimlar/domain';
+import { canCreateAudit, canDeleteAudit, canEditAudit, canEditTask, canReadDept, deptScope } from '@/modules/foydalanuvchilar/domain';
 import type { Actor } from '@/shared/actor';
+import { KIND_FROM_DB, LIST_FROM_DB, LIST_TO_DB } from '@/shared/infrastructure/enums';
 import { isListKind, type ListKind } from '@/shared/lists';
 import { joinSummary } from '@/shared/text';
 import { isYmd, todayTashkent } from '@/shared/time';
@@ -37,39 +39,6 @@ const dbOf = (ctx?: Ctx) => ctx?.db ?? defaultDb;
 const nowOf = (ctx?: Ctx) => ctx?.now ?? new Date();
 
 // ── DTO'lar (brauzerga uzatiladigan oddiy obyektlar) ─────────────────────────
-
-export interface DeptDto {
-  id: string;
-  name: string;
-  position: number;
-  active: boolean;
-  norm: number;
-  estimate: boolean;
-  checkpoints: Checkpoint[];
-  /** Bo'lim hodimlari (yashirilganlari ham — `active`), tartib bo'yicha. */
-  staff: StaffDto[];
-}
-
-export interface StaffDto {
-  id: string;
-  name: string;
-  role: string;
-  active: boolean;
-}
-
-const KIND_FROM_DB: Record<QcCheckpointKind, CheckpointKind> = {
-  CHECK: 'check',
-  STAFF_CHECK: 'staff_check',
-  STAFF_COUNT: 'staff_count',
-};
-const KIND_TO_DB: Record<CheckpointKind, QcCheckpointKind> = {
-  check: 'CHECK',
-  staff_check: 'STAFF_CHECK',
-  staff_count: 'STAFF_COUNT',
-};
-
-const LIST_FROM_DB: Record<QcListKind, ListKind> = { SHIFT: 'shift', INTERACTION: 'interaction', WEEKLY: 'weekly' };
-const LIST_TO_DB: Record<ListKind, QcListKind> = { shift: 'SHIFT', interaction: 'INTERACTION', weekly: 'WEEKLY' };
 
 /** Json ustunidan o'qilgan hodimlar bloki (eski yozuvda null). */
 const staffOf = (v: Prisma.JsonValue | null): StaffBlock | null => (v && typeof v === 'object' ? (v as unknown as StaffBlock) : null);
@@ -178,24 +147,6 @@ function toTask(t: TaskRow): TaskDto {
 }
 
 // ── O'qish ───────────────────────────────────────────────────────────────────
-
-/** Bo'limlar va nuqtalar. Ko'ruvchi faqat o'z bo'limini oladi. Nofaol bo'limlar faqat so'ralganda. */
-export async function listDepartments(
-  actor: Actor,
-  opts: { includeInactive?: boolean } = {},
-  ctx?: Ctx,
-): Promise<DeptDto[]> {
-  const scope = deptScope(actor);
-  const rows = await dbOf(ctx).qcDepartment.findMany({
-    where: {
-      ...(opts.includeInactive ? {} : { active: true }),
-      ...(scope ? { id: scope } : {}),
-    },
-    include: DEPT_INCLUDE,
-    orderBy: [{ position: 'asc' }, { name: 'asc' }],
-  });
-  return rows.map(toDept);
-}
 
 export interface SummaryData {
   today: string;
@@ -610,181 +561,5 @@ export async function updateTask(
       await logChange(tx, { actorId: actor.id, action: 'task.update', entity: 'QcTask', entityId: id, summary: `Topshiriq tahrirlandi: ${lines.join('; ')}` });
     }
   });
-  return ok({ id });
-}
-
-// ── Sozlamalar (faqat rahbar) ────────────────────────────────────────────────
-
-export interface DeptInput {
-  id?: string;
-  name: string;
-  norm: number;
-  estimate: boolean;
-  active: boolean;
-  checkpoints: Array<{
-    id?: string;
-    text: string;
-    group?: string | null;
-    weight: number;
-    critical: boolean;
-    active: boolean;
-    /** Bo'lmasa — 'check' */
-    kind?: CheckpointKind;
-    okLabel?: string | null;
-    badLabel?: string | null;
-    /** Bo'lmasa — 'shift' (kunlik smena) */
-    list?: ListKind;
-  }>;
-  /** Bo'lim hodimlari. Bo'lmasa — o'zgarmaydi. Hodim o'chirilmaydi, faqat `active:false`. */
-  staff?: Array<{ id?: string; name: string; role?: string; active: boolean }>;
-}
-
-const KINDS = new Set<CheckpointKind>(['check', 'staff_check', 'staff_count']);
-const LABEL_MAX = 40;
-const cleanLabel = (v: string | null | undefined) => (v ?? '').trim().slice(0, LABEL_MAX) || null;
-
-/**
- * Bo'lim yaratish/o'zgartirish. Nuqtalar O'CHIRILMAYDI — faqat `active:false` qilinadi;
- * yangi nuqtaga bo'lim ichida keyingi `cpN` id beriladi. Massivdagi tartib — nuqtalar tartibi.
- */
-export async function saveDepartment(actor: Actor, input: DeptInput, ctx?: Ctx): Promise<Res<{ id: string }>> {
-  if (!canManageDepartments(actor)) return forbidden('Bo‘limlarni faqat rahbar o‘zgartira oladi.');
-  const name = (input.name ?? '').trim();
-  if (!name) return bad('Bo‘lim nomini yozing.');
-  if (!Number.isInteger(input.norm) || input.norm < 1 || input.norm > 100) return bad('Me‘yor 1 dan 100 gacha butun son bo‘lishi kerak.');
-  if (!Array.isArray(input.checkpoints) || input.checkpoints.length === 0) return bad('Kamida bitta nuqta kerak.');
-  for (const c of input.checkpoints) {
-    if (!c.text?.trim()) return bad('Har bir nuqtaga savol matnini yozing (bo‘sh nuqtani «yashirish» mumkin).');
-    if (![1, 2, 3].includes(c.weight)) return bad('Nuqta og‘irligi 1, 2 yoki 3 bo‘lishi kerak.');
-    if (c.kind !== undefined && !KINDS.has(c.kind)) return bad('Nuqta turi noto‘g‘ri.');
-    if (c.list !== undefined && !isListKind(c.list)) return bad('Nuqtaning cheklisti noto‘g‘ri.');
-    if (c.list === 'interaction' && c.kind && c.kind !== 'check') {
-      return bad(`«${c.text.trim()}»: muloqot bahosi bitta operatorni baholaydi — turi «Butun bo‘lim: Ha / Yo‘q» bo‘lsin.`);
-    }
-  }
-  if (!input.checkpoints.some((c) => c.active)) return bad('Kamida bitta faol nuqta qoldiring.');
-  const staffIn = input.staff;
-  if (staffIn !== undefined) {
-    if (!Array.isArray(staffIn) || staffIn.length > 200) return bad('Hodimlar ro‘yxati noto‘g‘ri (ko‘pi bilan 200 kishi).');
-    const seen = new Set<string>();
-    for (const s of staffIn) {
-      const n = (s.name ?? '').trim();
-      if (!n) return bad('Har bir hodimning ismini yozing (keraksizini «yashirish» mumkin).');
-      if (n.length > 80) return bad('Hodim ismi 80 belgidan oshmasin.');
-      const key = n.toLowerCase();
-      if (s.active && seen.has(key)) return bad(`«${n}» ro‘yxatda ikki marta. Ismlarni farqlang (masalan familiya qo‘shing).`);
-      if (s.active) seen.add(key);
-    }
-  }
-  const hasStaffCp = input.checkpoints.some((c) => c.active && c.kind && c.kind !== 'check');
-
-  const client = dbOf(ctx);
-  const dupe = await client.qcDepartment.findFirst({
-    where: { name: { equals: name, mode: 'insensitive' }, ...(input.id ? { NOT: { id: input.id } } : {}) },
-    select: { id: true },
-  });
-  if (dupe) return bad('Bunday nomli bo‘lim allaqachon bor. Boshqa nom tanlang.');
-
-  const existing = input.id
-    ? await client.qcDepartment.findUnique({ where: { id: input.id }, include: DEPT_INCLUDE })
-    : null;
-  if (input.id && !existing) return notFound('Bo‘lim topilmadi.');
-  const known = new Set((existing?.checkpoints ?? []).map((c) => c.id));
-  for (const c of input.checkpoints) {
-    if (c.id && !known.has(c.id)) return bad('Nuqta topilmadi. Sahifani yangilang.');
-  }
-  const knownStaff = new Set((existing?.staff ?? []).map((s) => s.id));
-  for (const s of staffIn ?? []) {
-    if (s.id && !knownStaff.has(s.id)) return bad('Hodim topilmadi. Sahifani yangilang.');
-  }
-  const activeStaff = staffIn ? staffIn.filter((s) => s.active).length : (existing?.staff ?? []).filter((s) => s.active).length;
-  if (hasStaffCp && activeStaff === 0) {
-    return bad('Hodimlar kesimidagi nuqta bor, lekin bo‘limda faol hodim yo‘q. Avval hodimlarni qo‘shing.');
-  }
-
-  const after = {
-    ...input,
-    name,
-    checkpoints: input.checkpoints.map((c) => ({
-      ...c,
-      text: c.text.trim(),
-      kind: c.kind ?? 'check',
-      okLabel: cleanLabel(c.okLabel),
-      badLabel: cleanLabel(c.badLabel),
-      list: c.list ?? 'shift',
-    })),
-    staff: staffIn?.map((s) => ({ ...s, name: s.name.trim(), role: (s.role ?? '').trim() })),
-  };
-  const lines = diffDept(existing ? toDept(existing) : null, after);
-  const id = await client.$transaction(async (tx) => {
-    let deptId = existing?.id;
-    if (existing) {
-      await tx.qcDepartment.update({
-        where: { id: existing.id },
-        data: { name, norm: input.norm, estimate: input.estimate, active: input.active },
-      });
-    } else {
-      const max = await tx.qcDepartment.aggregate({ _max: { position: true } });
-      const created = await tx.qcDepartment.create({
-        data: { name, norm: input.norm, estimate: input.estimate, active: input.active, position: (max._max.position ?? 0) + 1 },
-      });
-      deptId = created.id;
-    }
-    let next = (existing?.checkpoints ?? []).reduce((m, c) => Math.max(m, Number(c.id.replace(/^cp/, '')) || 0), 0);
-    for (const [i, c] of after.checkpoints.entries()) {
-      const data = {
-        text: c.text,
-        grp: c.group?.trim() || null,
-        weight: c.weight,
-        critical: c.critical,
-        active: c.active,
-        position: i + 1,
-        kind: KIND_TO_DB[c.kind],
-        okLabel: c.okLabel,
-        badLabel: c.badLabel,
-        list: LIST_TO_DB[c.list],
-      };
-      if (c.id) {
-        await tx.qcCheckpoint.update({ where: { deptId_id: { deptId: deptId as string, id: c.id } }, data });
-      } else {
-        next += 1;
-        await tx.qcCheckpoint.create({ data: { ...data, deptId: deptId as string, id: `cp${next}` } });
-      }
-    }
-    // Hodimlar: tartib — massivdagi tartib; o'chirilmaydi, faqat yashiriladi
-    for (const [i, s] of (after.staff ?? []).entries()) {
-      const data = { name: s.name, role: s.role, active: s.active, position: i + 1 };
-      if (s.id) await tx.qcStaff.update({ where: { id: s.id }, data });
-      else await tx.qcStaff.create({ data: { ...data, deptId: deptId as string } });
-    }
-    if (lines.length > 0) {
-      await logChange(tx, {
-        actorId: actor.id,
-        action: 'dept.save',
-        entity: 'QcDepartment',
-        entityId: deptId as string,
-        summary: `${name}: ${lines.join('; ')}`,
-      });
-    }
-    return deptId as string;
-  });
-  return ok({ id });
-}
-
-/** Bo'lim tartibini o'zgartirish (panelda ko'rinish tartibi). */
-export async function moveDepartment(actor: Actor, id: string, dir: -1 | 1, ctx?: Ctx): Promise<Res<{ id: string }>> {
-  if (!canManageDepartments(actor)) return forbidden('Bo‘limlarni faqat rahbar o‘zgartira oladi.');
-  const client = dbOf(ctx);
-  const all = await client.qcDepartment.findMany({ orderBy: [{ position: 'asc' }, { name: 'asc' }], select: { id: true, name: true } });
-  const i = all.findIndex((d) => d.id === id);
-  if (i < 0) return notFound('Bo‘lim topilmadi.');
-  const j = i + dir;
-  if (j < 0 || j >= all.length) return ok({ id });
-  const order = all.map((d) => d.id);
-  [order[i], order[j]] = [order[j] as string, order[i] as string];
-  await client.$transaction([
-    ...order.map((deptId, idx) => client.qcDepartment.update({ where: { id: deptId }, data: { position: idx + 1 } })),
-    client.qcLog.create({ data: { actorId: actor.id, action: 'dept.move', entity: 'QcDepartment', entityId: id, summary: `Bo‘lim tartibi o‘zgardi: «${all[i]?.name ?? ''}» ${dir < 0 ? 'yuqoriga' : 'pastga'}` } }),
-  ]);
   return ok({ id });
 }

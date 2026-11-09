@@ -3,9 +3,9 @@ import Link from 'next/link';
 
 import { Badge, Callout, Empty, PageHead } from '@/components/ui';
 import { requireActorFor } from '@/modules/foydalanuvchilar/ui';
-import { listDepartments } from '@/server/qc';
+import { listDepartments } from '@/modules/bolimlar';
 
-import { MoveButtons } from './move-buttons';
+import { MoveButtons } from '@/modules/bolimlar/ui';
 
 export const metadata: Metadata = { title: 'Sozlamalar' };
 export const dynamic = 'force-dynamic';

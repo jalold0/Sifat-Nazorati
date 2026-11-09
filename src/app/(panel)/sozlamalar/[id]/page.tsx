@@ -4,9 +4,9 @@ import { notFound } from 'next/navigation';
 
 import { PageHead } from '@/components/ui';
 import { requireActorFor } from '@/modules/foydalanuvchilar/ui';
-import { listDepartments } from '@/server/qc';
+import { listDepartments } from '@/modules/bolimlar';
 
-import { DeptForm } from './dept-form';
+import { DeptForm } from '@/modules/bolimlar/ui';
 
 export const metadata: Metadata = { title: 'Bo‘lim sozlamasi' };
 export const dynamic = 'force-dynamic';

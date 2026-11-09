@@ -4,7 +4,8 @@ import clsx from 'clsx';
 import { useRouter } from 'next/navigation';
 import { useEffect, useMemo, useRef, useState, useTransition } from 'react';
 
-import type { DeptDto, StaffDto, TaskDto } from '@/server/qc';
+import type { DeptDto, StaffDto } from '@/modules/bolimlar/domain';
+import type { TaskDto } from '@/server/qc';
 
 import { saveAuditAction, updateAuditAction } from './actions';
 import { ShiftRoster, StaffCard, toCell, type CellDraft } from './staff-inputs';

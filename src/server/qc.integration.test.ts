@@ -20,13 +20,12 @@ import {
   getAudit,
   getSummaryData,
   listAudits,
-  listDepartments,
   listTasks,
   listTaskTab,
-  saveDepartment,
   updateAudit,
   type Ctx,
 } from './qc';
+import { listDepartments, saveDepartment } from '@/modules/bolimlar';
 
 import type { Actor } from '@/shared/actor';
 import { todayTashkent } from '@/shared/time';

@@ -6,7 +6,8 @@ import { AutoRefresh } from '@/components/qc/auto-refresh';
 import { Badge, Empty, PageHead } from '@/components/ui';
 import { requireActorFor } from '@/modules/foydalanuvchilar/ui';
 import { date as fmtDate } from '@/lib/format';
-import { listAudits, listDepartments, PAGE_SIZE } from '@/server/qc';
+import { listDepartments } from '@/modules/bolimlar';
+import { listAudits, PAGE_SIZE } from '@/server/qc';
 
 import { canExport } from '@/modules/foydalanuvchilar/domain';
 import { LIST_LABEL } from '@/shared/lists';

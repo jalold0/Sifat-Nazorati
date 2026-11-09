@@ -4,11 +4,8 @@ import clsx from 'clsx';
 import { useRouter } from 'next/navigation';
 import { useState, useTransition } from 'react';
 
-import type { DeptDto } from '@/server/qc';
-
-import { saveDepartmentAction } from '../actions';
-
-import { type CheckpointKind, KIND_LABEL, kindLabels } from '@/modules/bolimlar/domain';
+import { saveDepartmentAction } from './actions';
+import { type CheckpointKind, type DeptDto, KIND_LABEL, kindLabels } from '../domain';
 
 interface Row {
   key: string;

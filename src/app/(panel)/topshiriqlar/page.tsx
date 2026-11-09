@@ -6,7 +6,8 @@ import { AutoRefresh } from '@/components/qc/auto-refresh';
 import { TaskList } from '@/components/qc/task-list';
 import { PageHead } from '@/components/ui';
 import { requireActorFor } from '@/modules/foydalanuvchilar/ui';
-import { listDepartments, listTaskTab, PAGE_SIZE } from '@/server/qc';
+import { listDepartments } from '@/modules/bolimlar';
+import { listTaskTab, PAGE_SIZE } from '@/server/qc';
 
 import { canEditTask } from '@/modules/foydalanuvchilar/domain';
 import { todayTashkent } from '@/shared/time';

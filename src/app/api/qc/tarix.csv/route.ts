@@ -1,7 +1,8 @@
 import { NextResponse, type NextRequest } from 'next/server';
 
 import { getActor } from '@/modules/foydalanuvchilar/ui';
-import { listAudits, listDepartments } from '@/server/qc';
+import { listDepartments } from '@/modules/bolimlar';
+import { listAudits } from '@/server/qc';
 
 import { canExport } from '@/modules/foydalanuvchilar/domain';
 import { toCsv } from '@/shared/csv';

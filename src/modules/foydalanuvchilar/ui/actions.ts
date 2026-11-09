@@ -8,7 +8,7 @@ import { z } from 'zod';
 import { changePassword, currentClaims, login, revokeSessions, saveUser, type UserInput } from '..';
 import { clientIp, homePath, trustedHops } from '../domain';
 
-import { requireActor, getActor } from './guards';
+import { getActor, requireActor } from './guards';
 import { createSessionCookie, destroySessionCookie } from './session-cookie';
 
 const loginSchema = z.object({

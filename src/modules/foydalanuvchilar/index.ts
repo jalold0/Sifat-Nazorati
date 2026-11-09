@@ -18,6 +18,8 @@ import { currentClaims as currentClaimsUseCase, resolveActor as resolveActorUseC
 import type { SessionClaims } from './domain';
 import { userDeps } from './infrastructure/container';
 
+// Sessiya tokeni (JWT): cookie'ga yozishni `ui` qiladi, imzolash/tekshirish shu yerda
+export { SESSION_COOKIE, SESSION_MAX_AGE, signSession, verifySession } from './infrastructure/session-token';
 export type { LoginOutcome } from './application/login';
 export type { UserDto, UserInput } from './application/ports';
 

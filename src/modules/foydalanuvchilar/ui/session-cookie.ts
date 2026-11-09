@@ -2,8 +2,8 @@ import 'server-only';
 
 import { cookies } from 'next/headers';
 
+import { SESSION_COOKIE, SESSION_MAX_AGE, signSession, verifySession } from '..';
 import type { SessionClaims } from '../domain';
-import { SESSION_COOKIE, SESSION_MAX_AGE, signSession, verifySession } from '../infrastructure/session-token';
 
 /** Joriy so'rovdagi sessiya da'volari (token imzosi tekshiriladi; baza tekshiruvi — `getActor` da). */
 export async function getSession(): Promise<SessionClaims | null> {

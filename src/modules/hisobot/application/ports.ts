@@ -1,4 +1,4 @@
-import type { SummaryData } from '@/modules/auditlar';
+import type { SummaryData } from '@/modules/auditlar/domain';
 import type { Actor } from '@/shared/actor';
 import type { JournalWriter } from '@/shared/journal';
 import type { Res } from '@/shared/result';

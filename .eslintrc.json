@@ -6,6 +6,85 @@
     "@typescript-eslint/no-unused-vars": ["error", { "argsIgnorePattern": "^_", "varsIgnorePattern": "^_" }],
     // O'zbek lotin yozuvida apostrof (bo'lim, o'zgarish) matnning tabiiy qismi —
     // uni har joyda HTML entity bilan almashtirish matnni o'qib bo'lmas qiladi.
-    "react/no-unescaped-entities": "off"
-  }
+    "react/no-unescaped-entities": "off",
+
+    // ── Arxitektura (to'liq tekshiruv: src/architecture.test.ts; docs/ARXITEKTURA.md) ──
+    // Hamma joyda: boshqa modulning ichki qatlamlariga (application, infrastructure) tegib bo'lmaydi —
+    // faqat ochiq kirish nuqtalari: '@/modules/<m>', '/domain', '/ui', '/edge'.
+    "no-restricted-imports": [
+      "error",
+      {
+        "patterns": [
+          {
+            "group": ["@/modules/*/application", "@/modules/*/application/*", "@/modules/*/infrastructure", "@/modules/*/infrastructure/*"],
+            "message": "Modulning ichki qatlami yopiq. Ochiq API: '@/modules/<modul>' (use-case), '/domain' (sof qoidalar), '/ui'."
+          }
+        ]
+      }
+    ]
+  },
+  "overrides": [
+    {
+      // domain va application: sof — Prisma, freymvork, infratuzilma va boshqa modullarning use-case/ui'i yo'q
+      "files": ["src/modules/*/domain/**/*.{ts,tsx}", "src/modules/*/application/**/*.{ts,tsx}"],
+      "rules": {
+        "no-restricted-imports": [
+          "error",
+          {
+            "paths": [
+              { "name": "@prisma/client", "message": "Prisma'ni faqat infrastructure biladi." },
+              { "name": "next", "message": "domain/application freymvorksiz bo'lishi kerak." },
+              { "name": "react", "message": "domain/application freymvorksiz bo'lishi kerak." }
+            ],
+            "patterns": [
+              {
+                "group": ["next/*", "@prisma/client/*", "@/shared/infrastructure", "@/shared/infrastructure/*", "@/shared/ui", "@/shared/ui/*"],
+                "message": "domain/application infratuzilma va freymvorkni bilmaydi."
+              },
+              {
+                "regex": "^@/modules/[^/]+(?:$|/(?!domain(?:/|$)))",
+                "message": "Boshqa modulga faqat '/domain' orqali tayaning; qolgan ma'lumotni port orqali oling."
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      // ui va sahifalar: use-case'ni chaqiradi; Prisma va infratuzilmani bilmaydi
+      "files": ["src/modules/*/ui/**/*.{ts,tsx}", "src/app/**/*.{ts,tsx}", "src/middleware.ts"],
+      "rules": {
+        "no-restricted-imports": [
+          "error",
+          {
+            "paths": [{ "name": "@prisma/client", "message": "Prisma'ni faqat infrastructure biladi. Use-case chaqiring." }],
+            "patterns": [
+              {
+                "group": ["@/modules/*/application", "@/modules/*/application/*", "@/modules/*/infrastructure", "@/modules/*/infrastructure/*"],
+                "message": "Ichki qatlam yopiq: faqat '@/modules/<modul>' (use-case)."
+              },
+              { "group": ["@/shared/infrastructure", "@/shared/infrastructure/*"], "message": "ui/sahifa infratuzilmani bilmaydi: use-case chaqiring." }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      // shared hech qachon modullarga bog'lanmaydi (bog'liqlik faqat modul → shared)
+      "files": ["src/shared/**/*.{ts,tsx}"],
+      "rules": {
+        "no-restricted-imports": [
+          "error",
+          {
+            "patterns": [{ "group": ["@/modules/*", "@/modules/*/*"], "message": "shared modullarga bog'liq bo'lmaydi: bog'liqlik faqat modul → shared." }]
+          }
+        ]
+      }
+    },
+    {
+      // Testlar chuqur importlarga ruxsat: ichki qismni sinash uchun
+      "files": ["**/*.test.ts", "src/integration/**/*.ts"],
+      "rules": { "no-restricted-imports": "off" }
+    }
+  ]
 }
